@@ -29,14 +29,14 @@ namespace PostTestr
     [AddINotifyPropertyChangedInterface]
     public class Data
     {
-        public ObservableCollection<Request> Reguests { get; set; } = new ObservableCollection<Request>();
+        public ObservableCollection<Request> Requests { get; set; } = new ObservableCollection<Request>();
         public Request SelectedRequest { get; set; } = null;
         public CookieContainer Cookies { get; set; }
 
         public void AddNewRequest()
         {
             var r = new Request();
-            this.Reguests.Add(r);
+            this.Requests.Add(r);
             this.SelectedRequest = r;
         }
     }
@@ -54,7 +54,7 @@ namespace PostTestr
         {
             var data = File.ReadAllText(file);
             var container = JsonConvert.DeserializeObject<RequestFile>(data);
-            return new Data { Reguests = new ObservableCollection<Request>(container.Requests) };
+            return new Data { Requests = new ObservableCollection<Request>(container.Requests) };
         }
 
         public static Data LoadOrCreateNew()
