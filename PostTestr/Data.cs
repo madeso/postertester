@@ -36,6 +36,15 @@ namespace PostTestr
         public void AddNewRequest()
         {
             var r = new Request();
+            if(this.SelectedRequest != null)
+            {
+                var newUrl = new UriBuilder(new Uri(this.SelectedRequest.Url))
+                {
+                    Path = "",
+                    Query = ""
+                };
+                r.Url = newUrl.Uri.AbsoluteUri;
+            }
             this.Requests.Add(r);
             this.SelectedRequest = r;
         }
