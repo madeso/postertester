@@ -1,7 +1,12 @@
 ﻿<Window x:Class="PostTestr.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:postTestr="clr-namespace:PostTestr" Icon="icon.ico"
+        xmlns:postTestr="clr-namespace:PostTestr"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PostTestr"
+        mc:Ignorable="d"
+        Icon="icon.ico"
         Title="PostTestr" Height="350" Width="525" Closing="MainWindow_OnClosing">
     <Window.CommandBindings>
         <CommandBinding Command="postTestr:CustomCommands.Exit" Executed="ExitExecuted"></CommandBinding>
