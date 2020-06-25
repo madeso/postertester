@@ -53,7 +53,15 @@
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Requests}" SelectedItem="{Binding SelectedRequest}"></ListView>
+                <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Requests}" SelectedItem="{Binding SelectedRequest}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel>
+                                <TextBlock Text="{Binding Url}" Foreground="Blue"/>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>

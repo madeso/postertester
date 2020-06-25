@@ -19,11 +19,6 @@ namespace PostTestr
         public string Url { get; set; } = "http://localhost:8080/";
         public string Post { get; set; } = string.Empty;
         public string Response { get; set; } = string.Empty;
-
-        public override string ToString()
-        {
-            return this.Url;
-        }
     }
 
     [AddINotifyPropertyChangedInterface]
