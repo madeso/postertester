@@ -7,16 +7,19 @@
         xmlns:local="clr-namespace:PostTestr"
         mc:Ignorable="d"
         Icon="icon.ico"
-        Title="PostTestr" Height="350" Width="525" Closing="MainWindow_OnClosing">
+        Title="PostTestr"
+        Width="800" Height="600"
+        d:DataContext="{d:DesignInstance local:Data}"
+        >
     <Window.CommandBindings>
         <CommandBinding Command="postTestr:CustomCommands.Exit" Executed="ExitExecuted"></CommandBinding>
         <CommandBinding Command="postTestr:CustomCommands.Execute" Executed="ExecuteExecuted"></CommandBinding>
-        <CommandBinding Command="postTestr:CustomCommands.Login" Executed="LoginExecuted"></CommandBinding>
+        <CommandBinding Command="postTestr:CustomCommands.NewRequest" Executed="NewRequestExecuted"></CommandBinding>
         <CommandBinding Command="postTestr:CustomCommands.Format" Executed="FormatExecuted"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Q" Modifiers="Control" Command="postTestr:CustomCommands.Exit"></KeyBinding>
-        <KeyBinding Key="L" Modifiers="Control" Command="postTestr:CustomCommands.Login"></KeyBinding>
+        <KeyBinding Key="L" Modifiers="Control" Command="postTestr:CustomCommands.NewRequest"></KeyBinding>
         <KeyBinding Key="Return" Modifiers="Control" Command="postTestr:CustomCommands.Execute"></KeyBinding>
         <KeyBinding Key="F" Modifiers="Control" Command="postTestr:CustomCommands.Format"></KeyBinding>
     </Window.InputBindings>
@@ -25,33 +28,60 @@
             <RowDefinition Height="20" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
         <Menu Width="Auto" Grid.Row="0">
             <MenuItem Header="_File">
                 <MenuItem Header="Exit" Command="postTestr:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="Login" Command="postTestr:CustomCommands.Login" InputGestureText="Ctrl-L" />
+                <MenuItem Header="New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-L" />
                 <MenuItem Header="Execute" Command="postTestr:CustomCommands.Execute" InputGestureText="Ctrl-Return" />
                 <MenuItem Header="Format" Command="postTestr:CustomCommands.Format" InputGestureText="Ctrl-F" />
             </MenuItem>
         </Menu>
+        
+        <!-- main application here below menu -->
         <Grid Grid.Row="1">
-            <TextBlock Margin="10,10,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="35">LGN</TextBlock>
-            <TextBox Name="UiLogin" Margin="45,10,10,0" Height="17" VerticalAlignment="Top"></TextBox>
-            
-            <TextBlock Margin="10,32,0,0" Height="17" VerticalAlignment="Top" HorizontalAlignment="Left" Width="35" RenderTransformOrigin="2.771,7.706">URL</TextBlock>
-            <TextBox Name="UiUrl" Margin="45,32,10,0" Height="17" VerticalAlignment="Top"></TextBox>
-            
-            <Grid Margin="10,54,10,10">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
-                <TextBox Name="UiPost" AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">Post data</TextBox>
+
+                <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Reguests}" SelectedItem="{Binding SelectedRequest}"></ListView>
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                <TextBox Name="UiResponse" Grid.Column="2" AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">Response</TextBox>
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0">URL</TextBlock>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url}"></TextBox>
+
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding SelectedRequest.Post}" AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                        <TextBox Text="{Binding SelectedRequest.Response}" x:Name="UiResponse" Grid.Column="2" AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
+        
+        
     </Grid>
 </Window>

@@ -13,5 +13,12 @@ namespace PostTestr
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            var data = Disk.LoadOrCreateNew();
+            var window = new MainWindow { DataContext = data, Data = data };
+            window.Closed += (closedSender, closedArgs) => Disk.Save(data);
+            window.Show();
+        }
     }
 }

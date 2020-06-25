@@ -11,8 +11,8 @@ namespace PostTestr
     public static class CustomCommands
     {
         public static RoutedCommand Exit = new RoutedCommand();
+        public static RoutedCommand NewRequest = new RoutedCommand();
         public static RoutedCommand Execute = new RoutedCommand();
-        public static RoutedCommand Login = new RoutedCommand();
         public static RoutedCommand Format = new RoutedCommand();
     }
 }
