@@ -32,6 +32,13 @@ namespace PostTestr
         public ObservableCollection<Request> Reguests { get; set; } = new ObservableCollection<Request>();
         public Request SelectedRequest { get; set; } = null;
         public CookieContainer Cookies { get; set; }
+
+        public void AddNewRequest()
+        {
+            var r = new Request();
+            this.Reguests.Add(r);
+            this.SelectedRequest = r;
+        }
     }
 
     public class RequestFile
@@ -59,7 +66,7 @@ namespace PostTestr
             else
             {
                 var r = new Data { };
-                r.Reguests.Add(new Request());
+                r.AddNewRequest();
                 return r;
             }
         }

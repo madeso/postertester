@@ -59,9 +59,7 @@ namespace PostTestr
 
         private void NewRequestExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var r = new Request();
-            Data.Reguests.Add(r);
-            Data.SelectedRequest = r;
+            Data.AddNewRequest();
         }
 
         private void ExitExecuted(object sender, ExecutedRoutedEventArgs e)
