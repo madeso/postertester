@@ -44,7 +44,7 @@ namespace PostTestr
             {
                 return;
             }
-            r.Response = Logic.Request(r.Url, r.Post, Data.Cookies);
+            Logic.Request(r, Data.Cookies);
         }
 
         private void FormatExecuted(object sender, ExecutedRoutedEventArgs e)

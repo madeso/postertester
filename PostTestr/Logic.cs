@@ -49,7 +49,7 @@ namespace PostTestr
 
             request.CookieContainer = cookies;
 
-            if (string.IsNullOrEmpty(requestData) == false)
+            if (requestData != null)
             {
                 request.Method = "POST";
                 var bytes = Encoding.UTF8.GetBytes(requestData);
@@ -108,6 +108,11 @@ namespace PostTestr
             {
                 return x.Message;
             }
+        }
+
+        public static void Request(Request r, CookieContainer cookies)
+        {
+            r.Response = Logic.Request(r.Url, r.HasPost? r.Post ?? string.Empty : null, cookies);
         }
     }
 }

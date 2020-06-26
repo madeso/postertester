@@ -5,12 +5,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PostTestr"
+        xmlns:converters="clr-namespace:PostTestr.Converters"
         mc:Ignorable="d"
         Icon="icon.ico"
         Title="PostTestr"
         Width="800" Height="600"
         d:DataContext="{d:DesignInstance local:Data}"
         >
+    <Window.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"  True="Visible"   False="Collapsed" />
+        <converters:BooleanToVisibilityConverter x:Key="VisibleIfFalseConverter" True="Collapsed" False="Visible" />
+    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="postTestr:CustomCommands.Exit" Executed="ExitExecuted"></CommandBinding>
         <CommandBinding Command="postTestr:CustomCommands.Execute" Executed="ExecuteExecuted"></CommandBinding>
@@ -70,39 +75,54 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0">URL</TextBlock>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="URL"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="5" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        
-                        <Grid Grid.Column="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Post"/>
-                            <TextBox Grid.Row="1" Text="{Binding SelectedRequest.Post, UpdateSourceTrigger=PropertyChanged}"
-                                     AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
-                        </Grid>
-                        
-                        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                    <CheckBox Grid.Row="1" Grid.Column="1" Content="Has post data" IsChecked="{Binding SelectedRequest.HasPost}" />
 
-                        <Grid Grid.Column="2">
+                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
+                        <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <TextBlock Text="Response"/>
                             <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
-                                     AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+                        </Grid>
+
+                        <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="5" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                        
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Post"/>
+                                <TextBox Grid.Row="1" Text="{Binding SelectedRequest.Post, UpdateSourceTrigger=PropertyChanged}"
+                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                            </Grid>
+                        
+                            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Response"/>
+                                <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
+                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
