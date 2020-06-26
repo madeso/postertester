@@ -79,10 +79,10 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="URL"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" Text="URL"/>
+                    <TextBox Margin="3" Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <CheckBox Grid.Row="1" Grid.Column="1" Content="Has post data" IsChecked="{Binding SelectedRequest.HasPost}" />
+                    <CheckBox Margin="3" Grid.Row="1" Grid.Column="1" Content="Has post data" IsChecked="{Binding SelectedRequest.HasPost}" />
 
                     <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
                         <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
@@ -90,7 +90,7 @@
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Response"/>
+                            <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
                             <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
                         </Grid>
@@ -107,7 +107,7 @@
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="Post"/>
+                                <TextBlock FontWeight="Bold" Text="Post" />
                                 <TextBox Grid.Row="1" Text="{Binding SelectedRequest.Post, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
                             </Grid>
@@ -119,7 +119,7 @@
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="Response"/>
+                                <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
                                 <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
                             </Grid>
