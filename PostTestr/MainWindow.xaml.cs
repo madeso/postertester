@@ -37,6 +37,13 @@ namespace PostTestr
             InitializeComponent();
         }
 
+        public Action OnSave { get; set; } = null;
+
+        private void Save()
+        {
+            this.OnSave?.Invoke();
+        }
+
         public void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var r = Data.SelectedRequest;
@@ -45,6 +52,7 @@ namespace PostTestr
                 return;
             }
             Logic.Request(r, Data.Cookies);
+            Save();
         }
 
         private void FormatExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -55,11 +63,13 @@ namespace PostTestr
                 return;
             }
             r.Post = Logic.FormatJsonOrNot(r.Post);
+            Save();
         }
 
         private void NewRequestExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             Data.AddNewRequest();
+            Save();
         }
 
         private void ExitExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -70,6 +80,7 @@ namespace PostTestr
         private void DeleteSelectedRequestExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             Data.DeleteSelectedRequest();
+            Save();
         }
     }
 }

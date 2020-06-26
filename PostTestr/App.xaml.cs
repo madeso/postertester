@@ -18,6 +18,7 @@ namespace PostTestr
             var data = Disk.LoadOrCreateNew();
             var window = new MainWindow { DataContext = data, Data = data };
             window.Closed += (closedSender, closedArgs) => Disk.Save(data);
+            window.OnSave = () => Disk.Save(data);
             window.Show();
         }
     }

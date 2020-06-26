@@ -16,9 +16,16 @@ namespace PostTestr
     [AddINotifyPropertyChangedInterface]
     public class Request
     {
+        [JsonProperty("url")]
         public string Url { get; set; } = "http://localhost:8080/";
+
+        [JsonProperty("has_post")]
         public bool HasPost { get; set; } = false;
+
+        [JsonProperty("post")]
         public string Post { get; set; } = string.Empty;
+
+        [JsonProperty("response")]
         public string Response { get; set; } = string.Empty;
     }
 
@@ -58,23 +65,47 @@ namespace PostTestr
 
     public class RequestFile
     {
+        [JsonProperty("requests")]
         public Request[] Requests { get; set; }
+
+        [JsonProperty("selected_request")]
+        public int SelectedRequest { get; set; }
     }
 
     public static class Disk
     {
-        public static string SettingsFile => "";
+        private static string SettingsFile
+        {
+            get
+            {
+                var root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var folder = Path.Combine(root, "PostTestr");
+                if(Directory.Exists(folder) == false)
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                return Path.Combine(folder, "settings.json"); ;
+            }
+        }
 
-        public static Data Load(string file)
+        private static Data Load(string file)
         {
             var data = File.ReadAllText(file);
             var container = JsonConvert.DeserializeObject<RequestFile>(data);
-            return new Data { Requests = new ObservableCollection<Request>(container.Requests) };
+            var requests = new ObservableCollection<Request>(container.Requests);
+            return new Data { Requests = requests, SelectedRequest = requests[container.SelectedRequest]};
+        }
+
+        private static void Save(Data data, string file)
+        {
+            var jsonFile = new RequestFile { Requests = data.Requests.ToArray(), SelectedRequest = data.Requests.IndexOf(data.SelectedRequest) };
+            var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
+            File.WriteAllText(file, jsonData);
         }
 
         public static Data LoadOrCreateNew()
         {
-            if(File.Exists(SettingsFile))
+            if (File.Exists(SettingsFile))
             {
                 return Load(SettingsFile);
             }
@@ -86,8 +117,9 @@ namespace PostTestr
             }
         }
 
-        internal static void Save(Data data)
+        public static void Save(Data data)
         {
+            Save(data, SettingsFile);
         }
     }
 }
