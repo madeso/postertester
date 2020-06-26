@@ -14,5 +14,6 @@ namespace PostTestr
         public static RoutedCommand NewRequest = new RoutedCommand();
         public static RoutedCommand Execute = new RoutedCommand();
         public static RoutedCommand Format = new RoutedCommand();
+        public static RoutedCommand DeleteSelectedRequest = new RoutedCommand();
     }
 }

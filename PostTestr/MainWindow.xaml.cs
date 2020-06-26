@@ -66,5 +66,10 @@ namespace PostTestr
         {
             this.Close();
         }
+
+        private void DeleteSelectedRequestExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Data.DeleteSelectedRequest();
+        }
     }
 }

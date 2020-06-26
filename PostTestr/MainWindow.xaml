@@ -21,6 +21,7 @@
         <CommandBinding Command="postTestr:CustomCommands.Execute" Executed="ExecuteExecuted"></CommandBinding>
         <CommandBinding Command="postTestr:CustomCommands.NewRequest" Executed="NewRequestExecuted"></CommandBinding>
         <CommandBinding Command="postTestr:CustomCommands.Format" Executed="FormatExecuted"></CommandBinding>
+        <CommandBinding Command="postTestr:CustomCommands.DeleteSelectedRequest" Executed="DeleteSelectedRequestExecuted"></CommandBinding>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Q" Modifiers="Control" Command="postTestr:CustomCommands.Exit"></KeyBinding>
@@ -59,6 +60,9 @@
                 </Grid.ColumnDefinitions>
 
                 <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Requests}" SelectedItem="{Binding SelectedRequest}">
+                    <ListView.InputBindings>
+                        <KeyBinding Key="Delete" Command="postTestr:CustomCommands.DeleteSelectedRequest" />
+                    </ListView.InputBindings>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel>

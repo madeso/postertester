@@ -44,6 +44,16 @@ namespace PostTestr
             this.Requests.Add(r);
             this.SelectedRequest = r;
         }
+
+        public void DeleteSelectedRequest()
+        {
+            if(this.SelectedRequest == null) { return; }
+            if(this.Requests.Count <= 1) { return; }
+
+            var index = this.Requests.IndexOf(this.SelectedRequest);
+            this.Requests.RemoveAt(index);
+            this.SelectedRequest = this.Requests[ Math.Min(index, this.Requests.Count-1) ];
+        }
     }
 
     public class RequestFile
