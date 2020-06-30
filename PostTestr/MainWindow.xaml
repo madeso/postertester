@@ -17,17 +17,50 @@
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfFalseConverter" True="Collapsed" False="Visible" />
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="postTestr:CustomCommands.Exit" Executed="ExitExecuted"></CommandBinding>
-        <CommandBinding Command="postTestr:CustomCommands.Execute" Executed="ExecuteExecuted"></CommandBinding>
-        <CommandBinding Command="postTestr:CustomCommands.NewRequest" Executed="NewRequestExecuted"></CommandBinding>
-        <CommandBinding Command="postTestr:CustomCommands.Format" Executed="FormatExecuted"></CommandBinding>
-        <CommandBinding Command="postTestr:CustomCommands.DeleteSelectedRequest" Executed="DeleteSelectedRequestExecuted"></CommandBinding>
+        <CommandBinding Command="postTestr:CustomCommands.Exit" Executed="ExitExecuted" />
+        <CommandBinding Command="postTestr:CustomCommands.Execute" Executed="ExecuteExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.NewRequest" Executed="NewRequestExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.Format" Executed="FormatExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.DeleteSelectedRequest" Executed="DeleteSelectedRequestExecuted" />
+
+        <CommandBinding Command="postTestr:CustomCommands.FocusRequests" Executed="FocusRequestsExecuted" />
+        <CommandBinding Command="postTestr:CustomCommands.FocusUrl" Executed="FocusUrlExecuted" />
+        <CommandBinding Command="postTestr:CustomCommands.FocusPost" Executed="FocusPostExecuted" />
+
+        <CommandBinding Command="postTestr:CustomCommands.Save" Executed="SaveExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.TogglePost" Executed="TogglePostExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest1" Executed="SelectRequest1Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest2" Executed="SelectRequest2Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest3" Executed="SelectRequest3Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest4" Executed="SelectRequest4Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest5" Executed="SelectRequest5Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest6" Executed="SelectRequest6Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest7" Executed="SelectRequest7Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest8" Executed="SelectRequest8Executed"/>
+        <CommandBinding Command="postTestr:CustomCommands.SelectRequest9" Executed="SelectRequest9Executed"/>
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Key="Q" Modifiers="Control" Command="postTestr:CustomCommands.Exit"></KeyBinding>
-        <KeyBinding Key="L" Modifiers="Control" Command="postTestr:CustomCommands.NewRequest"></KeyBinding>
-        <KeyBinding Key="Return" Modifiers="Control" Command="postTestr:CustomCommands.Execute"></KeyBinding>
-        <KeyBinding Key="F" Modifiers="Control" Command="postTestr:CustomCommands.Format"></KeyBinding>
+        <KeyBinding Modifiers="Control" Key="S" Command="postTestr:CustomCommands.Save" />
+        <KeyBinding Modifiers="Control" Key="Q" Command="postTestr:CustomCommands.Exit" />
+        
+        <KeyBinding Modifiers="Control" Key="Return" Command="postTestr:CustomCommands.Execute" />
+        <KeyBinding Modifiers="Control" Key="F" Command="postTestr:CustomCommands.Format" />
+        <KeyBinding Modifiers="Control" Key="N" Command="postTestr:CustomCommands.NewRequest" />
+        <KeyBinding Modifiers="Control" Key="T" Command="postTestr:CustomCommands.TogglePost" />
+        
+        <KeyBinding Modifiers="Control" Key="R" Command="postTestr:CustomCommands.FocusRequests" />
+        <KeyBinding Modifiers="Control" Key="U" Command="postTestr:CustomCommands.FocusUrl" />
+        <KeyBinding Modifiers="Control" Key="P" Command="postTestr:CustomCommands.FocusPost" />
+        
+        <KeyBinding Modifiers="Control" Key="D1" Command="postTestr:CustomCommands.SelectRequest1" />
+        <KeyBinding Modifiers="Control" Key="D2" Command="postTestr:CustomCommands.SelectRequest2" />
+        <KeyBinding Modifiers="Control" Key="D3" Command="postTestr:CustomCommands.SelectRequest3" />
+        <KeyBinding Modifiers="Control" Key="D4" Command="postTestr:CustomCommands.SelectRequest4" />
+        <KeyBinding Modifiers="Control" Key="D5" Command="postTestr:CustomCommands.SelectRequest5" />
+        <KeyBinding Modifiers="Control" Key="D6" Command="postTestr:CustomCommands.SelectRequest6" />
+        <KeyBinding Modifiers="Control" Key="D7" Command="postTestr:CustomCommands.SelectRequest7" />
+        <KeyBinding Modifiers="Control" Key="D8" Command="postTestr:CustomCommands.SelectRequest8" />
+        <KeyBinding Modifiers="Control" Key="D9" Command="postTestr:CustomCommands.SelectRequest9" />
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
@@ -41,12 +74,30 @@
         
         <Menu Width="Auto" Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="Exit" Command="postTestr:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
+                <MenuItem Header="_Save" Command="postTestr:CustomCommands.Save" InputGestureText="Ctrl-S" />
+                <MenuItem Header="E_xit" Command="postTestr:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-L" />
                 <MenuItem Header="Execute" Command="postTestr:CustomCommands.Execute" InputGestureText="Ctrl-Return" />
                 <MenuItem Header="Format" Command="postTestr:CustomCommands.Format" InputGestureText="Ctrl-F" />
+                <MenuItem Header="_New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />
+                <MenuItem Header="Delete selected request" Command="postTestr:CustomCommands.DeleteSelectedRequest"/>
+                <MenuItem Header="Toggle post" Command="postTestr:CustomCommands.TogglePost" InputGestureText="Ctrl-T" />
+            </MenuItem>
+            <MenuItem Header="Focus">
+                <MenuItem Header="Focus requests" Command="postTestr:CustomCommands.FocusRequests" InputGestureText="Ctrl-R" />
+                <MenuItem Header="Focus URL" Command="postTestr:CustomCommands.FocusUrl" InputGestureText="Ctrl-U" />
+                <MenuItem Header="Focus posts" Command="postTestr:CustomCommands.FocusPost" InputGestureText="Ctrl-P" />
+                <Separator />
+                <MenuItem Header="Select request 1" Command="postTestr:CustomCommands.SelectRequest1" InputGestureText="Ctrl-1" />
+                <MenuItem Header="Select request 2" Command="postTestr:CustomCommands.SelectRequest2" InputGestureText="Ctrl-2" />
+                <MenuItem Header="Select request 3" Command="postTestr:CustomCommands.SelectRequest3" InputGestureText="Ctrl-3" />
+                <MenuItem Header="Select request 4" Command="postTestr:CustomCommands.SelectRequest4" InputGestureText="Ctrl-4" />
+                <MenuItem Header="Select request 5" Command="postTestr:CustomCommands.SelectRequest5" InputGestureText="Ctrl-5" />
+                <MenuItem Header="Select request 6" Command="postTestr:CustomCommands.SelectRequest6" InputGestureText="Ctrl-6" />
+                <MenuItem Header="Select request 7" Command="postTestr:CustomCommands.SelectRequest7" InputGestureText="Ctrl-7" />
+                <MenuItem Header="Select request 8" Command="postTestr:CustomCommands.SelectRequest8" InputGestureText="Ctrl-8" />
+                <MenuItem Header="Select request 9" Command="postTestr:CustomCommands.SelectRequest9" InputGestureText="Ctrl-9" />
             </MenuItem>
         </Menu>
         
@@ -59,7 +110,7 @@
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Requests}" SelectedItem="{Binding SelectedRequest}">
+                <ListView x:Name="uiRequests" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Requests}" SelectedItem="{Binding SelectedRequest}">
                     <ListView.InputBindings>
                         <KeyBinding Key="Delete" Command="postTestr:CustomCommands.DeleteSelectedRequest" />
                     </ListView.InputBindings>
@@ -84,7 +135,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" Text="URL"/>
-                    <TextBox Margin="3" Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox x:Name="uiUrl" Margin="3" Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
                     <CheckBox Margin="3" Grid.Row="1" Grid.Column="1" Content="Has post data" IsChecked="{Binding SelectedRequest.HasPost}" />
 
@@ -112,7 +163,7 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <TextBlock FontWeight="Bold" Text="Post" />
-                                <TextBox Grid.Row="1" Text="{Binding SelectedRequest.Post, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.Post, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
                             </Grid>
                         

@@ -82,5 +82,96 @@ namespace PostTestr
             Data.DeleteSelectedRequest();
             Save();
         }
+
+        private void SaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Save();
+        }
+
+        private void TogglePostExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var r = Data.SelectedRequest;
+            if (r == null)
+            {
+                return;
+            }
+            r.HasPost = !r.HasPost;
+        }
+
+        private void FocusRequestsExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            uiRequests.Focus();
+        }
+
+        private void FocusUrlExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            uiUrl.Focus();
+            uiUrl.SelectAll();
+        }
+
+        private void FocusPostExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var r = Data.SelectedRequest;
+            if (r == null)
+            {
+                return;
+            }
+            uiPost.Focus();
+            uiPost.SelectAll();
+        }
+
+
+        void SelectRequest(int i1)
+        {
+            var i = i1 - 1;
+            if(i < 0 ) return;
+            if(i >= Data.Requests.Count) return;
+            Data.SelectedRequest = Data.Requests[i];
+        }
+
+        private void SelectRequest1Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(1);
+        }
+
+        private void SelectRequest2Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(2);
+        }
+
+        private void SelectRequest3Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(3);
+        }
+
+        private void SelectRequest4Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(4);
+        }
+
+        private void SelectRequest5Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(5);
+        }
+
+        private void SelectRequest6Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(6);
+        }
+
+        private void SelectRequest7Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(7);
+        }
+
+        private void SelectRequest8Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(8);
+        }
+
+        private void SelectRequest9Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectRequest(9);
+        }
     }
 }
