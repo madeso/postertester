@@ -112,7 +112,25 @@ namespace PostTestr
 
         public static void Request(Request r, CookieContainer cookies)
         {
-            r.Response = Logic.Request(r.Url, r.HasPost? r.Post ?? string.Empty : null, cookies);
+            if(r.Worker != null)
+            {
+                if(r.Worker.IsBusy)
+                {
+                    return;
+                }
+            }
+            r.Worker = new System.ComponentModel.BackgroundWorker();
+            r.Worker.DoWork += (sender, args) =>
+            {
+                r.Response = Logic.Request(r.Url, r.HasPost ? r.Post ?? string.Empty : null, cookies);
+            };
+            r.Worker.RunWorkerCompleted += (sender, e) =>
+            {
+                r.IsWorking = false;
+            };
+            r.Response = string.Empty;
+            r.IsWorking = true;
+            r.Worker.RunWorkerAsync();
         }
     }
 }

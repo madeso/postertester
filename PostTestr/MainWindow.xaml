@@ -145,7 +145,10 @@
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
+                            <DockPanel>
+                                <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
+                                <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
+                            </DockPanel>
                             <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
                         </Grid>
@@ -174,7 +177,10 @@
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
+                                <DockPanel>
+                                    <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
+                                    <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
+                                </DockPanel>
                                 <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
                             </Grid>

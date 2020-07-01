@@ -27,6 +27,12 @@ namespace PostTestr
 
         [JsonProperty("response")]
         public string Response { get; set; } = string.Empty;
+
+        [JsonIgnore]
+        public bool IsWorking { get; set; } = false;
+
+        [JsonIgnore]
+        public BackgroundWorker Worker { get; set; } = null;
     }
 
     [AddINotifyPropertyChangedInterface]
