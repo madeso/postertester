@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,45 +6,127 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PostTestr
 {
-    [AddINotifyPropertyChangedInterface]
-    public class Request
+    public class Request : INotifyPropertyChanged
     {
+        private bool hasPost = false;
+        private string url = "http://localhost:8080/";
+        private string post = string.Empty;
+        private string response = string.Empty;
+        private bool isWorking = false;
+        private BackgroundWorker worker = null;
+
         [JsonProperty("url")]
-        public string Url { get; set; } = "http://localhost:8080/";
+        public string Url
+        {
+            get => url; set
+            {
+                url = value;
+                OnPropertyChanged();
+            }
+        }
 
         [JsonProperty("has_post")]
-        public bool HasPost { get; set; } = false;
+        public bool HasPost
+        {
+            get => hasPost; set
+            {
+                hasPost = value;
+                OnPropertyChanged();
+            }
+        }
 
         [JsonProperty("post")]
-        public string Post { get; set; } = string.Empty;
+        public string Post
+        {
+            get => post; set
+            {
+                post = value;
+                OnPropertyChanged();
+            }
+        }
 
         [JsonProperty("response")]
-        public string Response { get; set; } = string.Empty;
+        public string Response
+        {
+            get => response; set
+            {
+                response = value;
+                OnPropertyChanged();
+            }
+        }
 
         [JsonIgnore]
-        public bool IsWorking { get; set; } = false;
+        public bool IsWorking
+        {
+            get => isWorking; set
+            {
+                isWorking = value;
+                OnPropertyChanged();
+            }
+        }
 
         [JsonIgnore]
-        public BackgroundWorker Worker { get; set; } = null;
+        public BackgroundWorker Worker
+        {
+            get => worker; set
+            {
+                worker = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 
-    [AddINotifyPropertyChangedInterface]
-    public class Data
+    public class Data : INotifyPropertyChanged
     {
-        public ObservableCollection<Request> Requests { get; set; } = new ObservableCollection<Request>();
-        public Request SelectedRequest { get; set; } = null;
-        public CookieContainer Cookies { get; set; }
+        private Request selectedRequest = null;
+        private CookieContainer cookies;
+        private ObservableCollection<Request> requests = new ObservableCollection<Request>();
+
+        public ObservableCollection<Request> Requests
+        {
+            get => requests; set
+            {
+                requests = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Request SelectedRequest
+        {
+            get => selectedRequest; set
+            {
+                selectedRequest = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CookieContainer Cookies
+        {
+            get => cookies; set
+            {
+                cookies = value;
+                OnPropertyChanged();
+            }
+        }
 
         public void AddNewRequest()
         {
             var r = new Request();
-            if(this.SelectedRequest != null)
+            if (this.SelectedRequest != null)
             {
                 var newUrl = new UriBuilder(new Uri(this.SelectedRequest.Url))
                 {
@@ -60,12 +141,19 @@ namespace PostTestr
 
         public void DeleteSelectedRequest()
         {
-            if(this.SelectedRequest == null) { return; }
-            if(this.Requests.Count <= 1) { return; }
+            if (this.SelectedRequest == null) { return; }
+            if (this.Requests.Count <= 1) { return; }
 
             var index = this.Requests.IndexOf(this.SelectedRequest);
             this.Requests.RemoveAt(index);
-            this.SelectedRequest = this.Requests[ Math.Min(index, this.Requests.Count-1) ];
+            this.SelectedRequest = this.Requests[Math.Min(index, this.Requests.Count - 1)];
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 
