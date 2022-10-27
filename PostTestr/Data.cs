@@ -17,10 +17,33 @@ namespace PostTestr
     {
         private bool hasPost = false;
         private string url = "http://localhost:8080/";
+        private string title = "";
+        private string titleOrUrl = "";
         private string post = string.Empty;
         private string response = string.Empty;
         private bool isWorking = false;
         private BackgroundWorker worker = null;
+
+        public string TitleOrUrl
+        {
+            get => titleOrUrl; private set
+            {
+                titleOrUrl = value;
+                OnPropertyChanged();
+            }
+        }
+
+        void UpdateTitleOrUrl()
+        {
+            if(string.IsNullOrWhiteSpace(this.Title))
+            {
+                this.TitleOrUrl = this.Url;
+            }
+            else
+            {
+                this.TitleOrUrl = $"{this.Title} ({this.Url})";
+            }
+        }
 
         [JsonProperty("url")]
         public string Url
@@ -29,6 +52,18 @@ namespace PostTestr
             {
                 url = value;
                 OnPropertyChanged();
+                UpdateTitleOrUrl();
+            }
+        }
+
+        [JsonProperty("title")]
+        public string Title
+        {
+            get => title; set
+            {
+                title = value;
+                OnPropertyChanged();
+                UpdateTitleOrUrl();
             }
         }
 

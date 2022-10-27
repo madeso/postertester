@@ -29,6 +29,7 @@
 
         <CommandBinding Command="postTestr:CustomCommands.Save" Executed="SaveExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.TogglePost" Executed="TogglePostExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.SelectRequest1" Executed="SelectRequest1Executed"/>
         <CommandBinding Command="postTestr:CustomCommands.SelectRequest2" Executed="SelectRequest2Executed"/>
         <CommandBinding Command="postTestr:CustomCommands.SelectRequest3" Executed="SelectRequest3Executed"/>
@@ -47,11 +48,12 @@
         <KeyBinding Modifiers="Control" Key="F" Command="postTestr:CustomCommands.Format" />
         <KeyBinding Modifiers="Control" Key="N" Command="postTestr:CustomCommands.NewRequest" />
         <KeyBinding Modifiers="Control" Key="T" Command="postTestr:CustomCommands.TogglePost" />
+        <KeyBinding Modifiers="Control" Key="P" Command="postTestr:CustomCommands.LoadPost" />
         
         <KeyBinding Modifiers="Control" Key="R" Command="postTestr:CustomCommands.FocusRequests" />
         <KeyBinding Modifiers="Control" Key="U" Command="postTestr:CustomCommands.FocusUrl" />
         <KeyBinding Modifiers="Control" Key="P" Command="postTestr:CustomCommands.FocusPost" />
-        
+
         <KeyBinding Modifiers="Control" Key="D1" Command="postTestr:CustomCommands.SelectRequest1" />
         <KeyBinding Modifiers="Control" Key="D2" Command="postTestr:CustomCommands.SelectRequest2" />
         <KeyBinding Modifiers="Control" Key="D3" Command="postTestr:CustomCommands.SelectRequest3" />
@@ -117,7 +119,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel>
-                                <TextBlock Text="{Binding Url}" Foreground="Blue"/>
+                                <TextBlock Text="{Binding TitleOrUrl}" Foreground="Blue"/>
                             </WrapPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -131,15 +133,19 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" Text="URL"/>
                     <TextBox x:Name="uiUrl" Margin="3" Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <CheckBox Margin="3" Grid.Row="1" Grid.Column="1" Content="Has post data" IsChecked="{Binding SelectedRequest.HasPost}" />
+                    <TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="Title"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" Margin="3,0,3,0" Text="{Binding SelectedRequest.Title, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
+                    <CheckBox Margin="3" Grid.Row="2" Grid.Column="1" Content="Has post data?" IsChecked="{Binding SelectedRequest.HasPost}"/>
+
+                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" >
                         <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
@@ -164,10 +170,19 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
                                 <TextBlock FontWeight="Bold" Text="Post" />
                                 <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.Post, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                                <Grid Grid.Row="2" Margin="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Margin="3" Command="postTestr:CustomCommands.LoadPost">
+                                        <TextBlock Text="Load file..." Margin="3"/>
+                                    </Button>
+                                </Grid>
                             </Grid>
                         
                             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />

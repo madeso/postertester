@@ -19,7 +19,7 @@ namespace PostTestr
     using System.IO;
     using System.Net;
     using System.Net.Cache;
-
+    using Microsoft.Win32;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -96,6 +96,25 @@ namespace PostTestr
                 return;
             }
             r.HasPost = !r.HasPost;
+        }
+
+        private void LoadPostExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var r = Data.SelectedRequest;
+            if (r == null)
+            {
+                return;
+            }
+
+
+            var fdlg = new OpenFileDialog();
+            fdlg.Title = "Browse post data";
+            fdlg.Filter = "Text files (json,txt,xml)|*.json;*.txt;*.xml|All files (*.*)|*.*";
+            fdlg.RestoreDirectory = true;
+            var dr = fdlg.ShowDialog();
+            if (dr == false) { return; }
+
+            r.Post = File.ReadAllText(fdlg.FileName);
         }
 
         private void FocusRequestsExecuted(object sender, ExecutedRoutedEventArgs e)
