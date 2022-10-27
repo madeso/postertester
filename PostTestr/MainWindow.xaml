@@ -26,6 +26,7 @@
         <CommandBinding Command="postTestr:CustomCommands.FocusRequests" Executed="FocusRequestsExecuted" />
         <CommandBinding Command="postTestr:CustomCommands.FocusUrl" Executed="FocusUrlExecuted" />
         <CommandBinding Command="postTestr:CustomCommands.FocusPost" Executed="FocusPostExecuted" />
+        <CommandBinding Command="postTestr:CustomCommands.Compare" Executed="CompareExecuted" />
 
         <CommandBinding Command="postTestr:CustomCommands.Save" Executed="SaveExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.TogglePost" Executed="TogglePostExecuted"/>
@@ -197,9 +198,30 @@
                                     <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
                                     <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
                                 </DockPanel>
-                                <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
-                                         FontFamily="Consolas" FontSize="11"
-                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+
+                                <Grid Grid.Row="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
+                                             FontFamily="Consolas" FontSize="11"
+                                             AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+
+                                    <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding LeftCompare}" Margin="3"/>
+                                    <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding RightCompare}" Margin="3"/>
+
+                                    <Button Grid.Row="1" Grid.Column="2" Margin="3" Command="postTestr:CustomCommands.Compare">
+                                        <TextBlock Text="Compare..." Margin="3"/>
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

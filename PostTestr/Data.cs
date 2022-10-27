@@ -128,6 +128,9 @@ namespace PostTestr
     public class Data : INotifyPropertyChanged
     {
         private Request selectedRequest = null;
+        private Request leftCompare = null;
+        private Request rightCompare = null;
+
         private CookieContainer cookies;
         private ObservableCollection<Request> requests = new ObservableCollection<Request>();
 
@@ -145,6 +148,24 @@ namespace PostTestr
             get => selectedRequest; set
             {
                 selectedRequest = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Request LeftCompare
+        {
+            get => leftCompare; set
+            {
+                leftCompare = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Request RightCompare
+        {
+            get => rightCompare; set
+            {
+                rightCompare = value;
                 OnPropertyChanged();
             }
         }
@@ -181,7 +202,19 @@ namespace PostTestr
 
             var index = this.Requests.IndexOf(this.SelectedRequest);
             this.Requests.RemoveAt(index);
-            this.SelectedRequest = this.Requests[Math.Min(index, this.Requests.Count - 1)];
+            var nextRequest = this.Requests[Math.Min(index, this.Requests.Count - 1)];
+
+            if(this.LeftCompare == this.SelectedRequest)
+            {
+                this.LeftCompare = nextRequest;
+            }
+
+            if (this.RightCompare == this.SelectedRequest)
+            {
+                this.RightCompare = nextRequest;
+            }
+
+            this.SelectedRequest = nextRequest;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -189,6 +222,18 @@ namespace PostTestr
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        internal void Compare()
+        {
+            var lhs = this.LeftCompare;
+            var rhs = this.RightCompare;
+            if (lhs == null || rhs == null)
+            {
+                return;
+            }
+
+            DiffTool.LaunchDiff(lhs.Response, rhs.Response);
         }
     }
 
@@ -199,6 +244,12 @@ namespace PostTestr
 
         [JsonProperty("selected_request")]
         public int SelectedRequest { get; set; }
+
+        [JsonProperty("left_compare")]
+        public int LeftCompare { get; set; }
+
+        [JsonProperty("right_compare")]
+        public int RightCompare { get; set; }
     }
 
     public static class Disk
@@ -222,12 +273,24 @@ namespace PostTestr
             var data = File.ReadAllText(file);
             var container = JsonConvert.DeserializeObject<RequestFile>(data);
             var requests = new ObservableCollection<Request>(container.Requests);
-            return new Data { Requests = requests, SelectedRequest = requests[container.SelectedRequest]};
+            return new Data
+            {
+                Requests = requests,
+                SelectedRequest = requests[container.SelectedRequest],
+                LeftCompare = requests[container.LeftCompare],
+                RightCompare  = requests[container.RightCompare]
+            };
         }
 
         private static void Save(Data data, string file)
         {
-            var jsonFile = new RequestFile { Requests = data.Requests.ToArray(), SelectedRequest = data.Requests.IndexOf(data.SelectedRequest) };
+            var jsonFile = new RequestFile
+            {
+                Requests = data.Requests.ToArray(),
+                SelectedRequest = data.Requests.IndexOf(data.SelectedRequest),
+                LeftCompare = data.Requests.IndexOf(data.LeftCompare),
+                RightCompare = data.Requests.IndexOf(data.RightCompare)
+            };
             var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
             File.WriteAllText(file, jsonData);
         }

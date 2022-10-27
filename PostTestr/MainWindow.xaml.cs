@@ -98,6 +98,11 @@ namespace PostTestr
             r.HasPost = !r.HasPost;
         }
 
+        private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Data.Compare();
+        }
+
         private void LoadPostExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var r = Data.SelectedRequest;
