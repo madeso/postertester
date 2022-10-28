@@ -22,7 +22,6 @@ namespace PostTestr
         private string post = string.Empty;
         private string response = string.Empty;
         private bool isWorking = false;
-        private BackgroundWorker worker = null;
 
         public string TitleOrUrl
         {
@@ -103,16 +102,6 @@ namespace PostTestr
             get => isWorking; set
             {
                 isWorking = value;
-                OnPropertyChanged();
-            }
-        }
-
-        [JsonIgnore]
-        public BackgroundWorker Worker
-        {
-            get => worker; set
-            {
-                worker = value;
                 OnPropertyChanged();
             }
         }

@@ -1,136 +1,146 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Cache;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PostTestr
+namespace PostTestr;
+
+public class Response
 {
-    public static class Logic
+    public HttpStatusCode Status { get; set; }
+    public string Body { get; set; }
+}
+
+public enum Method
+{
+    Get,
+    // Head,
+    Post,
+    Put,
+    Delete,
+    // Connect,
+    // Options,
+    // Trace,
+    Patch
+    
+    // Link,
+    // Unlink,
+    // Purge,
+    // View,
+
+    // web dav
+    // Copy,
+    // Lock,
+    // PropFind,
+    // Unlock
+}
+
+public static class Logic
+{
+    private static string FormatJson(string t)
     {
-        private static string FormatJson(string t)
+        var obj = JsonConvert.DeserializeObject(t);
+        var f = JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented);
+        return f;
+    }
+
+    public static string FormatJsonOrNot(string t)
+    {
+        try
         {
-            var obj = Newtonsoft.Json.JsonConvert.DeserializeObject(t);
-            var f = Newtonsoft.Json.JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented);
-            return f;
+            return FormatJson(t);
+        }
+        catch (JsonReaderException)
+        {
+            return t;
+        }
+    }
+
+    static readonly HttpClient client = new HttpClient();
+
+    private static async Task<HttpResponseMessage> GetResponse(Method action, Uri url, HttpContent content)
+    {
+        return action switch
+        {
+            Method.Get =>      await client.GetAsync(url),
+            // Method.Head =>     break,
+            Method.Post =>     await client.PostAsync(url, content),
+            Method.Put =>      await client.PutAsync(url, content),
+            Method.Delete =>   await client.DeleteAsync(url),
+            // Method.Connect =>  break,
+            // Method.Options =>  break,
+            // Method.Trace =>    break,
+            Method.Patch =>    await client.PatchAsync(url, content),
+
+            // Method.Link =>     break,
+            // Method.Unlink =>   break,
+            // Method.Purge =>    break,
+            // Method.View =>     break,
+
+            // Method.Copy =>     break,
+            // Method.Lock =>     break,
+            // Method.PropFind => break,
+            // Method.Unlock =>   break,
+
+        _ => throw new Exception($"Invalid action: {action}"),
+        };
+    }
+
+    // todo(Gustav): read file
+    // todo(Gustav): form input
+
+    public static HttpContent WithStringContent(string t)
+    {
+        return new StringContent(t, Encoding.UTF8, "text/plain");
+    }
+
+    public static HttpContent WithJsonContent(string t)
+    {
+        return new StringContent(t, Encoding.UTF8, "application/json");
+    }
+
+    public static async Task<Response> GetUrl(Method action, Uri url, HttpContent content)
+    {
+        // todo(Gustav): client.DefaultRequestHeaders.
+        var headers = client.DefaultRequestHeaders;
+        using HttpResponseMessage response = await GetResponse(action, url, content);
+        var status = response.EnsureSuccessStatusCode();
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        return new Response { Status = status.StatusCode, Body = responseBody };
+    }
+
+    public static async Task Request(Request r, CookieContainer cookies)
+    {
+        // silently ignore double commands
+        if(r.IsWorking == true) { return; }
+
+        r.Response = string.Empty;
+        r.IsWorking = true;
+
+        try
+        {
+            var url = new Uri(r.Url);
+            var data = r.HasPost
+                ? await GetUrl(Method.Post, url, WithJsonContent(r.Post))
+                : await GetUrl(Method.Get, url, null);
+            r.Response = data.Body;
+        }
+        catch(Exception xx)
+        {
+            r.Response = String.Empty;
+
+            var x = xx;
+            while(x != null)
+            {
+                r.Response += x.Message + "\r\n";
+                x = x.InnerException;
+            }
         }
 
-        public static string FormatJsonOrNot(string t)
-        {
-            try
-            {
-                return FormatJson(t);
-            }
-            catch (JsonReaderException)
-            {
-                return t;
-            }
-        }
-
-        private static HttpWebRequest GetWebRequest(string url)
-        {
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
-            request.AllowAutoRedirect = true;
-            request.Credentials = CredentialCache.DefaultCredentials;
-            request.KeepAlive = false;
-            request.ProtocolVersion = HttpVersion.Version10;
-
-            return request;
-        }
-
-        private static string FetchStringAdvanced(string url, string requestData, CookieContainer cookies)
-        {
-            var request = GetWebRequest(url);
-
-            request.CookieContainer = cookies;
-
-            if (requestData != null)
-            {
-                request.Method = "POST";
-                var bytes = Encoding.UTF8.GetBytes(requestData);
-                request.ContentLength = bytes.Length;
-                request.ContentType = "application/json";
-                var postStream = request.GetRequestStream();
-                postStream.Write(bytes, 0, bytes.Length);
-                postStream.Close();
-            }
-
-            WebResponse response;
-            WebException exp = null;
-
-            try
-            {
-                response = request.GetResponse();
-            }
-            catch (WebException web)
-            {
-                exp = web;
-                response = web.Response;
-                if (response == null)
-                {
-                    throw;
-                }
-            }
-
-            Stream dataStream = response.GetResponseStream();
-            if (dataStream == null)
-            {
-                throw new Exception("No response stream present");
-            }
-
-            var reader = new StreamReader(dataStream);
-            var responseFromServer = reader.ReadToEnd();
-            reader.Close();
-            response.Close();
-
-            // if we didn't get any response and we failed earlier, rethrow that web-error
-            if (string.IsNullOrEmpty(responseFromServer) && exp != null)
-            {
-                throw exp;
-            }
-
-            if (exp == null) return FormatJsonOrNot(responseFromServer);
-            else return string.Format("{0}\n{1}", exp.Message, responseFromServer);
-        }
-
-        public static string Request(string url, string requestData, CookieContainer cookies)
-        {
-            try
-            {
-                return FetchStringAdvanced(url, requestData, cookies);
-            }
-            catch (Exception x)
-            {
-                return x.Message;
-            }
-        }
-
-        public static void Request(Request r, CookieContainer cookies)
-        {
-            if(r.Worker != null)
-            {
-                if(r.Worker.IsBusy)
-                {
-                    return;
-                }
-            }
-            r.Worker = new System.ComponentModel.BackgroundWorker();
-            r.Worker.DoWork += (sender, args) =>
-            {
-                r.Response = Logic.Request(r.Url, r.HasPost ? r.Post ?? string.Empty : null, cookies);
-            };
-            r.Worker.RunWorkerCompleted += (sender, e) =>
-            {
-                r.IsWorking = false;
-            };
-            r.Response = string.Empty;
-            r.IsWorking = true;
-            r.Worker.RunWorkerAsync();
-        }
+        r.IsWorking = false;
     }
 }
