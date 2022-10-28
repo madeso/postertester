@@ -3,8 +3,31 @@ using System.Windows.Input;
 using System.IO;
 using Microsoft.Win32;
 using System;
+using System.Windows.Media.Effects;
 
 namespace PostTestr;
+
+public class DialogBackground : IDisposable
+{
+    Window Parent { get; }
+    public DialogBackground(Window parent, Window dialog)
+    {
+        this.Parent = parent;
+
+        parent.Opacity = 0.5;
+        parent.Effect = new BlurEffect();
+
+        dialog.Owner = parent;
+        dialog.ShowInTaskbar = false;
+        dialog.Topmost = true;
+    }
+
+    public void Dispose()
+    {
+        Parent.Opacity = 1;
+        Parent.Effect = null;
+    }
+}
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -72,7 +95,12 @@ public partial class MainWindow : Window
 
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        Data.Compare();
+        var dlg = new CompareRequests(Data);
+        using var blur = new DialogBackground(this, dlg);
+        if (dlg.ShowDialog() ?? false)
+        {
+            Data.Compare();
+        }
     }
 
     private void LoadPostExecuted(object sender, ExecutedRoutedEventArgs e)

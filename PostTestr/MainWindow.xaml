@@ -83,6 +83,7 @@
                 <MenuItem Header="Format" Command="postTestr:CustomCommands.Format" InputGestureText="Ctrl-F" />
                 <MenuItem Header="_New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />
                 <MenuItem Header="Delete selected request" Command="postTestr:CustomCommands.DeleteSelectedRequest"/>
+                <MenuItem Header="Compare responses from 2 requests" Command="postTestr:CustomCommands.Compare"/>
             </MenuItem>
             <MenuItem Header="Focus">
                 <MenuItem Header="Focus requests" Command="postTestr:CustomCommands.FocusRequests" InputGestureText="Ctrl-R" />
@@ -141,50 +142,23 @@
                     <TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="Title"/>
                     <TextBox Grid.Row="1" Grid.Column="2" Margin="3,0,3,0" Text="{Binding SelectedRequest.Title, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" >
-                        <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <DockPanel>
-                                <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
-                                <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
-                            </DockPanel>
-                            <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
-                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
-                        </Grid>
+                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
 
-                        <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="5" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                        
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-                                <TextBlock FontWeight="Bold" Text="Post" />
-                                <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
-                                         FontFamily="Consolas" FontSize="11"
-                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
-                                <Grid Grid.Row="2" Margin="3">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Button Margin="3" Command="postTestr:CustomCommands.LoadPost">
-                                        <TextBlock Text="Load file..." Margin="3"/>
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        
-                            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
 
-                            <Grid Grid.Column="2">
+                        <!-- begin main body -->
+                        <Grid Grid.Row="0" Grid.ColumnSpan="3">
+
+                            <!-- No request body -->
+                            <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="*" />
@@ -193,33 +167,60 @@
                                     <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
                                     <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
                                 </DockPanel>
+                                <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
+                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+                            </Grid>
 
-                                <Grid Grid.Row="2">
+
+                            <!-- Has request body -->
+                            <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="5" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0">
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="auto" />
                                     </Grid.RowDefinitions>
+                                    <TextBlock FontWeight="Bold" Text="Body" />
+                                    <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                         FontFamily="Consolas" FontSize="11"
+                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                                    <Grid Grid.Row="2" Margin="3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Margin="3" Command="postTestr:CustomCommands.LoadPost">
+                                            <TextBlock Text="Load file..." Margin="3"/>
+                                        </Button>
+                                    </Grid>
+                                </Grid>
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
+                                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
-                                    <TextBox Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
+                                <Grid Grid.Column="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <DockPanel>
+                                        <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
+                                        <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
+                                    </DockPanel>
+
+                                    <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
                                              FontFamily="Consolas" FontSize="11"
                                              AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
-
-                                    <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding LeftCompare}" Margin="3"/>
-                                    <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding RightCompare}" Margin="3"/>
-
-                                    <Button Grid.Row="1" Grid.Column="2" Margin="3" Command="postTestr:CustomCommands.Compare">
-                                        <TextBlock Text="Compare..." Margin="3"/>
-                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
+                        <!-- end main body-->
                     </Grid>
+                    <!-- end body -->
                 </Grid>
             </Grid>
         </Grid>

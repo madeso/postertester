@@ -1,0 +1,51 @@
+﻿<Window x:Class="PostTestr.CompareRequests"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:postTestr="clr-namespace:PostTestr"
+        xmlns:converters="clr-namespace:PostTestr.Converters"
+        Icon="icon.ico"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        d:DataContext="{d:DesignInstance postTestr:Data}"
+        mc:Ignorable="d" Height="127" Width="481"
+        >
+    <Window.CommandBindings>
+        <CommandBinding Command="postTestr:CustomCommands.Compare" Executed="CompareExecuted" />
+    </Window.CommandBindings>
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" Orientation="Horizontal">
+                <ComboBox MinWidth="120" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding LeftCompare}" Margin="3"/>
+                <ComboBox MinWidth="120" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding RightCompare}" Margin="3"/>
+            </StackPanel>
+
+            <Button Grid.Column="1" Grid.Row="1" IsDefault="True" Margin="3" Command="postTestr:CustomCommands.Compare">
+                <TextBlock Text="Compare..." Margin="3"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
