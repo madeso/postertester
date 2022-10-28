@@ -83,7 +83,8 @@
                 <MenuItem Header="Format" Command="postTestr:CustomCommands.Format" InputGestureText="Ctrl-F" />
                 <MenuItem Header="_New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />
                 <MenuItem Header="Delete selected request" Command="postTestr:CustomCommands.DeleteSelectedRequest"/>
-                <MenuItem Header="Compare responses from 2 requests" Command="postTestr:CustomCommands.Compare"/>
+                <MenuItem Header="Compare responses from 2 requests..." Command="postTestr:CustomCommands.Compare"/>
+                <MenuItem Header="Import request content from file" Command="postTestr:CustomCommands.LoadPost"/>
             </MenuItem>
             <MenuItem Header="Focus">
                 <MenuItem Header="Focus requests" Command="postTestr:CustomCommands.FocusRequests" InputGestureText="Ctrl-R" />
@@ -184,20 +185,11 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto" />
                                         <RowDefinition Height="*" />
-                                        <RowDefinition Height="auto" />
                                     </Grid.RowDefinitions>
                                     <TextBlock FontWeight="Bold" Text="Body" />
                                     <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
                                          FontFamily="Consolas" FontSize="11"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
-                                    <Grid Grid.Row="2" Margin="3">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Button Margin="3" Command="postTestr:CustomCommands.LoadPost">
-                                            <TextBlock Text="Load file..." Margin="3"/>
-                                        </Button>
-                                    </Grid>
                                 </Grid>
 
                                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
