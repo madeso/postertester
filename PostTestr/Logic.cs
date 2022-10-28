@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,16 +16,25 @@ public class Response
     public string Body { get; set; }
 }
 
-public enum Method
+public enum HttpMethod
 {
+    [EnumMember(Value = "get")]
     Get,
     // Head,
+
+    [EnumMember(Value = "post")]
     Post,
+
+    [EnumMember(Value = "put")]
     Put,
+
+    [EnumMember(Value = "delete")]
     Delete,
     // Connect,
     // Options,
     // Trace,
+
+    [EnumMember(Value = "patch")]
     Patch
     
     // Link,
@@ -61,19 +72,19 @@ public static class Logic
 
     static readonly HttpClient client = new HttpClient();
 
-    private static async Task<HttpResponseMessage> GetResponse(Method action, Uri url, HttpContent content)
+    private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent content)
     {
         return action switch
         {
-            Method.Get =>      await client.GetAsync(url),
+            HttpMethod.Get =>      await client.GetAsync(url),
             // Method.Head =>     break,
-            Method.Post =>     await client.PostAsync(url, content),
-            Method.Put =>      await client.PutAsync(url, content),
-            Method.Delete =>   await client.DeleteAsync(url),
+            HttpMethod.Post =>     await client.PostAsync(url, content),
+            HttpMethod.Put =>      await client.PutAsync(url, content),
+            HttpMethod.Delete =>   await client.DeleteAsync(url),
             // Method.Connect =>  break,
             // Method.Options =>  break,
             // Method.Trace =>    break,
-            Method.Patch =>    await client.PatchAsync(url, content),
+            HttpMethod.Patch =>    await client.PatchAsync(url, content),
 
             // Method.Link =>     break,
             // Method.Unlink =>   break,
@@ -89,8 +100,36 @@ public static class Logic
         };
     }
 
-    // todo(Gustav): read file
-    // todo(Gustav): form input
+    internal static bool HasContent(HttpMethod action)
+    {
+        return action switch
+        {
+            HttpMethod.Get => false,
+            // Method.Head =>     break,
+            HttpMethod.Post => true,
+            HttpMethod.Put => true,
+            HttpMethod.Delete => false,
+            // Method.Connect =>  break,
+            // Method.Options =>  break,
+            // Method.Trace =>    break,
+            HttpMethod.Patch => true,
+
+            // Method.Link =>     break,
+            // Method.Unlink =>   break,
+            // Method.Purge =>    break,
+            // Method.View =>     break,
+
+            // Method.Copy =>     break,
+            // Method.Lock =>     break,
+            // Method.PropFind => break,
+            // Method.Unlock =>   break,
+
+            _ => throw new Exception($"Invalid action: {action}"),
+        };
+    }
+
+        // todo(Gustav): read file
+        // todo(Gustav): form input
 
     public static HttpContent WithStringContent(string t)
     {
@@ -102,7 +141,7 @@ public static class Logic
         return new StringContent(t, Encoding.UTF8, "application/json");
     }
 
-    public static async Task<Response> GetUrl(Method action, Uri url, HttpContent content)
+    public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
     {
         // todo(Gustav): client.DefaultRequestHeaders.
         var headers = client.DefaultRequestHeaders;
@@ -124,9 +163,9 @@ public static class Logic
         try
         {
             var url = new Uri(r.Url);
-            var data = r.HasPost
-                ? await GetUrl(Method.Post, url, WithJsonContent(r.Post))
-                : await GetUrl(Method.Get, url, null);
+            var data = HasContent(r.Method)
+                ? await GetUrl(HttpMethod.Post, url, r.GetContent())
+                : await GetUrl(HttpMethod.Get, url, null);
             r.Response = data.Body;
         }
         catch(Exception xx)

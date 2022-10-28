@@ -29,7 +29,6 @@
         <CommandBinding Command="postTestr:CustomCommands.Compare" Executed="CompareExecuted" />
 
         <CommandBinding Command="postTestr:CustomCommands.Save" Executed="SaveExecuted"/>
-        <CommandBinding Command="postTestr:CustomCommands.TogglePost" Executed="TogglePostExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.SelectRequest1" Executed="SelectRequest1Executed"/>
         <CommandBinding Command="postTestr:CustomCommands.SelectRequest2" Executed="SelectRequest2Executed"/>
@@ -48,7 +47,6 @@
         <KeyBinding Modifiers="Control" Key="Return" Command="postTestr:CustomCommands.Execute" />
         <KeyBinding Modifiers="Control" Key="F" Command="postTestr:CustomCommands.Format" />
         <KeyBinding Modifiers="Control" Key="N" Command="postTestr:CustomCommands.NewRequest" />
-        <KeyBinding Modifiers="Control" Key="T" Command="postTestr:CustomCommands.TogglePost" />
         <KeyBinding Modifiers="Control" Key="P" Command="postTestr:CustomCommands.LoadPost" />
         
         <KeyBinding Modifiers="Control" Key="R" Command="postTestr:CustomCommands.FocusRequests" />
@@ -85,7 +83,6 @@
                 <MenuItem Header="Format" Command="postTestr:CustomCommands.Format" InputGestureText="Ctrl-F" />
                 <MenuItem Header="_New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />
                 <MenuItem Header="Delete selected request" Command="postTestr:CustomCommands.DeleteSelectedRequest"/>
-                <MenuItem Header="Toggle post" Command="postTestr:CustomCommands.TogglePost" InputGestureText="Ctrl-T" />
             </MenuItem>
             <MenuItem Header="Focus">
                 <MenuItem Header="Focus requests" Command="postTestr:CustomCommands.FocusRequests" InputGestureText="Ctrl-R" />
@@ -138,13 +135,11 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" Text="URL"/>
+                    <ComboBox Margin="3" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedRequest.Method}"/>
                     <TextBox x:Name="uiUrl" Margin="3" Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="Title"/>
                     <TextBox Grid.Row="1" Grid.Column="2" Margin="3,0,3,0" Text="{Binding SelectedRequest.Title, UpdateSourceTrigger=PropertyChanged}" />
-
-                    <CheckBox Margin="3" Grid.Row="2" Grid.Column="1" Content="Has post data?" IsChecked="{Binding SelectedRequest.HasPost}"/>
 
                     <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" >
                         <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
@@ -174,7 +169,7 @@
                                     <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
                                 <TextBlock FontWeight="Bold" Text="Post" />
-                                <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.Post, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
                                          FontFamily="Consolas" FontSize="11"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
                                 <Grid Grid.Row="2" Margin="3">

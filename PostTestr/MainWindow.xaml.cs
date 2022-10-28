@@ -43,7 +43,8 @@ public partial class MainWindow : Window
         {
             return;
         }
-        r.Post = Logic.FormatJsonOrNot(r.Post);
+        r.TextContent = Logic.FormatJsonOrNot(r.TextContent);
+        r.Response = Logic.FormatJsonOrNot(r.Response);
         Save();
     }
 
@@ -69,16 +70,6 @@ public partial class MainWindow : Window
         Save();
     }
 
-    private void TogglePostExecuted(object sender, ExecutedRoutedEventArgs e)
-    {
-        var r = Data.SelectedRequest;
-        if (r == null)
-        {
-            return;
-        }
-        r.HasPost = !r.HasPost;
-    }
-
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         Data.Compare();
@@ -100,7 +91,7 @@ public partial class MainWindow : Window
         var dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
-        r.Post = File.ReadAllText(fdlg.FileName);
+        r.TextContent = File.ReadAllText(fdlg.FileName);
     }
 
     private void FocusRequestsExecuted(object sender, ExecutedRoutedEventArgs e)
