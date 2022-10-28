@@ -10,6 +10,8 @@ namespace PostTestr
 
     public static class CustomCommands
     {
+        public static RoutedCommand Ok = new RoutedCommand();
+
         public static RoutedCommand Save = new RoutedCommand();
         public static RoutedCommand Exit = new RoutedCommand();
         public static RoutedCommand NewRequest = new RoutedCommand();
@@ -18,6 +20,7 @@ namespace PostTestr
         public static RoutedCommand DeleteSelectedRequest = new RoutedCommand();
         public static RoutedCommand LoadPost = new RoutedCommand();
         public static RoutedCommand Compare = new RoutedCommand();
+        public static RoutedCommand Rename = new RoutedCommand();
 
         public static RoutedCommand SelectRequest1 = new RoutedCommand();
         public static RoutedCommand SelectRequest2 = new RoutedCommand();

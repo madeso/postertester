@@ -23,6 +23,8 @@
         <CommandBinding Command="postTestr:CustomCommands.Format" Executed="FormatExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.DeleteSelectedRequest" Executed="DeleteSelectedRequestExecuted" />
 
+        <CommandBinding Command="postTestr:CustomCommands.Rename" Executed="RenameExecuted" />
+
         <CommandBinding Command="postTestr:CustomCommands.FocusRequests" Executed="FocusRequestsExecuted" />
         <CommandBinding Command="postTestr:CustomCommands.FocusUrl" Executed="FocusUrlExecuted" />
         <CommandBinding Command="postTestr:CustomCommands.FocusPost" Executed="FocusPostExecuted" />
@@ -48,7 +50,9 @@
         <KeyBinding Modifiers="Control" Key="F" Command="postTestr:CustomCommands.Format" />
         <KeyBinding Modifiers="Control" Key="N" Command="postTestr:CustomCommands.NewRequest" />
         <KeyBinding Modifiers="Control" Key="P" Command="postTestr:CustomCommands.LoadPost" />
-        
+
+        <KeyBinding Key="F2" Command="postTestr:CustomCommands.Rename" />
+
         <KeyBinding Modifiers="Control" Key="R" Command="postTestr:CustomCommands.FocusRequests" />
         <KeyBinding Modifiers="Control" Key="U" Command="postTestr:CustomCommands.FocusUrl" />
         <KeyBinding Modifiers="Control" Key="P" Command="postTestr:CustomCommands.FocusPost" />
@@ -84,6 +88,7 @@
                 <MenuItem Header="_New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />
                 <MenuItem Header="Delete selected request" Command="postTestr:CustomCommands.DeleteSelectedRequest"/>
                 <MenuItem Header="Compare responses from 2 requests..." Command="postTestr:CustomCommands.Compare"/>
+                <MenuItem Header="Rename" Command="postTestr:CustomCommands.Rename" InputGestureText="F2"/>
                 <MenuItem Header="Import request content from file" Command="postTestr:CustomCommands.LoadPost"/>
             </MenuItem>
             <MenuItem Header="Focus">
@@ -132,18 +137,13 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <ComboBox Margin="3" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedRequest.Method}"/>
-                    <TextBox x:Name="uiUrl" Margin="3" Grid.Row="0" Grid.Column="1" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedRequest.Method}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="uiUrl" Margin="3" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="Title"/>
-                    <TextBox Grid.Row="1" Grid.Column="2" Margin="3,0,3,0" Text="{Binding SelectedRequest.Title, UpdateSourceTrigger=PropertyChanged}" />
-
-                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="auto" />

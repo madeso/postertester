@@ -44,13 +44,23 @@ public class Request : INotifyPropertyChanged
     }
     void UpdateTitleOrUrl()
     {
-        if(string.IsNullOrWhiteSpace(this.Title))
+        this.TitleOrUrl = CalculateDisplay();
+    }
+
+    private string CalculateDisplay()
+    {
+        return CalculateDisplay(this.Url, this.Title);
+    }
+
+    public static string CalculateDisplay(string url, string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
         {
-            this.TitleOrUrl = this.Url;
+            return url;
         }
         else
         {
-            this.TitleOrUrl = $"{this.Title} ({this.Url})";
+            return $"{title} ({url})";
         }
     }
 

@@ -12,23 +12,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PostTestr
-{
-    /// <summary>
-    /// Interaction logic for CompareRequests.xaml
-    /// </summary>
-    public partial class CompareRequests : Window
-    {
-        public CompareRequests(Data data)
-        {
-            InitializeComponent();
-            this.DataContext = data;
-        }
+namespace PostTestr;
 
-        private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            DialogResult = true;
-            Close();
-        }
+/// <summary>
+/// Interaction logic for CompareRequests.xaml
+/// </summary>
+public partial class CompareRequests : Window
+{
+    public CompareRequests(Data data)
+    {
+        InitializeComponent();
+        this.DataContext = data;
+    }
+
+    private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        DialogResult = true;
+        Close();
     }
 }

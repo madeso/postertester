@@ -93,6 +93,20 @@ public partial class MainWindow : Window
         Save();
     }
 
+    private void RenameExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        var r = Data.SelectedRequest;
+        if(r == null) { return; }
+
+        var dlg = new RenameRequest(r);
+        using var blur = new DialogBackground(this, dlg);
+        if (dlg.ShowDialog() ?? false)
+        {
+            r.Title = dlg.RequestTitle;
+            Save();
+        }
+    }
+
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var dlg = new CompareRequests(Data);
