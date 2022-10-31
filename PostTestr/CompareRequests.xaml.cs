@@ -19,7 +19,7 @@ namespace PostTestr;
 /// </summary>
 public partial class CompareRequests : Window
 {
-    public CompareRequests(Data data)
+    public CompareRequests(Data.Data data)
     {
         InitializeComponent();
         this.DataContext = data;

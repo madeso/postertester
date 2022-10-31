@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-namespace PostTestr;
+namespace PostTestr.Data;
 
 
 public enum ContentType

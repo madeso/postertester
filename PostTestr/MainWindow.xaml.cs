@@ -34,7 +34,7 @@ public class DialogBackground : IDisposable
 /// </summary>
 public partial class MainWindow : Window
 {
-    public Data Data { get; internal set; }
+    public Data.Data Data { get; internal set; }
 
     public MainWindow()
     {

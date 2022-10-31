@@ -152,7 +152,7 @@ public static class Logic
         return new Response { Status = status.StatusCode, Body = responseBody };
     }
 
-    public static async Task Request(Request r, CookieContainer cookies)
+    public static async Task Request(Data.Request r, CookieContainer cookies)
     {
         // silently ignore double commands
         if(r.IsWorking == true) { return; }

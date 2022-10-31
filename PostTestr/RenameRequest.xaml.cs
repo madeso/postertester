@@ -30,7 +30,7 @@ public class RenameRequestData : INotifyPropertyChanged
 
     void UpdateTitle()
     {
-        NewDisplay = Request.CalculateDisplay(this.Url, this.Title);
+        NewDisplay = Data.Request.CalculateDisplay(this.Url, this.Title);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -45,7 +45,7 @@ public class RenameRequestData : INotifyPropertyChanged
 public partial class RenameRequest : Window
 {
     RenameRequestData data;
-    public RenameRequest(Request r)
+    public RenameRequest(Data.Request r)
     {
         InitializeComponent();
         data = new RenameRequestData()
