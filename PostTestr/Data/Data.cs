@@ -109,6 +109,7 @@ public class Data : INotifyPropertyChanged
     private Request rightCompare = null;
     private RequestGroup selectedRequest = null;
     private ObservableCollection<RequestGroup> requests = new ObservableCollection<RequestGroup>();
+    private bool _formatResponse = true;
 
     public ObservableCollection<RequestGroup> Groups
     {
@@ -151,6 +152,15 @@ public class Data : INotifyPropertyChanged
         get => rightCompare; set
         {
             rightCompare = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool FormatResponse
+    {
+        get => _formatResponse; set
+        {
+            _formatResponse = value;
             OnPropertyChanged();
         }
     }

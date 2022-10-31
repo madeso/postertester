@@ -48,4 +48,7 @@ public class Root
 
     [JsonProperty("right_compare")]
     public RequestInGroup RightCompare { get; set; }
+
+    [JsonProperty("format_response")]
+    public bool FormatResponse { get; set; } = false;
 }

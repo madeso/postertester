@@ -83,14 +83,15 @@
                 <MenuItem Header="_Save" Command="postTestr:CustomCommands.Save" InputGestureText="Ctrl-S" />
                 <MenuItem Header="E_xit" Command="postTestr:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
             </MenuItem>
-            <MenuItem Header="_Tools">
+            <MenuItem Header="_Request">
                 <MenuItem Header="Execute" Command="postTestr:CustomCommands.Execute" InputGestureText="Ctrl-Return" />
-                <MenuItem Header="Format" Command="postTestr:CustomCommands.Format" InputGestureText="Ctrl-F" />
+                <MenuItem Header="Format request body" Command="postTestr:CustomCommands.Format" InputGestureText="Ctrl-F" />
                 <MenuItem Header="_New Request" Command="postTestr:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />
                 <MenuItem Header="Delete selected request" Command="postTestr:CustomCommands.DeleteSelectedRequest"/>
                 <MenuItem Header="Compare responses from 2 requests..." Command="postTestr:CustomCommands.Compare"/>
                 <MenuItem Header="Rename" Command="postTestr:CustomCommands.Rename" InputGestureText="F2"/>
-                <MenuItem Header="Import request content from file" Command="postTestr:CustomCommands.LoadPost"/>
+                <MenuItem Header="Import request body from file" Command="postTestr:CustomCommands.LoadPost"/>
+                <MenuItem Header="Format reponse?" IsCheckable="True" IsChecked="{Binding FormatResponse}"/>
             </MenuItem>
             <MenuItem Header="Focus">
                 <MenuItem Header="Focus requests" Command="postTestr:CustomCommands.FocusRequests" InputGestureText="Ctrl-R" />

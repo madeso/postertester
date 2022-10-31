@@ -152,7 +152,7 @@ public static class Logic
         return new Response { Status = status.StatusCode, Body = responseBody };
     }
 
-    public static async Task Request(Data.Request r)
+    public static async Task Request(Data.Data root, Data.Request r)
     {
         // silently ignore double commands
         if(r.IsWorking == true) { return; }
@@ -167,6 +167,11 @@ public static class Logic
                 ? await GetUrl(HttpMethod.Post, url, r.GetContent())
                 : await GetUrl(HttpMethod.Get, url, null);
             r.Response = data.Body;
+
+            if(root.FormatResponse)
+            {
+                r.Response = FormatJsonOrNot(r.Response);
+            }
         }
         catch(Exception xx)
         {

@@ -75,7 +75,8 @@ public static class Disk
             Groups = groups,
             SelectedGroup = container.SelectedGroup == -1 ? null : groups[container.SelectedGroup],
             LeftCompare = FindRequest(groups, container.LeftCompare),
-            RightCompare  = FindRequest(groups, container.RightCompare)
+            RightCompare  = FindRequest(groups, container.RightCompare),
+            FormatResponse = container.FormatResponse
         };
     }
 
@@ -119,7 +120,8 @@ public static class Disk
             Groups = data.Groups.Select(TransformGroup).ToArray(),
             SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),
             LeftCompare = FindRequest(data.LeftCompare),
-            RightCompare = FindRequest(data.RightCompare)
+            RightCompare = FindRequest(data.RightCompare),
+            FormatResponse = data.FormatResponse
         };
         WriteJson(jsonFile, file);
     }
