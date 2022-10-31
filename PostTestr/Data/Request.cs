@@ -31,6 +31,11 @@ public class Request : INotifyPropertyChanged
         this.TitleOrUrl = CalculateDisplay();
     }
 
+    public Request()
+    {
+        UpdateTitleOrUrl();
+    }
+
     private string CalculateDisplay()
     {
         return CalculateDisplay(this.Url, this.Title);
