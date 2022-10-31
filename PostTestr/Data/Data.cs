@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 
@@ -8,6 +9,10 @@ namespace PostTestr.Data;
 
 public class RequestGroup : INotifyPropertyChanged
 {
+    private bool _builtin;
+    private string _name;
+    private string _file;
+
     private Request selectedRequest = null;
     private ObservableCollection<Request> requests = new ObservableCollection<Request>();
 
@@ -25,6 +30,33 @@ public class RequestGroup : INotifyPropertyChanged
         get => selectedRequest; set
         {
             selectedRequest = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool Builtin
+    {
+        get => _builtin; set
+        {
+            _builtin = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string Name
+    {
+        get => _name; set
+        {
+            _name = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string File
+    {
+        get => _file; set
+        {
+            _file = value;
             OnPropertyChanged();
         }
     }
@@ -177,5 +209,22 @@ public class Data : INotifyPropertyChanged
         }
 
         DiffTool.LaunchDiff(lhs.Response, rhs.Response);
+    }
+
+    internal void CreateBuiltinIfMissing()
+    {
+        var hasBuiltin = Groups.Where(x => x.Builtin).Any();
+        if (hasBuiltin) { return; }
+
+        var g = new RequestGroup
+        {
+            Builtin = true,
+            Name = "My requests",
+            File = Disk.RequestsFile
+        };
+
+        g.AddNewRequest();
+
+        this.Groups.Add(g);
     }
 }

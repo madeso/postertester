@@ -15,7 +15,7 @@ public static class Disk
         }
     }
 
-    private static string RequestsFile
+    public static string RequestsFile
     {
         get
         {
@@ -36,12 +36,23 @@ public static class Disk
 
     private static Data Load(string file)
     {
+        static T ReadFile<T>(string path)
+        {
+            var data = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<T>(data);
+        }
         static RequestGroup TransformGroup(Saved.Group g)
         {
-            var req = new ObservableCollection<Request>(g.Requests);
+            var isbuiltin = g.File == Saved.Group.BuiltinFile;
+            var file = isbuiltin ? RequestsFile : g.File;
+            var json = ReadFile<Saved.RequestsFile>(file);
+            var req = new ObservableCollection<Request>(json.Requests);
             return new RequestGroup
             {
                 Requests = req,
+                File = g.File,
+                Name = g.Name,
+                Builtin = isbuiltin, 
                 SelectedRequest = req[g.SelectedRequest]
             };
         }
@@ -52,8 +63,7 @@ public static class Disk
             return groups[i.Group].Requests[i.Request];
         }
 
-        var data = File.ReadAllText(file);
-        var container = JsonConvert.DeserializeObject<Saved.Root>(data);
+        var container = ReadFile<Saved.Root>(file);
         var rc = container.Groups.Select(TransformGroup);
         var groups = new ObservableCollection<RequestGroup>(rc);
         return new Data
@@ -67,11 +77,20 @@ public static class Disk
 
     private static void Save(Data data, string file)
     {
+        static void WriteJson<T>(T jsonFile, string file)
+        {
+            var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
+            File.WriteAllText(file, jsonData);
+        }
         static Saved.Group TransformGroup(RequestGroup g)
         {
+            var rf = new Saved.RequestsFile { Requests = g.Requests.ToArray() };
+            WriteJson(rf, g.File);
+
             return new Saved.Group
             {
-                Requests = g.Requests.ToArray(),
+                File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
+                Name = g.Name,
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };
         }
@@ -97,8 +116,7 @@ public static class Disk
             LeftCompare = FindRequest(data.LeftCompare),
             RightCompare = FindRequest(data.RightCompare)
         };
-        var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
-        File.WriteAllText(file, jsonData);
+        WriteJson(jsonFile, file);
     }
 
     public static Data LoadOrCreateNew()
@@ -110,6 +128,7 @@ public static class Disk
         else
         {
             var r = new Data { };
+            r.CreateBuiltinIfMissing();
             r.AddNewRequest();
             return r;
         }

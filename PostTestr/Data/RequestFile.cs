@@ -1,13 +1,26 @@
 ﻿using Newtonsoft.Json;
 namespace PostTestr.Data.Saved;
 
-public class Group
+
+public class RequestsFile
 {
     [JsonProperty("requests")]
     public Request[] Requests { get; set; }
+}
 
+
+public class Group
+{
     [JsonProperty("selected_request")]
     public int SelectedRequest { get; set; }
+
+    [JsonProperty("file")]
+    public string File { get; set; }
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    public const string BuiltinFile = "<my requests>";
 }
 
 public class RequestInGroup
