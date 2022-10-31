@@ -19,6 +19,11 @@
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="postTestr:CustomCommands.Exit" Executed="ExitExecuted" />
+
+        <CommandBinding Command="postTestr:CustomCommands.CreateNewGroup" Executed="CreateNewGroupExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.AddExistingGroup" Executed="AddExistingGroupExecuted"/>
+        <CommandBinding Command="postTestr:CustomCommands.ForgetGroup" Executed="ForgetGroupExecuted"/>
+
         <CommandBinding Command="postTestr:CustomCommands.Execute" Executed="ExecuteExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.NewRequest" Executed="NewRequestExecuted"/>
         <CommandBinding Command="postTestr:CustomCommands.Format" Executed="FormatExecuted"/>
@@ -85,10 +90,10 @@
                 <MenuItem Header="E_xit" Command="postTestr:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="_Group">
-                <!-- add new group -->
-                <!-- add existing group -->
+                <MenuItem Header="Create _new group..." Command="postTestr:CustomCommands.CreateNewGroup"/>
+                <MenuItem Header="Add _existing group..." Command="postTestr:CustomCommands.AddExistingGroup"/>
                 <!-- rename current group -->
-                <!-- delete current group -->
+                <MenuItem Header="_Forget current group (won't delete file)" Command="postTestr:CustomCommands.ForgetGroup"/>
                 <Separator />
                 <MenuItem Header="Compare responses from 2 requests..." Command="postTestr:CustomCommands.Compare"/>
             </MenuItem>

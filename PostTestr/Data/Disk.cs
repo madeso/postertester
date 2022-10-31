@@ -3,6 +3,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+// using static System.Net.WebRequestMethods;
+
 namespace PostTestr.Data;
 
 public static class Disk
@@ -34,19 +36,26 @@ public static class Disk
         return Path.Combine(folder, fileName);
     }
 
+    private static T ReadFile<T>(string path)
+    {
+        var data = File.ReadAllText(path);
+        return JsonConvert.DeserializeObject<T>(data);
+    }
+
+    internal static ObservableCollection<Request> LoadRequests(string file)
+    {
+        var json = ReadFile<Saved.RequestsFile>(file);
+        var req = new ObservableCollection<Request>(json.Requests);
+        return req;
+    }
+
     private static Data Load(string file)
     {
-        static T ReadFile<T>(string path)
-        {
-            var data = File.ReadAllText(path);
-            return JsonConvert.DeserializeObject<T>(data);
-        }
         static RequestGroup TransformGroup(Saved.Group g)
         {
             var isbuiltin = g.File == Saved.Group.BuiltinFile;
             var file = isbuiltin ? RequestsFile : g.File;
-            var json = ReadFile<Saved.RequestsFile>(file);
-            var req = new ObservableCollection<Request>(json.Requests);
+            var req = LoadRequests(file);
             for(int i=0; i < g.Responses.Length; i+=1)
             {
                 req[i].Response = g.Responses[i];

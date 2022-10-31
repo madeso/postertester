@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -226,5 +227,54 @@ public class Data : INotifyPropertyChanged
         g.AddNewRequest();
 
         this.Groups.Add(g);
+    }
+
+    internal void CreateNewGroup(string fileName)
+    {
+        var g = new RequestGroup();
+        g.Name = GuessGroupName(fileName);
+        g.File = fileName;
+        g.Builtin = false;
+        g.AddNewRequest();
+        this.Groups.Add(g);
+        this.SelectedGroup = g;
+    }
+
+    private static string GuessGroupName(string fileName)
+    {
+        var info = new FileInfo(fileName);
+        var gitfolder = Path.Join(info.Directory.FullName, ".git");
+        var name = Path.GetFileNameWithoutExtension(fileName);
+        if(new DirectoryInfo(gitfolder).Exists)
+        {
+            return $"{name} for {info.Directory.Name}";
+        }
+        else
+        {
+            return name;
+        }
+    }
+
+    internal void AddExistingGroup(string fileName)
+    {
+        var g = new RequestGroup();
+        g.Requests = Disk.LoadRequests(fileName);
+        g.Name = GuessGroupName(fileName);
+        g.File = fileName;
+        g.Builtin = false;
+        g.SelectedRequest = g.Requests[0];
+        this.Groups.Add(g);
+        this.SelectedGroup = g;
+    }
+
+    internal void ForgetGroup()
+    {
+        if(this.SelectedGroup == null) { return; }
+        if (this.SelectedGroup.Builtin) { return; }
+
+        var index = this.Groups.IndexOf(this.SelectedGroup);
+        this.Groups.Remove(this.SelectedGroup);
+        index = Math.Min(index, this.Groups.Count-1);
+        this.SelectedGroup = this.Groups[index];
     }
 }

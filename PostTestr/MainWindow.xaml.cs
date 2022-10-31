@@ -34,6 +34,10 @@ public class DialogBackground : IDisposable
 /// </summary>
 public partial class MainWindow : Window
 {
+    private const string PostGroupExt = "PosterTesterGroup";
+    private const string PostGroupFilesFilter = $"Post group files (*.{PostGroupExt})|*.{PostGroupExt}|All files (*.*)|*.*";
+    
+
     public Data.Data Data { get; internal set; }
 
     public MainWindow()
@@ -63,6 +67,39 @@ public partial class MainWindow : Window
             return;
         }
         await Logic.Request(this.Data, r);
+        Save();
+    }
+
+    public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        var fdlg = new SaveFileDialog();
+        fdlg.Title = "Crete post data";
+        fdlg.Filter = PostGroupFilesFilter;
+        fdlg.RestoreDirectory = true;
+        fdlg.DefaultExt = PostGroupExt;
+        var dr = fdlg.ShowDialog();
+        if (dr == false) { return; }
+
+        this.Data.CreateNewGroup(fdlg.FileName);
+        Save();
+    }
+
+    public void AddExistingGroupExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        var fdlg = new OpenFileDialog();
+        fdlg.Title = "Select existing group file";
+        fdlg.Filter = PostGroupFilesFilter;
+        fdlg.RestoreDirectory = true;
+        var dr = fdlg.ShowDialog();
+        if (dr == false) { return; }
+
+        this.Data.AddExistingGroup(fdlg.FileName);
+        Save();
+    }
+
+    public void ForgetGroupExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        this.Data.ForgetGroup();
         Save();
     }
 

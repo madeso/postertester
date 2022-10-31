@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace PostTestr
 {
+    using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Xml.Linq;
 
     public static class CustomCommands
     {
@@ -14,6 +16,11 @@ namespace PostTestr
 
         public static RoutedCommand Save = new RoutedCommand();
         public static RoutedCommand Exit = new RoutedCommand();
+
+        public static RoutedCommand CreateNewGroup = new RoutedCommand();
+        public static RoutedCommand AddExistingGroup = new RoutedCommand();
+        public static RoutedCommand ForgetGroup = new RoutedCommand();
+
         public static RoutedCommand NewRequest = new RoutedCommand();
         public static RoutedCommand Execute = new RoutedCommand();
         public static RoutedCommand Format = new RoutedCommand();
