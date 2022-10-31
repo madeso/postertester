@@ -89,17 +89,23 @@ public static class Disk
         };
     }
 
+    static void WriteJson<T>(T jsonFile, string file)
+    {
+        var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
+        File.WriteAllText(file, jsonData);
+    }
+
+    internal static void SaveGroup(RequestGroup g)
+    {
+        var rf = new Saved.RequestsFile { Requests = g.Requests.ToArray() };
+        WriteJson(rf, g.File);
+    }
+
     private static void Save(Data data, string file)
     {
-        static void WriteJson<T>(T jsonFile, string file)
-        {
-            var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
-            File.WriteAllText(file, jsonData);
-        }
         static Saved.Group TransformGroup(RequestGroup g)
         {
-            var rf = new Saved.RequestsFile { Requests = g.Requests.ToArray() };
-            WriteJson(rf, g.File);
+            SaveGroup(g);
 
             return new Saved.Group
             {

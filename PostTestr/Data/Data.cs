@@ -272,6 +272,8 @@ public class Data : INotifyPropertyChanged
         if(this.SelectedGroup == null) { return; }
         if (this.SelectedGroup.Builtin) { return; }
 
+        Disk.SaveGroup(this.SelectedGroup);
+
         var index = this.Groups.IndexOf(this.SelectedGroup);
         this.Groups.Remove(this.SelectedGroup);
         index = Math.Min(index, this.Groups.Count-1);
