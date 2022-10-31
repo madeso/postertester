@@ -35,17 +35,30 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" Orientation="Horizontal">
-                <ComboBox MinWidth="120" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding LeftCompare}" Margin="3"/>
-                <ComboBox MinWidth="120" ItemsSource="{Binding Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding RightCompare}" Margin="3"/>
-            </StackPanel>
+            <Grid Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
 
-            <Button Grid.Column="1" Grid.Row="1" IsDefault="True" Margin="3" Command="postTestr:CustomCommands.Compare">
-                <TextBlock Text="Compare..." Margin="3"/>
+                <ComboBox Width="300" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Groups}" DisplayMemberPath="Name" SelectedItem="{Binding LeftGroup}" Margin="3"/>
+                <ComboBox Width="300" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Groups}" DisplayMemberPath="Name" SelectedItem="{Binding RightGroup}" Margin="3"/>
+                
+                <ComboBox Width="300" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding LeftGroup.Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding LeftCompare}" Margin="3"/>
+                <ComboBox Width="300" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding RightGroup.Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding RightCompare}" Margin="3"/>
+            </Grid>
+
+            <Button Grid.Column="1" Grid.Row="1" IsDefault="True" Margin="3"
+                    Command="postTestr:CustomCommands.Compare">
+                <TextBlock Text="Compare..." Margin="12,3"/>
             </Button>
         </Grid>
     </Grid>

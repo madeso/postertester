@@ -109,6 +109,8 @@ public class Data : INotifyPropertyChanged
     private Request leftCompare = null;
     private Request rightCompare = null;
     private RequestGroup selectedRequest = null;
+    private RequestGroup leftGroup = null;
+    private RequestGroup rightGroup = null;
     private ObservableCollection<RequestGroup> requests = new ObservableCollection<RequestGroup>();
     private bool _formatResponse = true;
 
@@ -127,6 +129,26 @@ public class Data : INotifyPropertyChanged
         {
             selectedRequest = value;
             OnPropertyChanged();
+        }
+    }
+
+    public RequestGroup LeftGroup
+    {
+        get => leftGroup; set
+        {
+            leftGroup = value;
+            OnPropertyChanged();
+            LeftCompare = value.Requests[0];
+        }
+    }
+
+    public RequestGroup RightGroup
+    {
+        get => rightGroup; set
+        {
+            rightGroup = value;
+            OnPropertyChanged();
+            RightCompare = value.Requests[0];
         }
     }
 

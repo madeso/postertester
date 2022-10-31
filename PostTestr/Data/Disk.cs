@@ -73,6 +73,8 @@ public static class Disk
         static Request FindRequest(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
         {
             if(i == null) {  return null; }
+            if (i.Group == -1) { return null; }
+            if (i.Request == -1) { return null; }
             return groups[i.Group].Requests[i.Request];
         }
 
@@ -83,6 +85,8 @@ public static class Disk
         {
             Groups = groups,
             SelectedGroup = container.SelectedGroup == -1 ? null : groups[container.SelectedGroup],
+            LeftGroup = groups[container.LeftCompare.Group],
+            RightGroup = groups[container.RightCompare.Group],
             LeftCompare = FindRequest(groups, container.LeftCompare),
             RightCompare  = FindRequest(groups, container.RightCompare),
             FormatResponse = container.FormatResponse
@@ -116,26 +120,25 @@ public static class Disk
             };
         }
 
-        Saved.RequestInGroup FindRequest(Request r)
+        Saved.RequestInGroup FindRequest(RequestGroup g, Request r)
         {
-            if(r == null) { return null; }
+            if (g == null) { return null; }
+            if (r == null) { return null; }
 
-            for(int g=0; g<data.Groups.Count; g+=1)
-            {
-                var index = data.Groups[g].Requests.IndexOf(r);
-                if(index != -1) { continue; }
-                return new Saved.RequestInGroup { Group = g, Request = index };
-            }
+            var gi = data.Groups.IndexOf(g);
+            var ri = g.Requests.IndexOf(r);
 
-            return null;
+            if(gi == -1 || ri == -1) { throw new Exception("bug"); }
+
+            return new Saved.RequestInGroup { Group = gi, Request=ri};
         }
 
         var jsonFile = new Saved.Root
         {
             Groups = data.Groups.Select(TransformGroup).ToArray(),
             SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),
-            LeftCompare = FindRequest(data.LeftCompare),
-            RightCompare = FindRequest(data.RightCompare),
+            LeftCompare = FindRequest(data.LeftGroup, data.LeftCompare),
+            RightCompare = FindRequest(data.RightGroup, data.RightCompare),
             FormatResponse = data.FormatResponse
         };
         WriteJson(jsonFile, file);
