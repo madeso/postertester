@@ -5,12 +5,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PostTestr"
+        xmlns:data="clr-namespace:PostTestr.Data"
         xmlns:converters="clr-namespace:PostTestr.Converters"
         mc:Ignorable="d"
         Icon="icon.ico"
         Title="PostTestr"
         Width="800" Height="600"
-        d:DataContext="{d:DesignInstance local:Data}"
+        d:DataContext="{d:DesignInstance data:Data}"
         >
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"  True="Visible"   False="Collapsed" />
@@ -117,19 +118,39 @@
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <ListView x:Name="uiRequests" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Requests}" SelectedItem="{Binding SelectedRequest}">
-                    <ListView.InputBindings>
-                        <KeyBinding Key="Delete" Command="postTestr:CustomCommands.DeleteSelectedRequest" />
-                    </ListView.InputBindings>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <WrapPanel>
-                                <TextBlock Text="{Binding TitleOrUrl}" Foreground="Blue"/>
-                            </WrapPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <!-- Left pane  -->
+                <Grid Grid.Column="0" Grid.Row="0">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Margin="3" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}"
+                              DisplayMemberPath="Name"
+                              />
+                    
+                    <ListView x:Name="uiRequests" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding SelectedGroup.Requests}" SelectedItem="{Binding SelectedGroup.SelectedRequest}">
+                        <ListView.InputBindings>
+                            <KeyBinding Key="Delete" Command="postTestr:CustomCommands.DeleteSelectedRequest" />
+                        </ListView.InputBindings>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel>
+                                    <TextBlock Text="{Binding TitleOrUrl}" Foreground="Blue"/>
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                
+                <!-- Right pane -->
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
@@ -140,8 +161,8 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedRequest.Method}"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="uiUrl" Margin="3" Text="{Binding SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedGroup.SelectedRequest.Method}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="uiUrl" Margin="3" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
@@ -159,22 +180,22 @@
                         <Grid Grid.Row="0" Grid.ColumnSpan="3">
 
                             <!-- No request body -->
-                            <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
+                            <Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <DockPanel>
                                     <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
-                                    <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
+                                    <ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
                                 </DockPanel>
-                                <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Grid.Row="2" Text="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
                             </Grid>
 
 
                             <!-- Has request body -->
-                            <Grid Visibility="{Binding SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
+                            <Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="5" />
@@ -187,7 +208,7 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <TextBlock FontWeight="Bold" Text="Body" />
-                                    <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
                                          FontFamily="Consolas" FontSize="11"
                                          AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
                                 </Grid>
@@ -201,10 +222,10 @@
                                     </Grid.RowDefinitions>
                                     <DockPanel>
                                         <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
-                                        <ProgressBar Visibility="{Binding SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
+                                        <ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
                                     </DockPanel>
 
-                                    <TextBox Grid.Row="2" Text="{Binding SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox Grid.Row="2" Text="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}"
                                              FontFamily="Consolas" FontSize="11"
                                              AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
                                 </Grid>

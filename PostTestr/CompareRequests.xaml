@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:postTestr="clr-namespace:PostTestr"
         xmlns:converters="clr-namespace:PostTestr.Converters"
+        xmlns:data="clr-namespace:PostTestr.Data"
         Icon="icon.ico"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
-        d:DataContext="{d:DesignInstance postTestr:Data}"
+        d:DataContext="{d:DesignInstance data:Data}"
         mc:Ignorable="d" Height="127" Width="481"
         >
     <Window.CommandBindings>

@@ -50,7 +50,7 @@ public static class Disk
             return new RequestGroup
             {
                 Requests = req,
-                File = g.File,
+                File = file,
                 Name = g.Name,
                 Builtin = isbuiltin, 
                 SelectedRequest = req[g.SelectedRequest]
