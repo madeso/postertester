@@ -11,19 +11,32 @@ public static class Disk
     {
         get
         {
-            var root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var folder = Path.Combine(root, "PostTestr");
-            if(Directory.Exists(folder) == false)
-            {
-                Directory.CreateDirectory(folder);
-            }
-            return Path.Combine(folder, "settings.json");
+            return GetLocalFile("settings.json");
         }
+    }
+
+    private static string RequestsFile
+    {
+        get
+        {
+            return GetLocalFile("requests.json");
+        }
+    }
+
+    private static string GetLocalFile(string fileName)
+    {
+        var root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var folder = Path.Combine(root, "PostTestr");
+        if (Directory.Exists(folder) == false)
+        {
+            Directory.CreateDirectory(folder);
+        }
+        return Path.Combine(folder, fileName);
     }
 
     private static Data Load(string file)
     {
-        static RequestGroup TransformGroup(RequestFileGroup g)
+        static RequestGroup TransformGroup(Saved.Group g)
         {
             var req = new ObservableCollection<Request>(g.Requests);
             return new RequestGroup
@@ -33,14 +46,14 @@ public static class Disk
             };
         }
 
-        static Request FindRequest(ObservableCollection<RequestGroup> groups, RequestInGroup i)
+        static Request FindRequest(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
         {
             if(i == null) {  return null; }
             return groups[i.Group].Requests[i.Request];
         }
 
         var data = File.ReadAllText(file);
-        var container = JsonConvert.DeserializeObject<RequestFile>(data);
+        var container = JsonConvert.DeserializeObject<Saved.Root>(data);
         var rc = container.Groups.Select(TransformGroup);
         var groups = new ObservableCollection<RequestGroup>(rc);
         return new Data
@@ -54,16 +67,16 @@ public static class Disk
 
     private static void Save(Data data, string file)
     {
-        static RequestFileGroup TransformGroup(RequestGroup g)
+        static Saved.Group TransformGroup(RequestGroup g)
         {
-            return new RequestFileGroup
+            return new Saved.Group
             {
                 Requests = g.Requests.ToArray(),
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };
         }
 
-        RequestInGroup FindRequest(Request r)
+        Saved.RequestInGroup FindRequest(Request r)
         {
             if(r == null) { return null; }
 
@@ -71,13 +84,13 @@ public static class Disk
             {
                 var index = data.Groups[g].Requests.IndexOf(r);
                 if(index != -1) { continue; }
-                return new RequestInGroup { Group = g, Request = index };
+                return new Saved.RequestInGroup { Group = g, Request = index };
             }
 
             return null;
         }
 
-        var jsonFile = new RequestFile
+        var jsonFile = new Saved.Root
         {
             Groups = data.Groups.Select(TransformGroup).ToArray(),
             SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),

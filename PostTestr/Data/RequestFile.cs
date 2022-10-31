@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-namespace PostTestr.Data;
+namespace PostTestr.Data.Saved;
 
-public class RequestFileGroup
+public class Group
 {
     [JsonProperty("requests")]
     public Request[] Requests { get; set; }
@@ -19,10 +19,10 @@ public class RequestInGroup
     public int Request { get; set; }
 }
 
-public class RequestFile
+public class Root
 {
     [JsonProperty("groups")]
-    public RequestFileGroup[] Groups { get; set; }
+    public Group[] Groups { get; set; }
 
     [JsonProperty("selected_group")]
     public int SelectedGroup { get; set; }
