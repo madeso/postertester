@@ -107,7 +107,6 @@ public class Data : INotifyPropertyChanged
 {
     private Request leftCompare = null;
     private Request rightCompare = null;
-    private CookieContainer cookies;
     private RequestGroup selectedRequest = null;
     private ObservableCollection<RequestGroup> requests = new ObservableCollection<RequestGroup>();
 
@@ -152,15 +151,6 @@ public class Data : INotifyPropertyChanged
         get => rightCompare; set
         {
             rightCompare = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public CookieContainer Cookies
-    {
-        get => cookies; set
-        {
-            cookies = value;
             OnPropertyChanged();
         }
     }

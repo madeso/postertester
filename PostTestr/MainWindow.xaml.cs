@@ -62,7 +62,7 @@ public partial class MainWindow : Window
         {
             return;
         }
-        await Logic.Request(r, Data.Cookies);
+        await Logic.Request(r);
         Save();
     }
 
