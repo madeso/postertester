@@ -115,7 +115,7 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonProperty("response")]
+    [JsonIgnore]
     public string Response
     {
         get => _response; set

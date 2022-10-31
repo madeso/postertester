@@ -14,6 +14,9 @@ public class Group
     [JsonProperty("selected_request")]
     public int SelectedRequest { get; set; }
 
+    [JsonProperty("responses")]
+    public string[] Responses { get; set; }
+
     [JsonProperty("file")]
     public string File { get; set; }
 

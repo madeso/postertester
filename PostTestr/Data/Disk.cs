@@ -47,6 +47,10 @@ public static class Disk
             var file = isbuiltin ? RequestsFile : g.File;
             var json = ReadFile<Saved.RequestsFile>(file);
             var req = new ObservableCollection<Request>(json.Requests);
+            for(int i=0; i < g.Responses.Length; i+=1)
+            {
+                req[i].Response = g.Responses[i];
+            }
             return new RequestGroup
             {
                 Requests = req,
@@ -90,6 +94,7 @@ public static class Disk
             return new Saved.Group
             {
                 File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
+                Responses = g.Requests.Select(x => x.Response).ToArray(),
                 Name = g.Name,
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };
