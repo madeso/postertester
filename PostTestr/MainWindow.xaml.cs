@@ -48,9 +48,16 @@ public partial class MainWindow : Window
         this.OnSave?.Invoke();
     }
 
+    Data.Request GetSelectedRequest()
+    {
+        var g = this.Data.SelectedGroup;
+        if(g == null) { return null; }
+        return g.SelectedRequest;
+    }
+
     public async void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var r = Data.SelectedRequest;
+        var r = GetSelectedRequest();
         if(r == null)
         {
             return;
@@ -61,7 +68,7 @@ public partial class MainWindow : Window
 
     private void FormatExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var r = Data.SelectedRequest;
+        var r = GetSelectedRequest();
         if (r == null)
         {
             return;
@@ -95,7 +102,7 @@ public partial class MainWindow : Window
 
     private void RenameExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var r = Data.SelectedRequest;
+        var r = GetSelectedRequest();
         if(r == null) { return; }
 
         var dlg = new RenameRequest(r);
@@ -119,7 +126,7 @@ public partial class MainWindow : Window
 
     private void LoadPostExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var r = Data.SelectedRequest;
+        var r = GetSelectedRequest();
         if (r == null)
         {
             return;
@@ -149,7 +156,7 @@ public partial class MainWindow : Window
 
     private void FocusPostExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var r = Data.SelectedRequest;
+        var r = GetSelectedRequest();
         if (r == null)
         {
             return;
@@ -161,10 +168,13 @@ public partial class MainWindow : Window
 
     void SelectRequest(int i1)
     {
+        var g = Data.SelectedGroup;
+        if(g == null) { return; }
+
         var i = i1 - 1;
         if(i < 0 ) return;
-        if(i >= Data.Requests.Count) return;
-        Data.SelectedRequest = Data.Requests[i];
+        if(i >= g.Requests.Count) return;
+        g.SelectedRequest = g.Requests[i];
     }
 
     private void SelectRequest1Executed(object sender, ExecutedRoutedEventArgs e)

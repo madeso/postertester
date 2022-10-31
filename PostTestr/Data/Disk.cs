@@ -17,32 +17,72 @@ public static class Disk
             {
                 Directory.CreateDirectory(folder);
             }
-            return Path.Combine(folder, "settings.json"); ;
+            return Path.Combine(folder, "settings.json");
         }
     }
 
     private static Data Load(string file)
     {
+        static RequestGroup TransformGroup(RequestFileGroup g)
+        {
+            var req = new ObservableCollection<Request>(g.Requests);
+            return new RequestGroup
+            {
+                Requests = req,
+                SelectedRequest = req[g.SelectedRequest]
+            };
+        }
+
+        static Request FindRequest(ObservableCollection<RequestGroup> groups, RequestInGroup i)
+        {
+            if(i == null) {  return null; }
+            return groups[i.Group].Requests[i.Request];
+        }
+
         var data = File.ReadAllText(file);
         var container = JsonConvert.DeserializeObject<RequestFile>(data);
-        var requests = new ObservableCollection<Request>(container.Requests);
+        var rc = container.Groups.Select(TransformGroup);
+        var groups = new ObservableCollection<RequestGroup>(rc);
         return new Data
         {
-            Requests = requests,
-            SelectedRequest = requests[container.SelectedRequest],
-            LeftCompare = requests[container.LeftCompare],
-            RightCompare  = requests[container.RightCompare]
+            Groups = groups,
+            SelectedGroup = container.SelectedGroup == -1 ? null : groups[container.SelectedGroup],
+            LeftCompare = FindRequest(groups, container.LeftCompare),
+            RightCompare  = FindRequest(groups, container.RightCompare)
         };
     }
 
     private static void Save(Data data, string file)
     {
+        static RequestFileGroup TransformGroup(RequestGroup g)
+        {
+            return new RequestFileGroup
+            {
+                Requests = g.Requests.ToArray(),
+                SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
+            };
+        }
+
+        RequestInGroup FindRequest(Request r)
+        {
+            if(r == null) { return null; }
+
+            for(int g=0; g<data.Groups.Count; g+=1)
+            {
+                var index = data.Groups[g].Requests.IndexOf(r);
+                if(index != -1) { continue; }
+                return new RequestInGroup { Group = g, Request = index };
+            }
+
+            return null;
+        }
+
         var jsonFile = new RequestFile
         {
-            Requests = data.Requests.ToArray(),
-            SelectedRequest = data.Requests.IndexOf(data.SelectedRequest),
-            LeftCompare = data.Requests.IndexOf(data.LeftCompare),
-            RightCompare = data.Requests.IndexOf(data.RightCompare)
+            Groups = data.Groups.Select(TransformGroup).ToArray(),
+            SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),
+            LeftCompare = FindRequest(data.LeftCompare),
+            RightCompare = FindRequest(data.RightCompare)
         };
         var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
         File.WriteAllText(file, jsonData);
