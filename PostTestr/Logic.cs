@@ -143,7 +143,7 @@ public static class Logic
 
     public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
     {
-        // todo(Gustav): client.DefaultRequestHeaders.
+        // todo(Gustav): expose and enrich headers
         var headers = client.DefaultRequestHeaders;
         using HttpResponseMessage response = await GetResponse(action, url, content);
         var status = response.EnsureSuccessStatusCode();
