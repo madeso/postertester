@@ -128,7 +128,7 @@ public static class Disk
             var gi = data.Groups.IndexOf(g);
             var ri = g.Requests.IndexOf(r);
 
-            if(gi == -1 || ri == -1) { throw new Exception("bug"); }
+            if(gi == -1 || ri == -1) { return null; }
 
             return new Saved.RequestInGroup { Group = gi, Request=ri};
         }

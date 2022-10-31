@@ -138,7 +138,7 @@ public class Data : INotifyPropertyChanged
         {
             leftGroup = value;
             OnPropertyChanged();
-            LeftCompare = value.Requests[0];
+            LeftCompare = value == null ? null : value.Requests[0];
         }
     }
 
@@ -148,7 +148,7 @@ public class Data : INotifyPropertyChanged
         {
             rightGroup = value;
             OnPropertyChanged();
-            RightCompare = value.Requests[0];
+            RightCompare = value == null ? null : value.Requests[0];
         }
     }
 
