@@ -13,9 +13,10 @@ Basic "postman" clone in .NET 6 in WPF (windows only).
 
 ![Compare dialog comparing 2 requests from 2 different groups](data/compare.png)
 
-## Possible some time in the future
-* Optio to send more than json
+## Possible some time in the future (not necessarily in a specifc order)
+* Option to send more than json
 * Option to send compact json
+* Uri editor
 * Use output from one request as input to another
 * Script tests and input "wizards" with .net?
 * Commandline to run tests
