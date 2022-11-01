@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 namespace PostTestr.Data;
@@ -10,14 +9,14 @@ public class Request : INotifyPropertyChanged
     private string _url = "http://localhost:8080/";
     private string _title = "";
     private string _textConent = string.Empty;
-    private string _response = string.Empty;
+    private Response _response = null;
     private bool _isWorking = false;
     private ContentType _contentType = ContentType.Json;
 
     private string _titleOrUrl = "";
     private bool _hasPost = false;
 
-    [JsonIgnore]
+
     public string TitleOrUrl
     {
         get => _titleOrUrl; private set
@@ -53,7 +52,6 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonIgnore]
     public bool HasPost
     {
         get => _hasPost; set
@@ -67,7 +65,6 @@ public class Request : INotifyPropertyChanged
         this.HasPost = Logic.HasContent(this.Method);
     }
 
-    [JsonProperty("url")]
     public string Url
     {
         get => _url; set
@@ -78,7 +75,6 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonProperty("title")]
     public string Title
     {
         get => _title; set
@@ -89,7 +85,6 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonProperty("method")]
     public HttpMethod Method
     {
         get => _method; set
@@ -100,7 +95,6 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonProperty("post_type")]
     public ContentType ContentType
     {
         get => _contentType; set
@@ -110,7 +104,6 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonProperty("post")]
     public string TextContent
     {
         get => _textConent; set
@@ -120,8 +113,7 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonIgnore]
-    public string Response
+    public Response Response
     {
         get => _response; set
         {
@@ -130,7 +122,6 @@ public class Request : INotifyPropertyChanged
         }
     }
 
-    [JsonIgnore]
     public bool IsWorking
     {
         get => _isWorking; set

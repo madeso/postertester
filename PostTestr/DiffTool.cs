@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PostTestr.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,7 +12,7 @@ namespace PostTestr;
 
 public static class DiffTool
 {
-    public static void LaunchDiff(string leftData, string rightData, string leftName="left.json", string rightName="right.json")
+    public static void LaunchDiff(Response leftData, Response rightData, string leftName="left.json", string rightName="right.json")
     {
         // todo(Gustav) read from registry
         // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Thingamahoochie\WinMerge
@@ -31,8 +32,8 @@ public static class DiffTool
             var root = Path.GetTempPath();
             var leftPath = Path.Join(root, leftName);
             var rightPath = Path.Join(root, rightName);
-            File.WriteAllText(leftPath, leftData);
-            File.WriteAllText(rightPath, rightData);
+            File.WriteAllText(leftPath, leftData.Body);
+            File.WriteAllText(rightPath, rightData.Body);
 
             RunCmd(p, $"{leftPath} {rightPath}");
             return;

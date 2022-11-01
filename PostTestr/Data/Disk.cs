@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 // using static System.Net.WebRequestMethods;
 
 namespace PostTestr.Data;
@@ -44,8 +45,20 @@ public static class Disk
 
     internal static ObservableCollection<Request> LoadRequests(string file)
     {
+        static Request ToReq(Saved.Request r)
+        {
+            return new Request
+            {
+                Url = r.Url,
+                Title = r.Title,
+                Method = r.Method,
+                ContentType = r.ContentType,
+                TextContent = r.TextContent
+            };
+        }
+
         var json = ReadFile<Saved.RequestsFile>(file);
-        var req = new ObservableCollection<Request>(json.Requests);
+        var req = new ObservableCollection<Request>(json.Requests.Select(ToReq));
         return req;
     }
 
@@ -56,9 +69,14 @@ public static class Disk
             var isbuiltin = g.File == Saved.Group.BuiltinFile;
             var file = isbuiltin ? RequestsFile : g.File;
             var req = LoadRequests(file);
-            for(int i=0; i < g.Responses.Length; i+=1)
+            if(g.Responses != null)
             {
-                req[i].Response = g.Responses[i];
+                for(int i=0; i < g.Responses.Length; i+=1)
+                {
+                    var re = g.Responses[i];
+                    if(re == null) { continue; }
+                    req[i].Response = new Response(IntToStatus(re.Status), re.Body);
+                }
             }
             return new RequestGroup
             {
@@ -100,6 +118,15 @@ public static class Disk
         };
     }
 
+    private static HttpStatusCode IntToStatus(int status)
+    {
+        return (HttpStatusCode)status;
+    }
+    private static int StatusToInt(HttpStatusCode status)
+    {
+        return (int)status;
+    }
+
     static void WriteJson<T>(T jsonFile, string file)
     {
         var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
@@ -108,7 +135,18 @@ public static class Disk
 
     internal static void SaveGroup(RequestGroup g)
     {
-        var rf = new Saved.RequestsFile { Requests = g.Requests.ToArray() };
+        static Saved.Request ToReq(Request r)
+        {
+            return new Saved.Request
+            {
+                Url = r.Url,
+                Title = r.Title,
+                Method = r.Method,
+                ContentType = r.ContentType,
+                TextContent = r.TextContent
+            };
+        }
+        var rf = new Saved.RequestsFile { Requests = g.Requests.Select(ToReq).ToArray() };
         WriteJson(rf, g.File);
     }
 
@@ -121,7 +159,7 @@ public static class Disk
             return new Saved.Group
             {
                 File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
-                Responses = g.Requests.Select(x => x.Response).ToArray(),
+                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response { Body = x.Response.Body, Status = StatusToInt(x.Response.Status) }).ToArray(),
                 Name = g.Name,
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };

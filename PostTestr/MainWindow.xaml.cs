@@ -111,7 +111,7 @@ public partial class MainWindow : Window
             return;
         }
         r.TextContent = Logic.FormatJsonOrNot(r.TextContent);
-        r.Response = Logic.FormatJsonOrNot(r.Response);
+        r.Response.Body = Logic.FormatJsonOrNot(r.Response.Body);
         Save();
     }
 

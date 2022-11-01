@@ -1,6 +1,24 @@
 ﻿using Newtonsoft.Json;
+
 namespace PostTestr.Data.Saved;
 
+public class Request
+{
+    [JsonProperty("url")]
+    public string Url { get; set; }
+
+    [JsonProperty("title")]
+    public string Title { get; set; }
+
+    [JsonProperty("method")]
+    public HttpMethod Method { get; set; }
+
+    [JsonProperty("post_type")]
+    public ContentType ContentType { get; set; }
+
+    [JsonProperty("post")]
+    public string TextContent { get; set; }
+}
 
 public class RequestsFile
 {
@@ -8,6 +26,14 @@ public class RequestsFile
     public Request[] Requests { get; set; }
 }
 
+public class Response
+{
+    [JsonProperty("body")]
+    public string Body { get; set; }
+
+    [JsonProperty("status")]
+    public int Status { get; set; }
+}
 
 public class Group
 {
@@ -15,7 +41,7 @@ public class Group
     public int SelectedRequest { get; set; }
 
     [JsonProperty("responses")]
-    public string[] Responses { get; set; }
+    public Response[] Responses { get; set; }
 
     [JsonProperty("file")]
     public string File { get; set; }

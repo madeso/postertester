@@ -10,12 +10,6 @@ using System.Threading.Tasks;
 
 namespace PostTestr;
 
-public class Response
-{
-    public HttpStatusCode Status { get; set; }
-    public string Body { get; set; }
-}
-
 public enum HttpMethod
 {
     [EnumMember(Value = "get")]
@@ -141,7 +135,7 @@ public static class Logic
         return new StringContent(t, Encoding.UTF8, "application/json");
     }
 
-    public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
+    public static async Task<Data.Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
     {
         // todo(Gustav): expose and enrich headers
         var headers = client.DefaultRequestHeaders;
@@ -149,7 +143,7 @@ public static class Logic
         var status = response.EnsureSuccessStatusCode();
         string responseBody = await response.Content.ReadAsStringAsync();
 
-        return new Response { Status = status.StatusCode, Body = responseBody };
+        return new Data.Response(status: status.StatusCode, body: responseBody);
     }
 
     public static async Task Request(Data.Data root, Data.Request r)
@@ -157,7 +151,7 @@ public static class Logic
         // silently ignore double commands
         if(r.IsWorking == true) { return; }
 
-        r.Response = string.Empty;
+        r.Response = null;
         r.IsWorking = true;
 
         try
@@ -166,23 +160,25 @@ public static class Logic
             var data = HasContent(r.Method)
                 ? await GetUrl(HttpMethod.Post, url, r.GetContent())
                 : await GetUrl(HttpMethod.Get, url, null);
-            r.Response = data.Body;
+            r.Response = data;
 
             if(root.FormatResponse)
             {
-                r.Response = FormatJsonOrNot(r.Response);
+                r.Response.Body = FormatJsonOrNot(r.Response.Body);
             }
         }
         catch(Exception xx)
         {
-            r.Response = String.Empty;
+            var builder = String.Empty;
 
             var x = xx;
             while(x != null)
             {
-                r.Response += x.Message + "\r\n";
+                builder += x.Message + "\r\n";
                 x = x.InnerException;
             }
+
+            r.Response = new Data.Response(status: HttpStatusCode.BadRequest, body: builder);
         }
 
         r.IsWorking = false;
