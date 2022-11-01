@@ -28,21 +28,21 @@ public class TimeSpanConverter : IValueConverter
 
         if (t.TotalMinutes > 1)
         {
-            var min = Floor(t.TotalMinutes);
+            int min = Floor(t.TotalMinutes);
             r.Add($"{min} minute{S(min)}");
             t = t.Subtract(TimeSpan.FromMinutes(min));
         }
 
         if (t.TotalSeconds > 1)
         {
-            var min = Floor(t.TotalSeconds);
+            int min = Floor(t.TotalSeconds);
             r.Add($"{min} second{S(min)}");
             t = t.Subtract(TimeSpan.FromSeconds(min));
         }
 
         if (t.TotalMilliseconds > 1)
         {
-            var min = Floor(t.TotalMilliseconds);
+            int min = Floor(t.TotalMilliseconds);
             r.Add($"{min} millisecond{S(min)}");
         }
 

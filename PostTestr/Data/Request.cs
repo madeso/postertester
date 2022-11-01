@@ -18,13 +18,14 @@ public class Request : INotifyPropertyChanged
 
     public string TitleOrUrl
     {
-        get => _titleOrUrl; private set
+        get => this._titleOrUrl; private set
         {
-            _titleOrUrl = value;
+            this._titleOrUrl = value;
             OnPropertyChanged();
         }
     }
-    void UpdateTitleOrUrl()
+
+    private void UpdateTitleOrUrl()
     {
         this.TitleOrUrl = CalculateDisplay();
     }
@@ -53,9 +54,9 @@ public class Request : INotifyPropertyChanged
 
     public bool HasPost
     {
-        get => _hasPost; set
+        get => this._hasPost; set
         {
-            _hasPost = value;
+            this._hasPost = value;
             OnPropertyChanged();
         }
     }
@@ -66,9 +67,9 @@ public class Request : INotifyPropertyChanged
 
     public string Url
     {
-        get => _url; set
+        get => this._url; set
         {
-            _url = value;
+            this._url = value;
             OnPropertyChanged();
             UpdateTitleOrUrl();
         }
@@ -76,9 +77,9 @@ public class Request : INotifyPropertyChanged
 
     public string Title
     {
-        get => _title; set
+        get => this._title; set
         {
-            _title = value;
+            this._title = value;
             OnPropertyChanged();
             UpdateTitleOrUrl();
         }
@@ -86,9 +87,9 @@ public class Request : INotifyPropertyChanged
 
     public HttpMethod Method
     {
-        get => _method; set
+        get => this._method; set
         {
-            _method = value;
+            this._method = value;
             OnPropertyChanged();
             UpdateHasPost();
         }
@@ -96,36 +97,36 @@ public class Request : INotifyPropertyChanged
 
     public ContentType ContentType
     {
-        get => _contentType; set
+        get => this._contentType; set
         {
-            _contentType = value;
+            this._contentType = value;
             OnPropertyChanged();
         }
     }
 
     public string TextContent
     {
-        get => _textConent; set
+        get => this._textConent; set
         {
-            _textConent = value;
+            this._textConent = value;
             OnPropertyChanged();
         }
     }
 
     public Response Response
     {
-        get => _response; set
+        get => this._response; set
         {
-            _response = value;
+            this._response = value;
             OnPropertyChanged();
         }
     }
 
     public bool IsWorking
     {
-        get => _isWorking; set
+        get => this._isWorking; set
         {
-            _isWorking = value;
+            this._isWorking = value;
             OnPropertyChanged();
         }
     }

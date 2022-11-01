@@ -13,26 +13,26 @@ public class Response : INotifyPropertyChanged
 
     public string Body
     {
-        get => _body; set
+        get => this._body; set
         {
-            _body = value;
+            this._body = value;
             OnPropertyChanged();
         }
     }
 
     public TimeSpan Time
     {
-        get => _time; internal set
+        get => this._time; internal set
         {
-            _time = value;
+            this._time = value;
             OnPropertyChanged();
         }
     }
 
     public Response(HttpStatusCode status, string body)
     {
-        Status = status;
-        Body = body;
+        this.Status = status;
+        this.Body = body;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

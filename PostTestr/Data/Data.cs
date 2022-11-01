@@ -18,45 +18,45 @@ public class RequestGroup : INotifyPropertyChanged
 
     public ObservableCollection<Request> Requests
     {
-        get => requests; set
+        get => this.requests; set
         {
-            requests = value;
+            this.requests = value;
             OnPropertyChanged();
         }
     }
 
     public Request SelectedRequest
     {
-        get => selectedRequest; set
+        get => this.selectedRequest; set
         {
-            selectedRequest = value;
+            this.selectedRequest = value;
             OnPropertyChanged();
         }
     }
 
     public bool Builtin
     {
-        get => _builtin; set
+        get => this._builtin; set
         {
-            _builtin = value;
+            this._builtin = value;
             OnPropertyChanged();
         }
     }
 
     public string Name
     {
-        get => _name; set
+        get => this._name; set
         {
-            _name = value;
+            this._name = value;
             OnPropertyChanged();
         }
     }
 
     public string File
     {
-        get => _file; set
+        get => this._file; set
         {
-            _file = value;
+            this._file = value;
             OnPropertyChanged();
         }
     }
@@ -83,7 +83,7 @@ public class RequestGroup : INotifyPropertyChanged
         if (this.SelectedRequest == null) { return null; }
         if (this.Requests.Count <= 1) { return null; }
 
-        var index = this.Requests.IndexOf(this.SelectedRequest);
+        int index = this.Requests.IndexOf(this.SelectedRequest);
         this.Requests.RemoveAt(index);
         var nextRequest = this.Requests.Count > 0 ? this.Requests[Math.Min(index, this.Requests.Count - 1)]
             : null;
@@ -115,39 +115,39 @@ public class Data : INotifyPropertyChanged
 
     public ObservableCollection<RequestGroup> Groups
     {
-        get => requests; set
+        get => this.requests; set
         {
-            requests = value;
+            this.requests = value;
             OnPropertyChanged();
         }
     }
 
     public RequestGroup SelectedGroup
     {
-        get => selectedRequest; set
+        get => this.selectedRequest; set
         {
-            selectedRequest = value;
+            this.selectedRequest = value;
             OnPropertyChanged();
         }
     }
 
     public RequestGroup LeftGroup
     {
-        get => leftGroup; set
+        get => this.leftGroup; set
         {
-            leftGroup = value;
+            this.leftGroup = value;
             OnPropertyChanged();
-            LeftCompare = value == null ? null : value.Requests[0];
+            this.LeftCompare = value?.Requests[0];
         }
     }
 
     public RequestGroup RightGroup
     {
-        get => rightGroup; set
+        get => this.rightGroup; set
         {
-            rightGroup = value;
+            this.rightGroup = value;
             OnPropertyChanged();
-            RightCompare = value == null ? null : value.Requests[0];
+            this.RightCompare = value?.Requests[0];
         }
     }
 
@@ -162,27 +162,27 @@ public class Data : INotifyPropertyChanged
 
     public Request LeftCompare
     {
-        get => leftCompare; set
+        get => this.leftCompare; set
         {
-            leftCompare = value;
+            this.leftCompare = value;
             OnPropertyChanged();
         }
     }
 
     public Request RightCompare
     {
-        get => rightCompare; set
+        get => this.rightCompare; set
         {
-            rightCompare = value;
+            this.rightCompare = value;
             OnPropertyChanged();
         }
     }
 
     public bool FormatResponse
     {
-        get => _formatResponse; set
+        get => this._formatResponse; set
         {
-            _formatResponse = value;
+            this._formatResponse = value;
             OnPropertyChanged();
         }
     }
@@ -235,7 +235,7 @@ public class Data : INotifyPropertyChanged
 
     internal void CreateBuiltinIfMissing()
     {
-        var hasBuiltin = Groups.Where(x => x.Builtin).Any();
+        bool hasBuiltin = this.Groups.Where(x => x.Builtin).Any();
         if (hasBuiltin) { return; }
 
         var g = new RequestGroup
@@ -264,8 +264,8 @@ public class Data : INotifyPropertyChanged
     private static string GuessGroupName(string fileName)
     {
         var info = new FileInfo(fileName);
-        var gitfolder = Path.Join(info.Directory.FullName, ".git");
-        var name = Path.GetFileNameWithoutExtension(fileName);
+        string gitfolder = Path.Join(info.Directory.FullName, ".git");
+        string name = Path.GetFileNameWithoutExtension(fileName);
         if (new DirectoryInfo(gitfolder).Exists)
         {
             return $"{name} for {info.Directory.Name}";
@@ -295,7 +295,7 @@ public class Data : INotifyPropertyChanged
 
         Disk.SaveGroup(this.SelectedGroup);
 
-        var index = this.Groups.IndexOf(this.SelectedGroup);
+        int index = this.Groups.IndexOf(this.SelectedGroup);
         this.Groups.Remove(this.SelectedGroup);
         index = Math.Min(index, this.Groups.Count - 1);
         this.SelectedGroup = this.Groups[index];

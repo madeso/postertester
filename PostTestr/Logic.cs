@@ -45,8 +45,8 @@ public static class Logic
 {
     private static string FormatJson(string t)
     {
-        var obj = JsonConvert.DeserializeObject(t);
-        var f = JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented);
+        object obj = JsonConvert.DeserializeObject(t);
+        string f = JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented);
         return f;
     }
 
@@ -62,7 +62,7 @@ public static class Logic
         }
     }
 
-    static readonly HttpClient client = new HttpClient();
+    private static readonly HttpClient client = new HttpClient();
 
     private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent content)
     {
@@ -109,7 +109,7 @@ public static class Logic
     {
         // todo(Gustav): expose and enrich headers
         var headers = client.DefaultRequestHeaders;
-        using HttpResponseMessage response = await GetResponse(action, url, content);
+        using var response = await GetResponse(action, url, content);
         var status = response.EnsureSuccessStatusCode();
         string responseBody = await response.Content.ReadAsStringAsync();
 
@@ -144,7 +144,7 @@ public static class Logic
         catch (Exception xx)
         {
             var end = DateTime.Now;
-            var builder = String.Empty;
+            string builder = String.Empty;
 
             var x = xx;
             while (x != null)

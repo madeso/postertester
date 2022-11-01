@@ -18,16 +18,16 @@ public static class DiffTool
                 @"C:\Program Files (x86)\WinMerge\WinMergeU.exe"
             };
 
-        foreach (var p in paths)
+        foreach (string p in paths)
         {
             if (File.Exists(p) == false)
             {
                 continue;
             }
 
-            var root = Path.GetTempPath();
-            var leftPath = Path.Join(root, leftName);
-            var rightPath = Path.Join(root, rightName);
+            string root = Path.GetTempPath();
+            string leftPath = Path.Join(root, leftName);
+            string rightPath = Path.Join(root, rightName);
             File.WriteAllText(leftPath, leftData.Body);
             File.WriteAllText(rightPath, rightData.Body);
 

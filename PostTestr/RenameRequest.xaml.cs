@@ -14,13 +14,13 @@ public class RenameRequestData : INotifyPropertyChanged
 
     public string Url { get; set; }
 
-    public string NewDisplay { get => newDisplay; set { newDisplay = value; OnPropertyChanged(); } }
-    public string OldDisplay { get => oldDisplay; set { oldDisplay = value; OnPropertyChanged(); } }
-    public string Title { get => title; set { title = value; OnPropertyChanged(); UpdateTitle(); } }
+    public string NewDisplay { get => this.newDisplay; set { this.newDisplay = value; OnPropertyChanged(); } }
+    public string OldDisplay { get => this.oldDisplay; set { this.oldDisplay = value; OnPropertyChanged(); } }
+    public string Title { get => this.title; set { this.title = value; OnPropertyChanged(); UpdateTitle(); } }
 
-    void UpdateTitle()
+    private void UpdateTitle()
     {
-        NewDisplay = Data.Request.CalculateDisplay(this.Url, this.Title);
+        this.NewDisplay = Data.Request.CalculateDisplay(this.Url, this.Title);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -34,33 +34,33 @@ public class RenameRequestData : INotifyPropertyChanged
 
 public partial class RenameRequest : Window
 {
-    readonly RenameRequestData data;
+    private readonly RenameRequestData data;
     public RenameRequest(Data.Request r)
     {
         InitializeComponent();
-        data = new RenameRequestData()
+        this.data = new RenameRequestData()
         {
             Url = r.Url,
             OldDisplay = r.TitleOrUrl,
             Title = r.Title
         };
-        this.DataContext = data;
+        this.DataContext = this.data;
     }
 
     public string RequestTitle
     {
-        get => data.Title;
+        get => this.data.Title;
     }
 
     private void Window_Activated(object sender, EventArgs e)
     {
-        dlgTitle.SelectAll();
-        dlgTitle.Focus();
+        this.dlgTitle.SelectAll();
+        this.dlgTitle.Focus();
     }
 
     private void OkExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        DialogResult = true;
+        this.DialogResult = true;
         Close();
     }
 }

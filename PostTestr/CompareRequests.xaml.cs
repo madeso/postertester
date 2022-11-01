@@ -16,7 +16,7 @@ public partial class CompareRequests : Window
 
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        DialogResult = true;
+        this.DialogResult = true;
         Close();
     }
 }

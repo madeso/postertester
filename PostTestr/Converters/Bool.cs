@@ -11,8 +11,8 @@ public class BooleanConverter<T> : IValueConverter
 {
     public BooleanConverter(T trueValue, T falseValue)
     {
-        True = trueValue;
-        False = falseValue;
+        this.True = trueValue;
+        this.False = falseValue;
     }
 
     public T True { get; set; }
@@ -20,12 +20,12 @@ public class BooleanConverter<T> : IValueConverter
 
     public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return value is bool && ((bool)value) ? True : False;
+        return value is bool && ((bool)value) ? this.True : this.False;
     }
 
     public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return value is T && EqualityComparer<T>.Default.Equals((T)value, True);
+        return value is T coverted && EqualityComparer<T>.Default.Equals(coverted, this.True);
     }
 }
 

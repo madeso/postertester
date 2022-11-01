@@ -9,7 +9,7 @@ namespace PostTestr;
 
 public class DialogBackground : IDisposable
 {
-    Window Parent { get; }
+    private Window Parent { get; }
     public DialogBackground(Window parent, Window dialog)
     {
         this.Parent = parent;
@@ -24,8 +24,8 @@ public class DialogBackground : IDisposable
 
     public void Dispose()
     {
-        Parent.Opacity = 1;
-        Parent.Effect = null;
+        this.Parent.Opacity = 1;
+        this.Parent.Effect = null;
     }
 }
 
@@ -52,7 +52,7 @@ public partial class MainWindow : Window
         this.OnSave?.Invoke();
     }
 
-    Data.Request GetSelectedRequest()
+    private Data.Request GetSelectedRequest()
     {
         var g = this.Data.SelectedGroup;
         if (g == null) { return null; }
@@ -77,7 +77,7 @@ public partial class MainWindow : Window
         fdlg.Filter = PostGroupFilesFilter;
         fdlg.RestoreDirectory = true;
         fdlg.DefaultExt = PostGroupExt;
-        var dr = fdlg.ShowDialog();
+        bool? dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
         this.Data.CreateNewGroup(fdlg.FileName);
@@ -90,7 +90,7 @@ public partial class MainWindow : Window
         fdlg.Title = "Select existing group file";
         fdlg.Filter = PostGroupFilesFilter;
         fdlg.RestoreDirectory = true;
-        var dr = fdlg.ShowDialog();
+        bool? dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
         this.Data.AddExistingGroup(fdlg.FileName);
@@ -117,18 +117,18 @@ public partial class MainWindow : Window
 
     private void NewRequestExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        Data.AddNewRequest();
+        this.Data.AddNewRequest();
         Save();
     }
 
     private void ExitExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        this.Close();
+        Close();
     }
 
     private void DeleteSelectedRequestExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        Data.DeleteSelectedRequest();
+        this.Data.DeleteSelectedRequest();
         Save();
     }
 
@@ -153,11 +153,11 @@ public partial class MainWindow : Window
 
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var dlg = new CompareRequests(Data);
+        var dlg = new CompareRequests(this.Data);
         using var blur = new DialogBackground(this, dlg);
         if (dlg.ShowDialog() ?? false)
         {
-            Data.Compare();
+            this.Data.Compare();
         }
     }
 
@@ -174,7 +174,7 @@ public partial class MainWindow : Window
         fdlg.Title = "Browse post data";
         fdlg.Filter = "Text files (json,txt,xml)|*.json;*.txt;*.xml|All files (*.*)|*.*";
         fdlg.RestoreDirectory = true;
-        var dr = fdlg.ShowDialog();
+        bool? dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
         r.TextContent = File.ReadAllText(fdlg.FileName);
@@ -182,13 +182,13 @@ public partial class MainWindow : Window
 
     private void FocusRequestsExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        uiRequests.Focus();
+        this.uiRequests.Focus();
     }
 
     private void FocusUrlExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        uiUrl.Focus();
-        uiUrl.SelectAll();
+        this.uiUrl.Focus();
+        this.uiUrl.SelectAll();
     }
 
     private void FocusPostExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -198,17 +198,16 @@ public partial class MainWindow : Window
         {
             return;
         }
-        uiPost.Focus();
-        uiPost.SelectAll();
+        this.uiPost.Focus();
+        this.uiPost.SelectAll();
     }
 
-
-    void SelectRequest(int i1)
+    private void SelectRequest(int i1)
     {
-        var g = Data.SelectedGroup;
+        var g = this.Data.SelectedGroup;
         if (g == null) { return; }
 
-        var i = i1 - 1;
+        int i = i1 - 1;
         if (i < 0) return;
         if (i >= g.Requests.Count) return;
         g.SelectedRequest = g.Requests[i];

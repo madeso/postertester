@@ -28,8 +28,8 @@ public static class Disk
 
     private static string GetLocalFile(string fileName)
     {
-        var root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var folder = Path.Combine(root, "PostTestr");
+        string root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        string folder = Path.Combine(root, "PostTestr");
         if (Directory.Exists(folder) == false)
         {
             Directory.CreateDirectory(folder);
@@ -39,7 +39,7 @@ public static class Disk
 
     private static T ReadFile<T>(string path)
     {
-        var data = File.ReadAllText(path);
+        string data = File.ReadAllText(path);
         return JsonConvert.DeserializeObject<T>(data);
     }
 
@@ -66,8 +66,8 @@ public static class Disk
     {
         static RequestGroup TransformGroup(Saved.Group g)
         {
-            var isbuiltin = g.File == Saved.Group.BuiltinFile;
-            var file = isbuiltin ? RequestsFile : g.File;
+            bool isbuiltin = g.File == Saved.Group.BuiltinFile;
+            string file = isbuiltin ? RequestsFile : g.File;
             var req = LoadRequests(file);
             if (g.Responses != null)
             {
@@ -127,9 +127,9 @@ public static class Disk
         return (int)status;
     }
 
-    static void WriteJson<T>(T jsonFile, string file)
+    private static void WriteJson<T>(T jsonFile, string file)
     {
-        var jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
+        string jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
         File.WriteAllText(file, jsonData);
     }
 
@@ -170,8 +170,8 @@ public static class Disk
             if (g == null) { return null; }
             if (r == null) { return null; }
 
-            var gi = data.Groups.IndexOf(g);
-            var ri = g.Requests.IndexOf(r);
+            int gi = data.Groups.IndexOf(g);
+            int ri = g.Requests.IndexOf(r);
 
             if (gi == -1 || ri == -1) { return null; }
 
