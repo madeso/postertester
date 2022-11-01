@@ -4,11 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PostTestr"
+             xmlns:converters="clr-namespace:PostTestr.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:data="clr-namespace:PostTestr.Data"
              d:DataContext="{d:DesignInstance data:Response}"
              >
+    <UserControl.Resources>
+        <converters:TimeSpanConverter x:Key="TimeSpanConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -27,7 +31,7 @@
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status}" Margin="3,3" FontWeight="Bold"/>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Time taken:" Margin="3,3"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Time}" Margin="3,3" FontWeight="Bold"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Time, Converter={StaticResource TimeSpanConverter}}" Margin="3,3" FontWeight="Bold"/>
         </Grid>
         <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding Body, UpdateSourceTrigger=PropertyChanged}"
             FontFamily="Consolas" FontSize="11" IsReadOnly="True" Background="LightGray"
