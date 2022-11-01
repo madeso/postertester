@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PostTestr
+﻿namespace PostTestr
 {
-    using System.Windows.Controls;
     using System.Windows.Input;
-    using System.Xml.Linq;
 
     public static class CustomCommands
     {

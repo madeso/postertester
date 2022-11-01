@@ -1,18 +1,14 @@
-﻿using PostTestr.Data;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using PostTestr.Data;
 
 namespace PostTestr;
 
 public static class DiffTool
 {
-    public static void LaunchDiff(Response leftData, Response rightData, string leftName="left.json", string rightName="right.json")
+    public static void LaunchDiff(Response leftData, Response rightData, string leftName = "left.json", string rightName = "right.json")
     {
         // todo(Gustav) read from registry
         // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Thingamahoochie\WinMerge

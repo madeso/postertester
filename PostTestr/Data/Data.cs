@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Runtime.CompilerServices;
 
 namespace PostTestr.Data;
@@ -86,7 +85,7 @@ public class RequestGroup : INotifyPropertyChanged
 
         var index = this.Requests.IndexOf(this.SelectedRequest);
         this.Requests.RemoveAt(index);
-        var nextRequest = this.Requests.Count > 0 ? this.Requests[Math.Min(index, this.Requests.Count - 1)] 
+        var nextRequest = this.Requests.Count > 0 ? this.Requests[Math.Min(index, this.Requests.Count - 1)]
             : null;
 
         this.SelectedRequest = nextRequest;
@@ -191,7 +190,7 @@ public class Data : INotifyPropertyChanged
     public void AddNewRequest()
     {
         var g = this.SelectedGroup;
-        if(g == null) { return; }
+        if (g == null) { return; }
 
         g.AddNewRequest();
     }
@@ -267,7 +266,7 @@ public class Data : INotifyPropertyChanged
         var info = new FileInfo(fileName);
         var gitfolder = Path.Join(info.Directory.FullName, ".git");
         var name = Path.GetFileNameWithoutExtension(fileName);
-        if(new DirectoryInfo(gitfolder).Exists)
+        if (new DirectoryInfo(gitfolder).Exists)
         {
             return $"{name} for {info.Directory.Name}";
         }
@@ -291,14 +290,14 @@ public class Data : INotifyPropertyChanged
 
     internal void ForgetGroup()
     {
-        if(this.SelectedGroup == null) { return; }
+        if (this.SelectedGroup == null) { return; }
         if (this.SelectedGroup.Builtin) { return; }
 
         Disk.SaveGroup(this.SelectedGroup);
 
         var index = this.Groups.IndexOf(this.SelectedGroup);
         this.Groups.Remove(this.SelectedGroup);
-        index = Math.Min(index, this.Groups.Count-1);
+        index = Math.Min(index, this.Groups.Count - 1);
         this.SelectedGroup = this.Groups[index];
     }
 }

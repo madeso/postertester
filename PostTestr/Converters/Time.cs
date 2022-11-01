@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows;
-using System.Linq;
 
 public class TimeSpanConverter : IValueConverter
 {
@@ -17,7 +15,7 @@ public class TimeSpanConverter : IValueConverter
 
         static int Floor(double totalMinutes)
         {
-            return (int) Math.Floor(totalMinutes);
+            return (int)Math.Floor(totalMinutes);
         }
 
         static string S(int x)
@@ -28,7 +26,7 @@ public class TimeSpanConverter : IValueConverter
 
         var r = new List<string>();
 
-        if(t.TotalMinutes > 1)
+        if (t.TotalMinutes > 1)
         {
             var min = Floor(t.TotalMinutes);
             r.Add($"{min} minute{S(min)}");
@@ -48,7 +46,7 @@ public class TimeSpanConverter : IValueConverter
             r.Add($"{min} millisecond{S(min)}");
         }
 
-        if(r.Count == 0)
+        if (r.Count == 0)
         {
             return "Less than 1 ms";
         }

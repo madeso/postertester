@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Newtonsoft.Json;
 // using static System.Net.WebRequestMethods;
 
 namespace PostTestr.Data;
@@ -69,12 +69,12 @@ public static class Disk
             var isbuiltin = g.File == Saved.Group.BuiltinFile;
             var file = isbuiltin ? RequestsFile : g.File;
             var req = LoadRequests(file);
-            if(g.Responses != null)
+            if (g.Responses != null)
             {
-                for(int i=0; i < g.Responses.Length; i+=1)
+                for (int i = 0; i < g.Responses.Length; i += 1)
                 {
                     var re = g.Responses[i];
-                    if(re == null) { continue; }
+                    if (re == null) { continue; }
                     req[i].Response = new Response(IntToStatus(re.Status), re.Body) { Time = TimeSpan.FromSeconds(re.Seconds) };
                 }
             }
@@ -83,7 +83,7 @@ public static class Disk
                 Requests = req,
                 File = file,
                 Name = g.Name,
-                Builtin = isbuiltin, 
+                Builtin = isbuiltin,
                 SelectedRequest = req[g.SelectedRequest]
             };
         }
@@ -97,7 +97,7 @@ public static class Disk
 
         static Request FindRequest(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
         {
-            if(i == null) {  return null; }
+            if (i == null) { return null; }
             if (i.Group == -1) { return null; }
             if (i.Request == -1) { return null; }
             return groups[i.Group].Requests[i.Request];
@@ -113,7 +113,7 @@ public static class Disk
             LeftGroup = FindGroup(groups, container.LeftCompare),
             RightGroup = FindGroup(groups, container.RightCompare),
             LeftCompare = FindRequest(groups, container.LeftCompare),
-            RightCompare  = FindRequest(groups, container.RightCompare),
+            RightCompare = FindRequest(groups, container.RightCompare),
             FormatResponse = container.FormatResponse
         };
     }
@@ -159,7 +159,7 @@ public static class Disk
             return new Saved.Group
             {
                 File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
-                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response { Body = x.Response.Body, Status = StatusToInt(x.Response.Status), Seconds=x.Response.Time.TotalSeconds }).ToArray(),
+                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response { Body = x.Response.Body, Status = StatusToInt(x.Response.Status), Seconds = x.Response.Time.TotalSeconds }).ToArray(),
                 Name = g.Name,
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };
@@ -173,9 +173,9 @@ public static class Disk
             var gi = data.Groups.IndexOf(g);
             var ri = g.Requests.IndexOf(r);
 
-            if(gi == -1 || ri == -1) { return null; }
+            if (gi == -1 || ri == -1) { return null; }
 
-            return new Saved.RequestInGroup { Group = gi, Request=ri};
+            return new Saved.RequestInGroup { Group = gi, Request = ri };
         }
 
         var jsonFile = new Saved.Root

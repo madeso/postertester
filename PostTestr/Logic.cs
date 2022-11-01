@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace PostTestr;
 
@@ -30,7 +28,7 @@ public enum HttpMethod
 
     [EnumMember(Value = "patch")]
     Patch
-    
+
     // Link,
     // Unlink,
     // Purge,
@@ -70,27 +68,13 @@ public static class Logic
     {
         return action switch
         {
-            HttpMethod.Get =>      await client.GetAsync(url),
-            // Method.Head =>     break,
-            HttpMethod.Post =>     await client.PostAsync(url, content),
-            HttpMethod.Put =>      await client.PutAsync(url, content),
-            HttpMethod.Delete =>   await client.DeleteAsync(url),
-            // Method.Connect =>  break,
-            // Method.Options =>  break,
-            // Method.Trace =>    break,
-            HttpMethod.Patch =>    await client.PatchAsync(url, content),
+            HttpMethod.Get => await client.GetAsync(url),
+            HttpMethod.Post => await client.PostAsync(url, content),
+            HttpMethod.Put => await client.PutAsync(url, content),
+            HttpMethod.Delete => await client.DeleteAsync(url),
+            HttpMethod.Patch => await client.PatchAsync(url, content),
 
-            // Method.Link =>     break,
-            // Method.Unlink =>   break,
-            // Method.Purge =>    break,
-            // Method.View =>     break,
-
-            // Method.Copy =>     break,
-            // Method.Lock =>     break,
-            // Method.PropFind => break,
-            // Method.Unlock =>   break,
-
-        _ => throw new Exception($"Invalid action: {action}"),
+            _ => throw new Exception($"Invalid action: {action}"),
         };
     }
 
@@ -99,31 +83,17 @@ public static class Logic
         return action switch
         {
             HttpMethod.Get => false,
-            // Method.Head =>     break,
             HttpMethod.Post => true,
             HttpMethod.Put => true,
             HttpMethod.Delete => false,
-            // Method.Connect =>  break,
-            // Method.Options =>  break,
-            // Method.Trace =>    break,
             HttpMethod.Patch => true,
-
-            // Method.Link =>     break,
-            // Method.Unlink =>   break,
-            // Method.Purge =>    break,
-            // Method.View =>     break,
-
-            // Method.Copy =>     break,
-            // Method.Lock =>     break,
-            // Method.PropFind => break,
-            // Method.Unlock =>   break,
 
             _ => throw new Exception($"Invalid action: {action}"),
         };
     }
 
-        // todo(Gustav): read file
-        // todo(Gustav): form input
+    // todo(Gustav): read file
+    // todo(Gustav): form input
 
     public static HttpContent WithStringContent(string t)
     {
@@ -149,7 +119,7 @@ public static class Logic
     public static async Task Request(Data.Data root, Data.Request r)
     {
         // silently ignore double commands
-        if(r.IsWorking == true) { return; }
+        if (r.IsWorking == true) { return; }
 
         r.Response = null;
         r.IsWorking = true;
@@ -171,13 +141,13 @@ public static class Logic
                 r.Response.Body = FormatJsonOrNot(r.Response.Body);
             }
         }
-        catch(Exception xx)
+        catch (Exception xx)
         {
             var end = DateTime.Now;
             var builder = String.Empty;
 
             var x = xx;
-            while(x != null)
+            while (x != null)
             {
                 builder += x.Message + "\r\n";
                 x = x.InnerException;

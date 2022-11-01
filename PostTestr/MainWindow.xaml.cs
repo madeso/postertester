@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System;
 using System.IO;
-using Microsoft.Win32;
-using System;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Effects;
+using Microsoft.Win32;
 
 namespace PostTestr;
 
@@ -36,7 +36,7 @@ public partial class MainWindow : Window
 {
     private const string PostGroupExt = "PosterTesterGroup";
     private const string PostGroupFilesFilter = $"Post group files (*.{PostGroupExt})|*.{PostGroupExt}|All files (*.*)|*.*";
-    
+
 
     public Data.Data Data { get; internal set; }
 
@@ -55,14 +55,14 @@ public partial class MainWindow : Window
     Data.Request GetSelectedRequest()
     {
         var g = this.Data.SelectedGroup;
-        if(g == null) { return null; }
+        if (g == null) { return null; }
         return g.SelectedRequest;
     }
 
     public async void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
-        if(r == null)
+        if (r == null)
         {
             return;
         }
@@ -140,7 +140,7 @@ public partial class MainWindow : Window
     private void RenameExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
-        if(r == null) { return; }
+        if (r == null) { return; }
 
         var dlg = new RenameRequest(r);
         using var blur = new DialogBackground(this, dlg);
@@ -206,11 +206,11 @@ public partial class MainWindow : Window
     void SelectRequest(int i1)
     {
         var g = Data.SelectedGroup;
-        if(g == null) { return; }
+        if (g == null) { return; }
 
         var i = i1 - 1;
-        if(i < 0 ) return;
-        if(i >= g.Requests.Count) return;
+        if (i < 0) return;
+        if (i >= g.Requests.Count) return;
         g.SelectedRequest = g.Requests[i];
     }
 
