@@ -5,9 +5,12 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace PostTestr;
 
+
+[JsonConverter(typeof(StringEnumConverter))]
 public enum HttpMethod
 {
     [EnumMember(Value = "get")]
