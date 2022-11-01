@@ -70,6 +70,13 @@ public static class Disk
             };
         }
 
+        static RequestGroup FindGroup(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
+        {
+            if (i == null) { return null; }
+            if (i.Group == -1) { return null; }
+            return groups[i.Group];
+        }
+
         static Request FindRequest(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
         {
             if(i == null) {  return null; }
@@ -85,8 +92,8 @@ public static class Disk
         {
             Groups = groups,
             SelectedGroup = container.SelectedGroup == -1 ? null : groups[container.SelectedGroup],
-            LeftGroup = groups[container.LeftCompare.Group],
-            RightGroup = groups[container.RightCompare.Group],
+            LeftGroup = FindGroup(groups, container.LeftCompare),
+            RightGroup = FindGroup(groups, container.RightCompare),
             LeftCompare = FindRequest(groups, container.LeftCompare),
             RightCompare  = FindRequest(groups, container.RightCompare),
             FormatResponse = container.FormatResponse
