@@ -33,6 +33,9 @@ public class Response
 
     [JsonProperty("status")]
     public int Status { get; set; }
+
+    [JsonProperty("seconds")]
+    public double Seconds { get; internal set; }
 }
 
 public class Group

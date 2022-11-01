@@ -16,7 +16,6 @@ public class Request : INotifyPropertyChanged
     private string _titleOrUrl = "";
     private bool _hasPost = false;
 
-
     public string TitleOrUrl
     {
         get => _titleOrUrl; private set

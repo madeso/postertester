@@ -154,21 +154,26 @@ public static class Logic
         r.Response = null;
         r.IsWorking = true;
 
+        var start = DateTime.Now;
+
         try
         {
             var url = new Uri(r.Url);
             var data = HasContent(r.Method)
                 ? await GetUrl(HttpMethod.Post, url, r.GetContent())
                 : await GetUrl(HttpMethod.Get, url, null);
+            var end = DateTime.Now;
             r.Response = data;
+            r.Response.Time = end.Subtract(start);
 
-            if(root.FormatResponse)
+            if (root.FormatResponse)
             {
                 r.Response.Body = FormatJsonOrNot(r.Response.Body);
             }
         }
         catch(Exception xx)
         {
+            var end = DateTime.Now;
             var builder = String.Empty;
 
             var x = xx;
@@ -179,6 +184,7 @@ public static class Logic
             }
 
             r.Response = new Data.Response(status: HttpStatusCode.BadRequest, body: builder);
+            r.Response.Time = end.Subtract(start);
         }
 
         r.IsWorking = false;

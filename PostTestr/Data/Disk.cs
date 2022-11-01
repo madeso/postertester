@@ -75,7 +75,7 @@ public static class Disk
                 {
                     var re = g.Responses[i];
                     if(re == null) { continue; }
-                    req[i].Response = new Response(IntToStatus(re.Status), re.Body);
+                    req[i].Response = new Response(IntToStatus(re.Status), re.Body) { Time = TimeSpan.FromSeconds(re.Seconds) };
                 }
             }
             return new RequestGroup
@@ -159,7 +159,7 @@ public static class Disk
             return new Saved.Group
             {
                 File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
-                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response { Body = x.Response.Body, Status = StatusToInt(x.Response.Status) }).ToArray(),
+                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response { Body = x.Response.Body, Status = StatusToInt(x.Response.Status), Seconds=x.Response.Time.TotalSeconds }).ToArray(),
                 Name = g.Name,
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };

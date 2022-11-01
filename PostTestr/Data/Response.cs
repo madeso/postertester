@@ -1,12 +1,13 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
 namespace PostTestr.Data;
 
 public class Response : INotifyPropertyChanged
 {
-    // public HttpStatusCode Status { get; set; }
     private string _body;
+    private TimeSpan _time;
 
     public HttpStatusCode Status { get; }
 
@@ -15,6 +16,15 @@ public class Response : INotifyPropertyChanged
         get => _body; set
         {
             _body = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public TimeSpan Time
+    {
+        get => _time; internal set
+        {
+            _time = value;
             OnPropertyChanged();
         }
     }
@@ -32,5 +42,5 @@ public class Response : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    
+
 }
