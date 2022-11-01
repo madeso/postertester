@@ -113,10 +113,9 @@ public static class Logic
         // todo(Gustav): expose and enrich headers
         var headers = client.DefaultRequestHeaders;
         using var response = await GetResponse(action, url, content);
-        var status = response.EnsureSuccessStatusCode();
         string responseBody = await response.Content.ReadAsStringAsync();
 
-        return new Data.Response(status: status.StatusCode, body: responseBody);
+        return new Data.Response(status: response.StatusCode, body: responseBody);
     }
 
     public static async Task Request(Data.Data root, Data.Request r)
