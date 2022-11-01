@@ -12,6 +12,7 @@
              >
     <UserControl.Resources>
         <converters:TimeSpanConverter x:Key="TimeSpanConverter"/>
+        <converters:UnderlyingEnumConverter x:Key="UnderlyingEnumConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -28,7 +29,10 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Status:" Margin="3,3"/>
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status}" Margin="3,3" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" >
+                <TextBlock Text="{Binding Status, Converter={StaticResource UnderlyingEnumConverter}}" Margin="3,3" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Status}" Margin="3,3" FontWeight="Bold"/>
+            </StackPanel>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Time taken:" Margin="3,3"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Time, Converter={StaticResource TimeSpanConverter}}" Margin="3,3" FontWeight="Bold"/>
