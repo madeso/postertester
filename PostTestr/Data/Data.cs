@@ -160,6 +160,12 @@ public class Data : INotifyPropertyChanged
         HttpMethod.Patch
     };
 
+    public ObservableCollection<ContentType> AllContentTypes { get; } = new ObservableCollection<ContentType>
+    {
+        ContentTypeJson.Instance,
+        ContentTypeText.Instance
+    };
+
     public Request LeftCompare
     {
         get => this.leftCompare; set

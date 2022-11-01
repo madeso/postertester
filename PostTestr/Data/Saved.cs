@@ -1,6 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace PostTestr.Data.Saved;
+
+[JsonConverter(typeof(StringEnumConverter))]
+public enum ContentType
+{
+    [EnumMember(Value = "json")]
+    Json,
+
+    [EnumMember(Value = "text")]
+    Text
+}
 
 public class Request
 {

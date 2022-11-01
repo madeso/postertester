@@ -11,7 +11,7 @@ public class Request : INotifyPropertyChanged
     private string _textConent = string.Empty;
     private Response _response = null;
     private bool _isWorking = false;
-    private ContentType _contentType = ContentType.Json;
+    private ContentType _contentType = ContentTypeJson.Instance;
 
     private string _titleOrUrl = "";
     private bool _hasPost = false;
@@ -140,11 +140,6 @@ public class Request : INotifyPropertyChanged
 
     internal System.Net.Http.HttpContent GetContent()
     {
-        return this.ContentType switch
-        {
-            ContentType.Json => Logic.WithJsonContent(this.TextContent),
-            ContentType.Text => Logic.WithStringContent(this.TextContent),
-            _ => throw new Exception($"Invalid type ${this.ContentType}"),
-        };
+        return this.ContentType.CreateContent(this);
     }
 }

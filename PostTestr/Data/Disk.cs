@@ -45,6 +45,15 @@ public static class Disk
 
     internal static ObservableCollection<Request> LoadRequests(string file)
     {
+        static ContentType MakeType(Saved.ContentType t)
+        {
+            return t switch
+            {
+                Saved.ContentType.Json => ContentTypeJson.Instance,
+                Saved.ContentType.Text => ContentTypeText.Instance,
+                _ => throw new NotImplementedException(),
+            };
+        }
         static Request ToReq(Saved.Request r)
         {
             return new Request
@@ -52,7 +61,7 @@ public static class Disk
                 Url = r.Url,
                 Title = r.Title,
                 Method = r.Method,
-                ContentType = r.ContentType,
+                ContentType = MakeType(r.ContentType),
                 TextContent = r.TextContent
             };
         }
@@ -142,7 +151,7 @@ public static class Disk
                 Url = r.Url,
                 Title = r.Title,
                 Method = r.Method,
-                ContentType = r.ContentType,
+                ContentType = r.ContentType.SavedType,
                 TextContent = r.TextContent
             };
         }

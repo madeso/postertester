@@ -223,9 +223,17 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <TextBlock FontWeight="Bold" Text="Body" />
-                                    <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
-                                         FontFamily="Consolas" FontSize="11"
-                                         AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+
+                                    <Grid Grid.Row="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <ComboBox Grid.Row="0" Margin="3" ItemsSource="{Binding AllContentTypes}" SelectedItem="{Binding SelectedGroup.SelectedRequest.ContentType}" DisplayMemberPath="Name"/>
+                                        <TextBox Grid.Row="1" Margin="3" x:Name="uiPost" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                             FontFamily="Consolas" FontSize="11"
+                                             AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+                                    </Grid>
                                 </Grid>
 
                                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
