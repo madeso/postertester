@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -254,6 +254,7 @@ public class Data : INotifyPropertyChanged
         g.AddNewRequest();
 
         this.Groups.Add(g);
+		this.SelectedGroup = g;
     }
 
     internal void CreateNewGroup(string fileName)
