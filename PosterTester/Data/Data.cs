@@ -251,8 +251,6 @@ public class Data : INotifyPropertyChanged
             File = Disk.RequestsFile
         };
 
-        g.AddNewRequest();
-
         this.Groups.Add(g);
 		this.SelectedGroup = g;
     }
