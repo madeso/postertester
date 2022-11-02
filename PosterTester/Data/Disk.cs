@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -27,17 +27,24 @@ public static class Disk
     }
 
     private static string GetLocalFile(string fileName)
-    {
-        string root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        string folder = Path.Combine(root, "PosterTester");
-        if (Directory.Exists(folder) == false)
-        {
-            Directory.CreateDirectory(folder);
-        }
-        return Path.Combine(folder, fileName);
-    }
+	{
+		string folder = GetAppFolder();
+		return Path.Combine(folder, fileName);
+	}
 
-    private static T ReadFile<T>(string path)
+	public static string GetAppFolder()
+	{
+		string root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		string folder = Path.Combine(root, "PosterTester");
+		if (Directory.Exists(folder) == false)
+		{
+			Directory.CreateDirectory(folder);
+		}
+
+		return folder;
+	}
+
+	private static T ReadFile<T>(string path)
     {
         string data = File.ReadAllText(path);
         return JsonConvert.DeserializeObject<T>(data);

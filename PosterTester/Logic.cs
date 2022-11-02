@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
@@ -161,4 +162,14 @@ public static class Logic
 
         r.IsWorking = false;
     }
+
+	internal static void BrowseFolder(string dir)
+	{
+		var startInfo = new ProcessStartInfo
+		{
+			FileName = "explorer.exe",
+			Arguments = dir
+		};
+		Process.Start(startInfo);
+	}
 }

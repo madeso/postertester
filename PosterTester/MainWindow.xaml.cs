@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -59,7 +59,12 @@ public partial class MainWindow : Window
         return g.SelectedRequest;
     }
 
-    public async void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
+	public void BrowseDataExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		Logic.BrowseFolder(PosterTester.Data.Disk.GetAppFolder());
+	}
+
+	public async void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
         if (r == null)

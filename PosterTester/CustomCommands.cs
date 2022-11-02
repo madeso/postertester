@@ -1,4 +1,4 @@
-﻿namespace PosterTester
+namespace PosterTester
 {
     using System.Windows.Input;
 
@@ -7,7 +7,8 @@
         public static RoutedCommand Ok = new RoutedCommand();
 
         public static RoutedCommand Save = new RoutedCommand();
-        public static RoutedCommand Exit = new RoutedCommand();
+		public static RoutedCommand BrowseData = new RoutedCommand();
+		public static RoutedCommand Exit = new RoutedCommand();
 
         public static RoutedCommand CreateNewGroup = new RoutedCommand();
         public static RoutedCommand AddExistingGroup = new RoutedCommand();

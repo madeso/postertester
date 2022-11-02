@@ -24,8 +24,9 @@
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Exit" Executed="ExitExecuted" />
+		<CommandBinding Command="posterTester:CustomCommands.BrowseData" Executed="BrowseDataExecuted" />
 
-        <CommandBinding Command="posterTester:CustomCommands.CreateNewGroup" Executed="CreateNewGroupExecuted"/>
+		<CommandBinding Command="posterTester:CustomCommands.CreateNewGroup" Executed="CreateNewGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.AddExistingGroup" Executed="AddExistingGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.ForgetGroup" Executed="ForgetGroupExecuted"/>
 
@@ -90,8 +91,8 @@
         
         <Menu Width="Auto" Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="_Save" Command="posterTester:CustomCommands.Save" InputGestureText="Ctrl-S" />
-                <!-- open data folder in explorer button -->
+				<MenuItem Header="_Save" Command="posterTester:CustomCommands.Save" InputGestureText="Ctrl-S" />
+				<MenuItem Header="_Browse local data..." Command="posterTester:CustomCommands.BrowseData"/>
                 <MenuItem Header="E_xit" Command="posterTester:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="_Group">
