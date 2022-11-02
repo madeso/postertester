@@ -1,0 +1,65 @@
+﻿<Window x:Class="PosterTester.CompareRequests"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:posterTester="clr-namespace:PosterTester"
+        xmlns:converters="clr-namespace:PosterTester.Converters"
+        xmlns:data="clr-namespace:PosterTester.Data"
+        Icon="icon.ico"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        d:DataContext="{d:DesignInstance data:Data}"
+        mc:Ignorable="d" Height="127" Width="481"
+        >
+    <Window.CommandBindings>
+        <CommandBinding Command="posterTester:CustomCommands.Compare" Executed="CompareExecuted" />
+    </Window.CommandBindings>
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <ComboBox Width="300" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Groups}" DisplayMemberPath="Name" SelectedItem="{Binding LeftGroup}" Margin="3"/>
+                <ComboBox Width="300" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Groups}" DisplayMemberPath="Name" SelectedItem="{Binding RightGroup}" Margin="3"/>
+                
+                <ComboBox Width="300" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding LeftGroup.Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding LeftCompare}" Margin="3"/>
+                <ComboBox Width="300" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding RightGroup.Requests}" DisplayMemberPath="TitleOrUrl" SelectedItem="{Binding RightCompare}" Margin="3"/>
+            </Grid>
+
+            <Button Grid.Column="1" Grid.Row="1" IsDefault="True" Margin="3"
+                    Command="posterTester:CustomCommands.Compare">
+                <TextBlock Text="Compare..." Margin="12,3"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
