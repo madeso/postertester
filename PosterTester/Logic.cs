@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
@@ -66,7 +67,11 @@ public static class Logic
         }
     }
 
-    private static readonly HttpClient client = new HttpClient();
+	private static readonly HttpClientHandler handler = new HttpClientHandler();
+	private static readonly CookieContainer cookieContainer = handler.CookieContainer;
+	private static readonly HttpClient client = new HttpClient(handler);
+	// private static readonly HttpClient client = new HttpClient();
+
 
     private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent content)
     {
@@ -112,11 +117,15 @@ public static class Logic
     public static async Task<Data.Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
     {
         // todo(Gustav): expose and enrich headers
-        var headers = client.DefaultRequestHeaders;
+		var headers = client.DefaultRequestHeaders.ToArray();
+		var cookies = cookieContainer.GetAllCookies().ToList();
         using var response = await GetResponse(action, url, content);
         string responseBody = await response.Content.ReadAsStringAsync();
 
-        return new Data.Response(status: response.StatusCode, body: responseBody);
+		var resh = Data.Headers.Collect(response.Headers);
+		var conh = Data.Headers.Collect(response.Content.Headers);
+
+        return new Data.Response(status: response.StatusCode, body: responseBody, responseHeaders:resh);
     }
 
     public static async Task Request(Data.Data root, Data.Request r)
@@ -156,7 +165,7 @@ public static class Logic
                 x = x.InnerException;
             }
 
-            r.Response = new Data.Response(status: HttpStatusCode.BadRequest, body: builder);
+            r.Response = new Data.Response(status: HttpStatusCode.BadRequest, body: builder, new Data.Headers());
             r.Response.Time = end.Subtract(start);
         }
 

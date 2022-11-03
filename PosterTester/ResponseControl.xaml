@@ -19,6 +19,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+		
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -37,8 +38,46 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Time taken:" Margin="3,3"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Time, Converter={StaticResource TimeSpanConverter}}" Margin="3,3" FontWeight="Bold"/>
         </Grid>
-        <TextBox x:Name="uiPost" Grid.Row="1" Text="{Binding Body, UpdateSourceTrigger=PropertyChanged}"
-            FontFamily="Consolas" FontSize="11" IsReadOnly="True" Background="LightGray"
-            AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
-    </Grid>
+
+		<TabControl Grid.Row="1" >
+			<TabItem Header="Headers">
+				<ListView ItemsSource="{Binding ResponseHeaders.Rows, UpdateSourceTrigger=PropertyChanged}" Margin="3" d:ItemsSource="{d:SampleData ItemCount=5}">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<WrapPanel>
+								<TextBlock Text="{Binding Name}" Foreground="Blue" Margin="0,0,6,0"/>
+
+								<ListView ItemsSource="{Binding Values}"
+										  Background="Transparent" BorderThickness="0" Padding="0"
+										  >
+									<ListBox.ItemContainerStyle>
+										<Style TargetType="{x:Type ListBoxItem}">
+											<Setter Property="Focusable" Value="False"/>
+										</Style>
+									</ListBox.ItemContainerStyle>
+									<ListView.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel/>
+										</ItemsPanelTemplate>
+									</ListView.ItemsPanel>
+									<ListView.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding}" Margin="0,0,3,0"/>
+										</DataTemplate>
+									</ListView.ItemTemplate>
+								</ListView>
+								
+							</WrapPanel>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</TabItem>
+			
+			<TabItem Header="Content">
+				<TextBox x:Name="uiPost" Text="{Binding Body}"
+					FontFamily="Consolas" FontSize="11" IsReadOnly="True" Background="LightGray"
+					HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
+			</TabItem>
+		</TabControl>
+	</Grid>
 </UserControl>

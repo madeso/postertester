@@ -1,8 +1,41 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 namespace PosterTester.Data;
+
+public class HeaderRow
+{
+	public string Name { get; set; }
+	public string[] Values { get; set; }
+}
+
+public class Headers
+{
+	public HeaderRow[] Rows { get; set; }
+
+	internal static Headers Collect(HttpResponseHeaders src)
+	{
+		return new Headers { Rows = CollectToRows(src).ToArray() };
+	}
+
+	internal static Headers Collect(HttpContentHeaders src)
+	{
+		return new Headers { Rows = CollectToRows(src).ToArray() };
+	}
+
+	private static IEnumerable<HeaderRow> CollectToRows<T>(T src)
+		where T : IEnumerable<KeyValuePair<string, IEnumerable<string>>>
+	{
+		foreach (var e in src)
+		{
+			yield return new HeaderRow { Name = e.Key, Values = e.Value.ToArray() };
+		}
+	}
+}
 
 public class Response : INotifyPropertyChanged
 {
@@ -20,7 +53,9 @@ public class Response : INotifyPropertyChanged
         }
     }
 
-    public TimeSpan Time
+	public Headers ResponseHeaders { set; get; }
+
+	public TimeSpan Time
     {
         get => this._time; internal set
         {
@@ -29,11 +64,16 @@ public class Response : INotifyPropertyChanged
         }
     }
 
-    public Response(HttpStatusCode status, string body)
+    public Response(HttpStatusCode status, string body, Headers responseHeaders)
     {
         this.Status = status;
         this.Body = body;
+		this.ResponseHeaders = responseHeaders;
     }
+
+
+
+
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -41,6 +81,4 @@ public class Response : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
-
 }

@@ -104,7 +104,7 @@ public static class Disk
 					{
 						var re = g.Responses[i];
 						if (re == null) { continue; }
-						req[i].Response = new Response(IntToStatus(re.Status), re.Body) { Time = TimeSpan.FromSeconds(re.Seconds) };
+						req[i].Response = new Response(IntToStatus(re.Status), re.Body, new Headers()) { Time = TimeSpan.FromSeconds(re.Seconds) };
 					}
 				}
 				return new RequestGroup
