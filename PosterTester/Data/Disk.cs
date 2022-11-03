@@ -10,7 +10,7 @@ namespace PosterTester.Data;
 
 public static class Disk
 {
-    private static string SettingsFile
+    private static string PathToSettings
     {
         get
         {
@@ -18,11 +18,11 @@ public static class Disk
         }
     }
 
-    public static string RequestsFile
+    public static string PathToMyRequests
     {
         get
         {
-            return GetLocalFile("requests.json");
+            return GetLocalFile("my-requests.json");
         }
     }
 
@@ -80,28 +80,42 @@ public static class Disk
 
     private static Data Load(string file)
     {
-        static RequestGroup TransformGroup(Saved.Group g)
+        static RequestGroup TransformGroupOrNull(Saved.Group g)
         {
             bool isbuiltin = g.File == Saved.Group.BuiltinFile;
-            string file = isbuiltin ? RequestsFile : g.File;
-            var req = LoadRequests(file);
-            if (g.Responses != null)
-            {
-                for (int i = 0; i < g.Responses.Length; i += 1)
-                {
-                    var re = g.Responses[i];
-                    if (re == null) { continue; }
-                    req[i].Response = new Response(IntToStatus(re.Status), re.Body) { Time = TimeSpan.FromSeconds(re.Seconds) };
-                }
-            }
-            return new RequestGroup
-            {
-                Requests = req,
-                File = file,
-                Name = g.Name,
-                Builtin = isbuiltin,
-                SelectedRequest = req[g.SelectedRequest]
-            };
+            string file = isbuiltin ? PathToMyRequests : g.File;
+			if(File.Exists(file) == false)
+			{
+				if(isbuiltin == false)
+				{
+					return null;
+				}
+				else
+				{
+					return Data.CreateDefaultGroup();
+				}
+			}
+			else
+			{
+				var req = LoadRequests(file);
+				if (g.Responses != null)
+				{
+					for (int i = 0; i < g.Responses.Length; i += 1)
+					{
+						var re = g.Responses[i];
+						if (re == null) { continue; }
+						req[i].Response = new Response(IntToStatus(re.Status), re.Body) { Time = TimeSpan.FromSeconds(re.Seconds) };
+					}
+				}
+				return new RequestGroup
+				{
+					Requests = req,
+					File = file,
+					Name = g.Name,
+					Builtin = isbuiltin,
+					SelectedRequest = g.SelectedRequest == -1 ? null : req[g.SelectedRequest]
+				};
+			}
         }
 
         static RequestGroup FindGroup(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
@@ -120,7 +134,7 @@ public static class Disk
         }
 
         var container = ReadFile<Saved.Root>(file);
-        var rc = container.Groups.Select(TransformGroup);
+        var rc = container.Groups.Select(TransformGroupOrNull).Where(x => x != null);
         var groups = new ObservableCollection<RequestGroup>(rc);
         return new Data
         {
@@ -207,21 +221,20 @@ public static class Disk
 
     public static Data LoadOrCreateNew()
     {
-        if (File.Exists(SettingsFile))
+        if (File.Exists(PathToSettings))
         {
-            return Load(SettingsFile);
+            return Load(PathToSettings);
         }
         else
         {
             var r = new Data { };
             r.CreateBuiltinIfMissing();
-            r.AddNewRequest();
             return r;
         }
     }
 
     public static void Save(Data data)
     {
-        Save(data, SettingsFile);
+        Save(data, PathToSettings);
     }
 }

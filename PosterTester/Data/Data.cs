@@ -240,22 +240,28 @@ public class Data : INotifyPropertyChanged
     }
 
     internal void CreateBuiltinIfMissing()
-    {
-        bool hasBuiltin = this.Groups.Where(x => x.Builtin).Any();
-        if (hasBuiltin) { return; }
+	{
+		bool hasBuiltin = this.Groups.Where(x => x.Builtin).Any();
+		if (hasBuiltin) { return; }
+		var g = CreateDefaultGroup();
 
-        var g = new RequestGroup
-        {
-            Builtin = true,
-            Name = "My requests",
-            File = Disk.RequestsFile
-        };
-
-        this.Groups.Add(g);
+		this.Groups.Add(g);
 		this.SelectedGroup = g;
-    }
+	}
 
-    internal void CreateNewGroup(string fileName)
+	public static RequestGroup CreateDefaultGroup()
+	{
+		var g = new RequestGroup
+		{
+			Builtin = true,
+			Name = "My requests",
+			File = Disk.PathToMyRequests
+		};
+		g.AddNewRequest();
+		return g;
+	}
+
+	internal void CreateNewGroup(string fileName)
     {
         var g = new RequestGroup();
         g.Name = GuessGroupName(fileName);
