@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -38,6 +40,21 @@ public class RequestsFile
     public Request[] Requests { get; set; }
 }
 
+public class HeaderRow
+{
+	[JsonProperty("name")]
+	public string Name { get; set; }
+
+	[JsonProperty("values")]
+	public string[] Values { get; set; }
+}
+
+public class Headers
+{
+	[JsonProperty("rows")]
+	public HeaderRow[] Rows { get; set; }
+}
+
 public class Response
 {
     [JsonProperty("body")]
@@ -48,6 +65,9 @@ public class Response
 
     [JsonProperty("seconds")]
     public double Seconds { get; internal set; }
+
+	[JsonProperty("response_headers")]
+	public Headers ResponseHeaders { get; internal set; }
 }
 
 public class Group

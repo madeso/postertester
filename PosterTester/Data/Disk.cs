@@ -80,7 +80,13 @@ public static class Disk
 
     private static Data Load(string file)
     {
-        static RequestGroup TransformGroupOrNull(Saved.Group g)
+		static Headers TransformHeaders(Saved.Headers src)
+		{
+			if(src == null) { return new Headers(); }
+			return new Headers { Rows = src.Rows.Select(x => new HeaderRow { Name=x.Name, Values = x.Values }).ToArray() };
+		}
+
+		static RequestGroup TransformGroupOrNull(Saved.Group g)
         {
             bool isbuiltin = g.File == Saved.Group.BuiltinFile;
             string file = isbuiltin ? PathToMyRequests : g.File;
@@ -104,7 +110,7 @@ public static class Disk
 					{
 						var re = g.Responses[i];
 						if (re == null) { continue; }
-						req[i].Response = new Response(IntToStatus(re.Status), re.Body, new Headers()) { Time = TimeSpan.FromSeconds(re.Seconds) };
+						req[i].Response = new Response(IntToStatus(re.Status), re.Body, TransformHeaders(re.ResponseHeaders)) { Time = TimeSpan.FromSeconds(re.Seconds) };
 					}
 				}
 				return new RequestGroup
@@ -148,7 +154,7 @@ public static class Disk
         };
     }
 
-    private static HttpStatusCode IntToStatus(int status)
+	private static HttpStatusCode IntToStatus(int status)
     {
         return (HttpStatusCode)status;
     }
@@ -182,14 +188,24 @@ public static class Disk
 
     private static void Save(Data data, string file)
     {
-        static Saved.Group TransformGroup(RequestGroup g)
+		static Saved.Headers TransformHeaders(Headers src)
+		{
+			return new Saved.Headers { Rows = src.Rows.Select(x => new Saved.HeaderRow { Name = x.Name, Values = x.Values }).ToArray() };
+		}
+
+		static Saved.Group TransformGroup(RequestGroup g)
         {
             SaveGroup(g);
 
             return new Saved.Group
             {
                 File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
-                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response { Body = x.Response.Body, Status = StatusToInt(x.Response.Status), Seconds = x.Response.Time.TotalSeconds }).ToArray(),
+                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response {
+					Body = x.Response.Body,
+					Status = StatusToInt(x.Response.Status),
+					Seconds = x.Response.Time.TotalSeconds,
+					ResponseHeaders = TransformHeaders(x.Response.ResponseHeaders)
+				}).ToArray(),
                 Name = g.Name,
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };
