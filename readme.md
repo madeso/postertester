@@ -19,7 +19,6 @@ Basic "postman" clone in .NET 6 in WPF (windows only).
 * Use output from one request as input to another
 * Script tests and input "wizards" with .net?
 * Commandline to run tests
-* Serial and parallel attacks (needs test)
 * Solarized light + dark theme
 * Cross platform
 * More features to the requests input
