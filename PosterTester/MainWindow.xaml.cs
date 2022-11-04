@@ -1,9 +1,11 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Effects;
 using Microsoft.Win32;
+using ScottPlot;
 
 namespace PosterTester;
 
@@ -71,11 +73,45 @@ public partial class MainWindow : Window
         {
             return;
         }
-        await Logic.Request(this.Data, r);
+		dlgMainTab.SelectedItem = dlgTabResponse;
+		await Logic.Request(this.Data, r);
         Save();
     }
 
-    public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)
+	private Data.AttackOptions RunAttackDialog()
+	{
+		var dlg = new AttackDialog(this.Data.Attack.Clone());
+		using var blur = new DialogBackground(this, dlg);
+		if (dlg.ShowDialog() ?? false)
+		{
+			return dlg.AttackOptions;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	private async void AttackExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		var r = GetSelectedRequest();
+		if (r == null) { return; }
+
+		var options = RunAttackDialog();
+		if (options != null)
+		{
+			this.Data.Attack.GetFrom(options);
+			Save();
+			dlgMainTab.SelectedItem = dlgTabAttack;
+			var result = await Logic.Attack(this.Data, r);
+
+			// todo(Gustav): display error!
+			Plotter.Plot(this.dlgPlot, result.Result.Select(x => x.TotalSeconds).ToArray(), this.Data.Attack);
+			// Save();
+		}
+	}
+
+	public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var fdlg = new SaveFileDialog();
         fdlg.Title = "Crete post data";
@@ -141,21 +177,6 @@ public partial class MainWindow : Window
     {
         Save();
     }
-
-	private void AttackExecuted(object sender, ExecutedRoutedEventArgs e)
-	{
-		var r = GetSelectedRequest();
-		if (r == null) { return; }
-
-		var dlg = new AttackDialog(this.Data.Attack.Clone());
-		using var blur = new DialogBackground(this, dlg);
-		if (dlg.ShowDialog() ?? false)
-		{
-			this.Data.Attack.GetFrom(dlg.AttackOptions);
-			Save();
-			// todo(Gustav): start attack
-		}
-	}
 
 	private void RenameExecuted(object sender, ExecutedRoutedEventArgs e)
     {

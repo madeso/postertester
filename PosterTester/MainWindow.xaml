@@ -189,8 +189,8 @@
                     <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedGroup.SelectedRequest.Method}"/>
                     <TextBox Grid.Row="0" Grid.Column="1" x:Name="uiUrl" Margin="3" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-					<TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom">
-						<TabItem Header="Response">
+					<TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom" x:Name="dlgMainTab">
+						<TabItem Header="Response" x:Name="dlgTabResponse">
 							<Grid>
 								<Grid.RowDefinitions>
 									<RowDefinition Height="*" />
@@ -267,7 +267,8 @@
 							</Grid>
 						</TabItem>
 
-						<TabItem Header="Attack">
+						<TabItem Header="Attack" x:Name="dlgTabAttack">
+							<WpfPlot x:Name="dlgPlot" />
 						</TabItem>
 					</TabControl>
 

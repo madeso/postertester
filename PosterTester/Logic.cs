@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -6,8 +7,11 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using PosterTester.Data;
+using PosterTester.Data.Saved;
 
 namespace PosterTester;
 
@@ -134,26 +138,23 @@ public static class Logic
         if (r.IsWorking == true) { return; }
 
         r.Response = null;
-        r.IsWorking = true;
+		using var locked = new WorkingLock(r);
 
         var start = DateTime.Now;
 
         try
-        {
-            var url = new Uri(r.Url);
-            var data = HasContent(r.Method)
-                ? await GetUrl(HttpMethod.Post, url, r.GetContent())
-                : await GetUrl(HttpMethod.Get, url, null);
-            var end = DateTime.Now;
-            r.Response = data;
-            r.Response.Time = end.Subtract(start);
+		{
+			var data = await MakeRequest(r);
+			var end = DateTime.Now;
+			r.Response = data;
+			r.Response.Time = end.Subtract(start);
 
-            if (root.FormatResponse)
-            {
-                r.Response.Body = FormatJsonOrNot(r.Response.Body);
-            }
-        }
-        catch (Exception xx)
+			if (root.FormatResponse)
+			{
+				r.Response.Body = FormatJsonOrNot(r.Response.Body);
+			}
+		}
+		catch (Exception xx)
         {
             var end = DateTime.Now;
             string builder = String.Empty;
@@ -168,9 +169,16 @@ public static class Logic
             r.Response = new Data.Response(status: HttpStatusCode.BadRequest, body: builder, new Data.Headers());
             r.Response.Time = end.Subtract(start);
         }
-
-        r.IsWorking = false;
     }
+
+	private static async Task<Data.Response> MakeRequest(Data.Request r)
+	{
+		var url = new Uri(r.Url);
+		var data = HasContent(r.Method)
+			? await GetUrl(HttpMethod.Post, url, r.GetContent())
+			: await GetUrl(HttpMethod.Get, url, null);
+		return data;
+	}
 
 	internal static void BrowseFolder(string dir)
 	{
@@ -181,4 +189,69 @@ public static class Logic
 		};
 		Process.Start(startInfo);
 	}
+
+	internal static async Task<AttackResult> Attack(Data.Data root, Data.Request r)
+	{
+		// silently ignore double commands
+		if (r.IsWorking == true) { return null; }
+
+		r.Response = null;
+		using var locked = new WorkingLock(r);
+
+		var attack = root.Attack.Clone();
+		var spans = new List<TimeSpan>();
+
+		try
+		{
+			// todo(Gustav): implment "at the same time"
+			for(int i = 0; i<attack.Count; i+=1)
+			{
+				var start = DateTime.Now;
+				var data = await MakeRequest(r);
+				// todo(Gustav): verify data... both status code and actual data
+				var end = DateTime.Now;
+				var time = end.Subtract(start);
+				spans.Add(time);
+			}
+		}
+		catch (Exception xx)
+		{
+			var end = DateTime.Now;
+			string builder = String.Empty;
+
+			var x = xx;
+			while (x != null)
+			{
+				builder += x.Message + "\r\n";
+				x = x.InnerException;
+			}
+
+			return new AttackResult { Error = builder };
+		}
+
+		return new AttackResult { Result = spans };
+	}
+}
+
+public class WorkingLock : IDisposable
+{
+	private readonly Data.Request r;
+
+	public WorkingLock(Data.Request r)
+	{
+		this.r = r;
+		r.IsWorking = true;
+	}
+
+	public void Dispose()
+	{
+		r.IsWorking = false;
+	}
+}
+
+
+public class AttackResult
+{
+	public string Error { get; set; } = null;
+	public List<TimeSpan> Result { get; set; } = new();
 }
