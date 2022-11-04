@@ -150,7 +150,8 @@ public static class Disk
             RightGroup = FindGroup(groups, container.RightCompare),
             LeftCompare = FindRequest(groups, container.LeftCompare),
             RightCompare = FindRequest(groups, container.RightCompare),
-            FormatResponse = container.FormatResponse
+            FormatResponse = container.FormatResponse,
+			Attack = new AttackOptions { AtTheSameTime = container.AttackAtTheSameTime, Count = container.AttackCount}
         };
     }
 
@@ -230,7 +231,9 @@ public static class Disk
             SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),
             LeftCompare = FindRequest(data.LeftGroup, data.LeftCompare),
             RightCompare = FindRequest(data.RightGroup, data.RightCompare),
-            FormatResponse = data.FormatResponse
+            FormatResponse = data.FormatResponse,
+			AttackAtTheSameTime = data.Attack.AtTheSameTime,
+			AttackCount = data.Attack.Count
         };
         WriteJson(jsonFile, file);
     }

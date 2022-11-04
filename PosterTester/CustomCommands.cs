@@ -16,7 +16,8 @@ namespace PosterTester
 
         public static RoutedCommand NewRequest = new RoutedCommand();
         public static RoutedCommand Execute = new RoutedCommand();
-        public static RoutedCommand Format = new RoutedCommand();
+		public static RoutedCommand Attack = new RoutedCommand();
+		public static RoutedCommand Format = new RoutedCommand();
         public static RoutedCommand DeleteSelectedRequest = new RoutedCommand();
         public static RoutedCommand LoadPost = new RoutedCommand();
         public static RoutedCommand Compare = new RoutedCommand();

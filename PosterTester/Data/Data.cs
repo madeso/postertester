@@ -105,141 +105,151 @@ public class RequestGroup : INotifyPropertyChanged
 
 public class Data : INotifyPropertyChanged
 {
-    private Request leftCompare = null;
-    private Request rightCompare = null;
-    private RequestGroup selectedRequest = null;
-    private RequestGroup leftGroup = null;
-    private RequestGroup rightGroup = null;
-    private ObservableCollection<RequestGroup> requests = new ObservableCollection<RequestGroup>();
-    private bool _formatResponse = true;
+	private Request leftCompare = null;
+	private Request rightCompare = null;
+	private RequestGroup selectedRequest = null;
+	private RequestGroup leftGroup = null;
+	private RequestGroup rightGroup = null;
+	private ObservableCollection<RequestGroup> requests = new ObservableCollection<RequestGroup>();
+	private bool _formatResponse = true;
+	private AttackOptions attack = new AttackOptions();
 
-    public ObservableCollection<RequestGroup> Groups
-    {
-        get => this.requests; set
-        {
-            this.requests = value;
-            OnPropertyChanged();
-        }
-    }
+	public ObservableCollection<RequestGroup> Groups
+	{
+		get => this.requests; set
+		{
+			this.requests = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public RequestGroup SelectedGroup
-    {
-        get => this.selectedRequest; set
-        {
-            this.selectedRequest = value;
-            OnPropertyChanged();
-        }
-    }
+	public RequestGroup SelectedGroup
+	{
+		get => this.selectedRequest; set
+		{
+			this.selectedRequest = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public RequestGroup LeftGroup
-    {
-        get => this.leftGroup; set
-        {
-            this.leftGroup = value;
-            OnPropertyChanged();
-            this.LeftCompare = value?.Requests[0];
-        }
-    }
+	public RequestGroup LeftGroup
+	{
+		get => this.leftGroup; set
+		{
+			this.leftGroup = value;
+			OnPropertyChanged();
+			this.LeftCompare = value?.Requests[0];
+		}
+	}
 
-    public RequestGroup RightGroup
-    {
-        get => this.rightGroup; set
-        {
-            this.rightGroup = value;
-            OnPropertyChanged();
-            this.RightCompare = value?.Requests[0];
-        }
-    }
+	public RequestGroup RightGroup
+	{
+		get => this.rightGroup; set
+		{
+			this.rightGroup = value;
+			OnPropertyChanged();
+			this.RightCompare = value?.Requests[0];
+		}
+	}
 
-    public ObservableCollection<HttpMethod> AllRequestMethods { get; } = new ObservableCollection<HttpMethod>
-    {
-        HttpMethod.Get,
-        HttpMethod.Post,
-        HttpMethod.Put,
-        HttpMethod.Delete,
-        HttpMethod.Patch
-    };
+	public AttackOptions Attack
+	{
+		get => attack; set
+		{
+			attack = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public ObservableCollection<ContentType> AllContentTypes { get; } = new ObservableCollection<ContentType>
-    {
-        ContentTypeJson.Instance,
-        ContentTypeText.Instance
-    };
+	public ObservableCollection<HttpMethod> AllRequestMethods { get; } = new ObservableCollection<HttpMethod>
+	{
+		HttpMethod.Get,
+		HttpMethod.Post,
+		HttpMethod.Put,
+		HttpMethod.Delete,
+		HttpMethod.Patch
+	};
 
-    public Request LeftCompare
-    {
-        get => this.leftCompare; set
-        {
-            this.leftCompare = value;
-            OnPropertyChanged();
-        }
-    }
+	public ObservableCollection<ContentType> AllContentTypes { get; } = new ObservableCollection<ContentType>
+	{
+		ContentTypeJson.Instance,
+		ContentTypeText.Instance
+	};
 
-    public Request RightCompare
-    {
-        get => this.rightCompare; set
-        {
-            this.rightCompare = value;
-            OnPropertyChanged();
-        }
-    }
+	public Request LeftCompare
+	{
+		get => this.leftCompare; set
+		{
+			this.leftCompare = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public bool FormatResponse
-    {
-        get => this._formatResponse; set
-        {
-            this._formatResponse = value;
-            OnPropertyChanged();
-        }
-    }
+	public Request RightCompare
+	{
+		get => this.rightCompare; set
+		{
+			this.rightCompare = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public void AddNewRequest()
-    {
-        var g = this.SelectedGroup;
-        if (g == null) { return; }
+	public bool FormatResponse
+	{
+		get => this._formatResponse; set
+		{
+			this._formatResponse = value;
+			OnPropertyChanged();
+		}
+	}
 
-        g.AddNewRequest();
-    }
+	public void AddNewRequest()
+	{
+		var g = this.SelectedGroup;
+		if (g == null) { return; }
 
-    public void DeleteSelectedRequest()
-    {
-        var g = this.SelectedGroup;
-        if (g == null) { return; }
+		g.AddNewRequest();
+	}
 
-        var previous = g.SelectedRequest;
-        var next = g.DeleteSelectedRequest();
+	public void DeleteSelectedRequest()
+	{
+		var g = this.SelectedGroup;
+		if (g == null) { return; }
 
-        if (this.LeftCompare == previous)
-        {
-            this.LeftCompare = next;
-        }
+		var previous = g.SelectedRequest;
+		var next = g.DeleteSelectedRequest();
 
-        if (this.RightCompare == previous)
-        {
-            this.RightCompare = next;
-        }
-    }
+		if (this.LeftCompare == previous)
+		{
+			this.LeftCompare = next;
+		}
 
-    public event PropertyChangedEventHandler PropertyChanged;
+		if (this.RightCompare == previous)
+		{
+			this.RightCompare = next;
+		}
+	}
 
-    protected void OnPropertyChanged([CallerMemberName] string name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
+	public event PropertyChangedEventHandler PropertyChanged;
 
-    internal void Compare()
-    {
-        var lhs = this.LeftCompare;
-        var rhs = this.RightCompare;
-        if (lhs == null || rhs == null)
-        {
-            return;
-        }
+	protected void OnPropertyChanged([CallerMemberName] string name = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+	}
 
-        DiffTool.LaunchDiff(lhs.Response, rhs.Response);
-    }
+	internal void Compare()
+	{
+		var lhs = this.LeftCompare;
+		var rhs = this.RightCompare;
+		if (lhs == null || rhs == null)
+		{
+			return;
+		}
 
-    internal void CreateBuiltinIfMissing()
+		DiffTool.LaunchDiff(lhs.Response, rhs.Response);
+	}
+
+	internal void CreateBuiltinIfMissing()
 	{
 		bool hasBuiltin = this.Groups.Where(x => x.Builtin).Any();
 		if (hasBuiltin) { return; }
@@ -262,53 +272,53 @@ public class Data : INotifyPropertyChanged
 	}
 
 	internal void CreateNewGroup(string fileName)
-    {
-        var g = new RequestGroup();
-        g.Name = GuessGroupName(fileName);
-        g.File = fileName;
-        g.Builtin = false;
-        g.AddNewRequest();
-        this.Groups.Add(g);
-        this.SelectedGroup = g;
-    }
+	{
+		var g = new RequestGroup();
+		g.Name = GuessGroupName(fileName);
+		g.File = fileName;
+		g.Builtin = false;
+		g.AddNewRequest();
+		this.Groups.Add(g);
+		this.SelectedGroup = g;
+	}
 
-    private static string GuessGroupName(string fileName)
-    {
-        var info = new FileInfo(fileName);
-        string gitfolder = Path.Join(info.Directory.FullName, ".git");
-        string name = Path.GetFileNameWithoutExtension(fileName);
-        if (new DirectoryInfo(gitfolder).Exists)
-        {
-            return $"{name} for {info.Directory.Name}";
-        }
-        else
-        {
-            return name;
-        }
-    }
+	private static string GuessGroupName(string fileName)
+	{
+		var info = new FileInfo(fileName);
+		string gitfolder = Path.Join(info.Directory.FullName, ".git");
+		string name = Path.GetFileNameWithoutExtension(fileName);
+		if (new DirectoryInfo(gitfolder).Exists)
+		{
+			return $"{name} for {info.Directory.Name}";
+		}
+		else
+		{
+			return name;
+		}
+	}
 
-    internal void AddExistingGroup(string fileName)
-    {
-        var g = new RequestGroup();
-        g.Requests = Disk.LoadRequests(fileName);
-        g.Name = GuessGroupName(fileName);
-        g.File = fileName;
-        g.Builtin = false;
-        g.SelectedRequest = g.Requests[0];
-        this.Groups.Add(g);
-        this.SelectedGroup = g;
-    }
+	internal void AddExistingGroup(string fileName)
+	{
+		var g = new RequestGroup();
+		g.Requests = Disk.LoadRequests(fileName);
+		g.Name = GuessGroupName(fileName);
+		g.File = fileName;
+		g.Builtin = false;
+		g.SelectedRequest = g.Requests[0];
+		this.Groups.Add(g);
+		this.SelectedGroup = g;
+	}
 
-    internal void ForgetGroup()
-    {
-        if (this.SelectedGroup == null) { return; }
-        if (this.SelectedGroup.Builtin) { return; }
+	internal void ForgetGroup()
+	{
+		if (this.SelectedGroup == null) { return; }
+		if (this.SelectedGroup.Builtin) { return; }
 
-        Disk.SaveGroup(this.SelectedGroup);
+		Disk.SaveGroup(this.SelectedGroup);
 
-        int index = this.Groups.IndexOf(this.SelectedGroup);
-        this.Groups.Remove(this.SelectedGroup);
-        index = Math.Min(index, this.Groups.Count - 1);
-        this.SelectedGroup = this.Groups[index];
-    }
+		int index = this.Groups.IndexOf(this.SelectedGroup);
+		this.Groups.Remove(this.SelectedGroup);
+		index = Math.Min(index, this.Groups.Count - 1);
+		this.SelectedGroup = this.Groups[index];
+	}
 }

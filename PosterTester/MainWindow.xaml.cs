@@ -142,7 +142,22 @@ public partial class MainWindow : Window
         Save();
     }
 
-    private void RenameExecuted(object sender, ExecutedRoutedEventArgs e)
+	private void AttackExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		var r = GetSelectedRequest();
+		if (r == null) { return; }
+
+		var dlg = new AttackDialog(this.Data.Attack.Clone());
+		using var blur = new DialogBackground(this, dlg);
+		if (dlg.ShowDialog() ?? false)
+		{
+			this.Data.Attack.GetFrom(dlg.AttackOptions);
+			Save();
+			// todo(Gustav): start attack
+		}
+	}
+
+	private void RenameExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
         if (r == null) { return; }

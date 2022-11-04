@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
         d:DataContext="{d:DesignInstance data:Data}"
-        mc:Ignorable="d" Height="127" Width="481"
+        mc:Ignorable="d" Height="127" Width="648"
         >
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Compare" Executed="CompareExecuted" />

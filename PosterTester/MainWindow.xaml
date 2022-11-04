@@ -30,6 +30,7 @@
         <CommandBinding Command="posterTester:CustomCommands.AddExistingGroup" Executed="AddExistingGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.ForgetGroup" Executed="ForgetGroupExecuted"/>
 
+		<CommandBinding Command="posterTester:CustomCommands.Attack" Executed="AttackExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.Execute" Executed="ExecuteExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.NewRequest" Executed="NewRequestExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.Format" Executed="FormatExecuted"/>
@@ -57,8 +58,9 @@
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="S" Command="posterTester:CustomCommands.Save" />
         <KeyBinding Modifiers="Control" Key="Q" Command="posterTester:CustomCommands.Exit" />
-        
-        <KeyBinding Modifiers="Control" Key="Return" Command="posterTester:CustomCommands.Execute" />
+
+		<KeyBinding Modifiers="Control+Shift" Key="Return" Command="posterTester:CustomCommands.Attack" />
+		<KeyBinding Modifiers="Control" Key="Return" Command="posterTester:CustomCommands.Execute" />
         <KeyBinding Modifiers="Control" Key="F" Command="posterTester:CustomCommands.Format" />
         <KeyBinding Modifiers="Control" Key="N" Command="posterTester:CustomCommands.NewRequest" />
         <KeyBinding Modifiers="Control" Key="P" Command="posterTester:CustomCommands.LoadPost" />
@@ -113,6 +115,7 @@
                 <Separator />
                 <MenuItem Header="Format reponse?" IsCheckable="True" IsChecked="{Binding FormatResponse}"/>
                 <MenuItem Header="Execute" Command="posterTester:CustomCommands.Execute" InputGestureText="Ctrl-Return" />
+				<MenuItem Header="Attack..." Command="posterTester:CustomCommands.Attack" InputGestureText="Ctrl-Shift-Return" />
             </MenuItem>
             <MenuItem Header="Focus">
                 <MenuItem Header="Focus requests" Command="posterTester:CustomCommands.FocusRequests" InputGestureText="Ctrl-R" />

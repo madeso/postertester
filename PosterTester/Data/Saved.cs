@@ -112,4 +112,10 @@ public class Root
 
     [JsonProperty("format_response")]
     public bool FormatResponse { get; set; } = false;
+
+	[JsonProperty("attack_count")]
+	public int AttackCount { get; set; }
+
+	[JsonProperty("attack_at_the_same_time")]
+	public bool AttackAtTheSameTime { get; set; }
 }

@@ -1,0 +1,46 @@
+﻿<Window x:Class="PosterTester.AttackDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:posterTester="clr-namespace:PosterTester"
+		xmlns:data="clr-namespace:PosterTester.Data"
+        Icon="icon.ico"
+        WindowStartupLocation="CenterOwner"
+        d:DataContext="{d:DesignInstance data:AttackOptions}"
+        mc:Ignorable="d" Height="131" Width="323"  Activated="Window_Activated"
+        >
+	<Window.CommandBindings>
+		<CommandBinding Command="posterTester:CustomCommands.Ok" Executed="OkExecuted" />
+	</Window.CommandBindings>
+	<Grid Margin="6">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<CheckBox Margin="3" Grid.Row="0" Grid.ColumnSpan="2" Content="At the same time?" IsChecked="{Binding AtTheSameTime}" />
+
+		<TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="Count:" />
+		<TextBox x:Name="dlgCount" Margin="3" Grid.Row="1" Grid.Column="1" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}"/>
+
+		<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+			<Button Margin="3" IsDefault="True" Command="posterTester:CustomCommands.Ok">
+				<Border Padding="6,3">
+					<TextBlock Text="OK" />
+				</Border>
+			</Button>
+			<Button Margin="3" IsCancel="True">
+				<Border Padding="6,3">
+					<TextBlock Text="cancel" />
+				</Border>
+			</Button>
+		</StackPanel>
+	</Grid>
+</Window>
