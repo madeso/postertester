@@ -186,82 +186,89 @@
                     <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedGroup.SelectedRequest.Method}"/>
                     <TextBox Grid.Row="0" Grid.Column="1" x:Name="uiUrl" Margin="3" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
+					<TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom">
+						<TabItem Header="Response">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="*" />
+									<RowDefinition Height="auto" />
+								</Grid.RowDefinitions>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="auto" />
+								</Grid.ColumnDefinitions>
 
-                        <!-- begin main body -->
-                        <Grid Grid.Row="0" Grid.ColumnSpan="3">
+								<!-- begin main body -->
+								<Grid Grid.Row="0" Grid.ColumnSpan="3">
 
-                            <!-- No request body -->
-                            <Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <DockPanel>
-                                    <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
-                                    <ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
-                                </DockPanel>
-                                <local:ResponseControl Grid.Row="2" DataContext="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}" />
-                            </Grid>
+									<!-- No request body -->
+									<Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
+										<Grid.RowDefinitions>
+											<RowDefinition Height="auto" />
+											<RowDefinition Height="*" />
+										</Grid.RowDefinitions>
+										<DockPanel>
+											<TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
+											<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
+										</DockPanel>
+										<local:ResponseControl Grid.Row="2" DataContext="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}" />
+									</Grid>
 
 
-                            <!-- Has request body -->
-                            <Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="5" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+									<!-- Has request body -->
+									<Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*" />
+											<ColumnDefinition Width="5" />
+											<ColumnDefinition Width="*" />
+										</Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock FontWeight="Bold" Text="Body" />
+										<Grid Grid.Column="0">
+											<Grid.RowDefinitions>
+												<RowDefinition Height="auto" />
+												<RowDefinition Height="*" />
+											</Grid.RowDefinitions>
+											<TextBlock FontWeight="Bold" Text="Body" />
 
-                                    <Grid Grid.Row="1">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <ComboBox Grid.Row="0" Margin="3" ItemsSource="{Binding AllContentTypes}" SelectedItem="{Binding SelectedGroup.SelectedRequest.ContentType}" DisplayMemberPath="Name"/>
-                                        <TextBox Grid.Row="1" Margin="3" x:Name="uiPost" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
+											<Grid Grid.Row="1">
+												<Grid.RowDefinitions>
+													<RowDefinition Height="auto"/>
+													<RowDefinition Height="*" />
+												</Grid.RowDefinitions>
+												<ComboBox Grid.Row="0" Margin="3" ItemsSource="{Binding AllContentTypes}" SelectedItem="{Binding SelectedGroup.SelectedRequest.ContentType}" DisplayMemberPath="Name"/>
+												<TextBox Grid.Row="1" Margin="3" x:Name="uiPost" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
                                              FontFamily="Consolas" FontSize="11"
                                              AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
-                                    </Grid>
-                                </Grid>
+											</Grid>
+										</Grid>
 
-                                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+										<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
-                                <Grid Grid.Column="2">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <DockPanel>
-                                        <TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
-                                        <ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
-                                    </DockPanel>
+										<Grid Grid.Column="2">
+											<Grid.RowDefinitions>
+												<RowDefinition Height="auto" />
+												<RowDefinition Height="*" />
+											</Grid.RowDefinitions>
+											<DockPanel>
+												<TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
+												<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
+											</DockPanel>
 
-                                    <local:ResponseControl Grid.Row="2" DataContext="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}" />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <!-- end main body-->
-                    </Grid>
-                    <!-- end body -->
-                </Grid>
+											<local:ResponseControl Grid.Row="2" DataContext="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}" />
+										</Grid>
+									</Grid>
+								</Grid>
+								<!-- end main body-->
+							</Grid>
+						</TabItem>
+
+						<TabItem Header="Attack">
+						</TabItem>
+					</TabControl>
+
+				</Grid>
             </Grid>
         </Grid>
         
