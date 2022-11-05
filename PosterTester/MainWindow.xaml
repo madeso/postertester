@@ -268,7 +268,15 @@
 						</TabItem>
 
 						<TabItem Header="Attack" x:Name="dlgTabAttack">
-							<WpfPlot x:Name="dlgPlot" />
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="auto" />
+									<RowDefinition Height="*" />
+								</Grid.RowDefinitions>
+								<ProgressBar Grid.Row="0" Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" Margin="3" Height="5" IsIndeterminate="True" />
+								<WpfPlot Grid.Row="1" x:Name="dlgPlot" />
+							</Grid>
+							
 						</TabItem>
 					</TabControl>
 
