@@ -106,7 +106,7 @@ public partial class MainWindow : Window
 			var result = await Logic.Attack(this.Data, r);
 
 			// todo(Gustav): display error!
-			Plotter.Plot(this.dlgPlot, result.Result.Select(x => x.TotalSeconds).ToArray(), this.Data.Attack);
+			Plotter.Plot(this.dlgPlot, result.Result, this.Data.Attack);
 			// Save();
 		}
 	}

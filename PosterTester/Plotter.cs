@@ -11,16 +11,18 @@ namespace PosterTester;
 
 internal static class Plotter
 {
-	public static void Plot(WpfPlot wpf, double[] values, Data.AttackOptions attack)
+	public static void Plot(WpfPlot wpf, IEnumerable<TimeSpan> times, Data.AttackOptions attack)
 	{
 		var plt = wpf.Plot;
 		plt.Clear();
+
+		var values = times.Select(x => x.TotalMilliseconds).ToArray();
 
 		var mi = values.Min();
 		var ma = values.Max();
 
 		// create a histogram
-		(double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: mi, max: ma, binSize: 0.02);
+		(double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: mi, max: ma, binSize: 1);
 		double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
 
 		// display histogram probabability as a bar plot
@@ -60,7 +62,7 @@ internal static class Plotter
 		plt.Title($"{sorp} attack of {attack.Count}");
 		plt.YAxis.Label("Count (#)");
 		plt.YAxis2.Label("Probability (%)");
-		plt.XAxis.Label("Time taken (s)");
+		plt.XAxis.Label("Time taken (ms)");
 		plt.SetAxisLimits(yMin: 0);
 		plt.SetAxisLimits(yMin: 0, yAxisIndex: 1);
 
