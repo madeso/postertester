@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -55,6 +57,21 @@ public class Headers
 	public HeaderRow[] Rows { get; set; }
 }
 
+public class Attack
+{
+	[JsonProperty("at_the_same_time")]
+	public bool AttackAtTheSameTime { get; internal set; }
+
+	[JsonProperty("count")]
+	public int AttackCount { get; internal set; }
+
+	[JsonProperty("got_error")]
+	public string AttackError { get; internal set; }
+
+	[JsonProperty("got_result")]
+	public double[] AttackResult { get; internal set; }
+}
+
 public class Response
 {
     [JsonProperty("body")]
@@ -70,13 +87,22 @@ public class Response
 	public Headers ResponseHeaders { get; internal set; }
 }
 
+public class Result
+{
+	[JsonProperty("response")]
+	public Response Response { get; internal set; }
+
+	[JsonProperty("attack")]
+	public Attack Attack { get; internal set; }
+}
+
 public class Group
 {
     [JsonProperty("selected_request")]
     public int SelectedRequest { get; set; }
 
-    [JsonProperty("responses")]
-    public Response[] Responses { get; set; }
+    [JsonProperty("result")]
+    public Result[] Results { get; set; }
 
     [JsonProperty("file")]
     public string File { get; set; }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
+using PosterTester.Data.Saved;
 // using static System.Net.WebRequestMethods;
 
 namespace PosterTester.Data;
@@ -103,23 +104,44 @@ public static class Disk
 			}
 			else
 			{
-				var req = LoadRequests(file);
-				if (g.Responses != null)
+				var requests = LoadRequests(file);
+				if (g.Results != null)
 				{
-					for (int i = 0; i < g.Responses.Length; i += 1)
+					for (int i = 0; i < g.Results.Length; i += 1)
 					{
-						var re = g.Responses[i];
-						if (re == null) { continue; }
-						req[i].Response = new Response(IntToStatus(re.Status), re.Body, TransformHeaders(re.ResponseHeaders)) { Time = TimeSpan.FromSeconds(re.Seconds) };
+						var saved = g.Results[i];
+						if (saved == null) { continue; }
+
+						var req = requests[i];
+
+						var savedResponse = saved.Response;
+						if (savedResponse != null)
+						{
+							var status = IntToStatus(savedResponse.Status);
+							string body = savedResponse.Body;
+							var headers = TransformHeaders(savedResponse.ResponseHeaders);
+							req.Response = new Response(status, body, headers)
+							{
+								Time = TimeSpan.FromSeconds(savedResponse.Seconds)
+							};
+						}
+
+						var attack = saved.Attack;
+						if(attack != null)
+						{
+							req.AttackOptions = new AttackOptions { AtTheSameTime = attack.AttackAtTheSameTime, Count = attack.AttackCount };
+							var spans = attack.AttackResult.Select(x => TimeSpan.FromMilliseconds(x));
+							req.AttackResult = new AttackResult { Error = attack.AttackError, Result = new ObservableCollection<TimeSpan>(spans) };
+						}
 					}
 				}
 				return new RequestGroup
 				{
-					Requests = req,
+					Requests = requests,
 					File = file,
 					Name = g.Name,
 					Builtin = isbuiltin,
-					SelectedRequest = g.SelectedRequest == -1 ? null : req[g.SelectedRequest]
+					SelectedRequest = g.SelectedRequest == -1 ? null : requests[g.SelectedRequest]
 				};
 			}
         }
@@ -201,13 +223,25 @@ public static class Disk
             return new Saved.Group
             {
                 File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
-                Responses = g.Requests.Select(x => x.Response == null ? null : new Saved.Response {
-					Body = x.Response.Body,
-					Status = StatusToInt(x.Response.Status),
-					Seconds = x.Response.Time.TotalSeconds,
-					ResponseHeaders = TransformHeaders(x.Response.ResponseHeaders)
+				Results = g.Requests.Select(x => 
+				new Result
+				{
+					Attack = x.AttackOptions == null || x.AttackResult == null ? null : new Attack
+					{
+						AttackAtTheSameTime = x.AttackOptions.AtTheSameTime,
+						AttackCount = x.AttackOptions.Count,
+						AttackError = x.AttackResult.Error,
+						AttackResult = x.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray()
+					},
+					Response = x.Response == null ? null : new Saved.Response
+					{
+						Body = x.Response.Body,
+						Status = StatusToInt(x.Response.Status),
+						Seconds = x.Response.Time.TotalSeconds,
+						ResponseHeaders = TransformHeaders(x.Response.ResponseHeaders)
+					}
 				}).ToArray(),
-                Name = g.Name,
+				Name = g.Name,
                 SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
             };
         }

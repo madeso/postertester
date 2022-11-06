@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Effects;
 using Microsoft.Win32;
+using PosterTester.Data;
 using ScottPlot;
 
 namespace PosterTester;
@@ -106,9 +107,16 @@ public partial class MainWindow : Window
 			var result = await Logic.Attack(this.Data, r);
 
 			// todo(Gustav): display error!
-			Plotter.Plot(this.dlgPlot, result.Result, this.Data.Attack);
+			r.AttackResult = result;
+			r.AttackOptions = options;
+			UpdatePlotForRequest(r);
 			// Save();
 		}
+	}
+
+	private void UpdatePlotForRequest(Request r)
+	{
+		Plotter.Plot(this.dlgPlot, r);
 	}
 
 	public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)

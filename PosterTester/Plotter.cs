@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PosterTester.Data;
 using ScottPlot;
 using ScottPlot.Control.EventProcess.Events;
 
@@ -11,12 +12,14 @@ namespace PosterTester;
 
 internal static class Plotter
 {
-	public static void Plot(WpfPlot wpf, IEnumerable<TimeSpan> times, Data.AttackOptions attack)
+	public static void Plot(WpfPlot wpf, Request r)
 	{
+		Data.AttackOptions attack = r.AttackOptions;
+
 		var plt = wpf.Plot;
 		plt.Clear();
 
-		var values = times.Select(x => x.TotalMilliseconds).ToArray();
+		var values = r.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray();
 
 		var mi = values.Min();
 		var ma = values.Max();

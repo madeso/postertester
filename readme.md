@@ -2,6 +2,8 @@
 
 Basic "postman" clone in .NET 6 in WPF (windows only).
 
+Warning: Still in development, stored data might be destroyed after a update
+
 ## Current features
 * No external services or call-to-home. 
 * Share requests by saving project files to a shared place (shared folder, git repo, etc)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -229,7 +230,7 @@ public static class Logic
 			return new AttackResult { Error = builder };
 		}
 
-		return new AttackResult { Result = spans };
+		return new AttackResult { Result = new ObservableCollection<TimeSpan>(spans) };
 	}
 }
 
@@ -249,9 +250,3 @@ public class WorkingLock : IDisposable
 	}
 }
 
-
-public class AttackResult
-{
-	public string Error { get; set; } = null;
-	public List<TimeSpan> Result { get; set; } = new();
-}
