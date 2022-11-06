@@ -39,7 +39,7 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Time, Converter={StaticResource TimeSpanConverter}}" Margin="3,3" FontWeight="Bold"/>
         </Grid>
 
-		<TabControl Grid.Row="1" >
+		<TabControl Grid.Row="1" SelectedIndex="{Binding ParentRequest.ParentGroup.ParentData.SelectedResponseTab}">
 			<TabItem Header="Headers">
 				<ListView ItemsSource="{Binding ResponseHeaders.Rows, UpdateSourceTrigger=PropertyChanged}" Margin="3" d:ItemsSource="{d:SampleData ItemCount=5}"
 						  >

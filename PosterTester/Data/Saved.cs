@@ -154,6 +154,9 @@ public class Root
 	[JsonProperty("attack_count")]
 	public int AttackCount { get; set; }
 
+	[JsonProperty("selected_response_tab")]
+	public int SelectedResponseTab { get; set; }
+
 	[JsonProperty("attack_at_the_same_time")]
 	public bool AttackAtTheSameTime { get; set; }
 }

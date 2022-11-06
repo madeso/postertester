@@ -126,7 +126,8 @@ public static class Disk
 							var headers = TransformHeaders(savedResponse.ResponseHeaders);
 							req.Response = new Response(status, body, headers)
 							{
-								Time = TimeSpan.FromSeconds(savedResponse.Seconds)
+								Time = TimeSpan.FromSeconds(savedResponse.Seconds),
+								ParentRequest = req
 							};
 						}
 
@@ -139,7 +140,7 @@ public static class Disk
 						}
 					}
 				}
-				return new RequestGroup
+				var ret = new RequestGroup
 				{
 					Requests = requests,
 					File = file,
@@ -148,6 +149,8 @@ public static class Disk
 					Guid = FromSavedGuid(sourceGroup.Guid),
 					SelectedRequest = sourceGroup.SelectedRequest == -1 ? null : requests[sourceGroup.SelectedRequest]
 				};
+				ret.LinkParents();
+				return ret;
 			}
         }
 
@@ -178,7 +181,8 @@ public static class Disk
             LeftCompare = FindRequest(groups, container.LeftCompare),
             RightCompare = FindRequest(groups, container.RightCompare),
             FormatResponse = container.FormatResponse,
-			Attack = new AttackOptions { AtTheSameTime = container.AttackAtTheSameTime, Count = container.AttackCount}
+			Attack = new AttackOptions { AtTheSameTime = container.AttackAtTheSameTime, Count = container.AttackCount},
+			SelectedResponseTab = container.SelectedResponseTab
         };
     }
 
@@ -286,7 +290,8 @@ public static class Disk
             RightCompare = FindRequest(data.RightGroup, data.RightCompare),
             FormatResponse = data.FormatResponse,
 			AttackAtTheSameTime = data.Attack.AtTheSameTime,
-			AttackCount = data.Attack.Count
+			AttackCount = data.Attack.Count,
+			SelectedResponseTab = data.SelectedResponseTab
         };
 		VerifyGuids(jsonFile.Groups.Select(x => x.Guid));
         WriteJson(jsonFile, file);

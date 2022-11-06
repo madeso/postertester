@@ -16,6 +16,7 @@ public class RequestGroup : INotifyPropertyChanged
 	private Request selectedRequest = null;
 	private ObservableCollection<Request> requests = new ObservableCollection<Request>();
 	private Guid guid;
+	private Data parentData;
 
 	public ObservableCollection<Request> Requests
 	{
@@ -72,12 +73,16 @@ public class RequestGroup : INotifyPropertyChanged
 		}
 	}
 
-	public Data ParentData { get; internal set; }
-	public Action OnSelectionChanged { get; set; } = () => { };
-	private void SelectionHasChanged()
+	public Data ParentData
 	{
-		this.OnSelectionChanged?.Invoke();
+		get => parentData; internal set
+		{
+			parentData = value;
+			OnPropertyChanged();
+		}
 	}
+
+	public Action OnSelectionChanged { get; set; } = () => { };
 
 	public void AddNewRequest()
 	{
@@ -92,6 +97,7 @@ public class RequestGroup : INotifyPropertyChanged
 			r.Url = newUrl.Uri.AbsoluteUri;
 		}
 		this.Requests.Add(r);
+		r.ParentGroup = this;
 		this.SelectedRequest = r;
 	}
 
@@ -117,6 +123,14 @@ public class RequestGroup : INotifyPropertyChanged
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}
+
+	internal void LinkParents()
+	{
+		foreach (var req in Requests)
+		{
+			req.ParentGroup = this;
+		}
+	}
 }
 
 
@@ -131,6 +145,7 @@ public class Data : INotifyPropertyChanged
 	private ObservableCollection<RequestGroup> requests = new ObservableCollection<RequestGroup>();
 	private bool _formatResponse = true;
 	private AttackOptions attack = new AttackOptions();
+	private int selectedResponseIndex = 1;
 
 	public Action OnSelectionChanged { get; set; } = () => { };
 
@@ -161,6 +176,15 @@ public class Data : INotifyPropertyChanged
 		{
 			this.selectedRequest = value;
 			SelectionHasChanged();
+			OnPropertyChanged();
+		}
+	}
+
+	public int SelectedResponseTab
+	{
+		get => selectedResponseIndex; set
+		{
+			selectedResponseIndex = value;
 			OnPropertyChanged();
 		}
 	}
@@ -322,7 +346,7 @@ public class Data : INotifyPropertyChanged
 			Name = GuessGroupName(fileName),
 			File = fileName,
 			Builtin = false,
-			Guid	= Guid.NewGuid()
+			Guid = Guid.NewGuid()
 		};
 		g.AddNewRequest();
 		AddGroup(g);
@@ -354,6 +378,7 @@ public class Data : INotifyPropertyChanged
 			Builtin = false,
 			Guid = loaded.Guid
 		};
+		g.LinkParents();
 		g.SelectedRequest = g.Requests[0];
 		AddGroup(g);
 	}
