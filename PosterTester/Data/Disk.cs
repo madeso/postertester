@@ -89,10 +89,10 @@ public static class Disk
 			return new Headers { Rows = src.Rows.Select(x => new HeaderRow { Name=x.Name, Values = x.Values }).ToArray() };
 		}
 
-		static RequestGroup TransformGroupOrNull(Saved.Group g)
+		static RequestGroup TransformGroupOrNull(Saved.Group sourceGroup)
         {
-            bool isbuiltin = g.File == Saved.Group.BuiltinFile;
-            string file = isbuiltin ? PathToMyRequests : g.File;
+            bool isbuiltin = sourceGroup.File == Saved.Group.BuiltinFile;
+            string file = isbuiltin ? PathToMyRequests : sourceGroup.File;
 			if(File.Exists(file) == false)
 			{
 				if(isbuiltin == false)
@@ -108,14 +108,15 @@ public static class Disk
 			{
 				var loadedRequests = LoadRequests(file);
 				var requests = loadedRequests.Requests;
-				if (g.Results != null)
+				if (sourceGroup.Results != null)
 				{
-					for (int i = 0; i < g.Results.Length; i += 1)
+					var reqDict = requests.ToDictionary(x => ToSaved(x.Guid));
+					foreach (var saved in sourceGroup.Results)
 					{
-						var saved = g.Results[i];
 						if (saved == null) { continue; }
 
-						var req = requests[i];
+						var req = reqDict[saved.Guid];
+						if(req == null) { continue; }
 
 						var savedResponse = saved.Response;
 						if (savedResponse != null)
@@ -142,10 +143,10 @@ public static class Disk
 				{
 					Requests = requests,
 					File = file,
-					Name = g.Name,
+					Name = sourceGroup.Name,
 					Builtin = isbuiltin,
-					Guid = FromSavedGuid(g.Guid),
-					SelectedRequest = g.SelectedRequest == -1 ? null : requests[g.SelectedRequest]
+					Guid = FromSavedGuid(sourceGroup.Guid),
+					SelectedRequest = sourceGroup.SelectedRequest == -1 ? null : requests[sourceGroup.SelectedRequest]
 				};
 			}
         }
