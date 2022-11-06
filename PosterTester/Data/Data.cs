@@ -144,6 +144,13 @@ public class Data : INotifyPropertyChanged
 		get => this.requests; set
 		{
 			this.requests = value;
+			if (value != null)
+			{
+				foreach (var g in value)
+				{
+					LinkAddedGroup(g);
+				}
+			}
 			OnPropertyChanged();
 		}
 	}
@@ -153,14 +160,22 @@ public class Data : INotifyPropertyChanged
 		get => this.selectedRequest; set
 		{
 			this.selectedRequest = value;
-			if(value != null)
-			{
-				value.ParentData = this;
-				value.OnSelectionChanged += () => this.SelectionHasChanged();
-			}
 			SelectionHasChanged();
 			OnPropertyChanged();
 		}
+	}
+
+	private void AddGroup(RequestGroup group)
+	{
+		this.Groups.Add(group);
+		this.SelectedGroup = group;
+		LinkAddedGroup(group);
+	}
+
+	private void LinkAddedGroup(RequestGroup group)
+	{
+		group.ParentData = this;
+		group.OnSelectionChanged += () => this.SelectionHasChanged();
 	}
 
 	public RequestGroup LeftGroup
@@ -284,10 +299,7 @@ public class Data : INotifyPropertyChanged
 	{
 		bool hasBuiltin = this.Groups.Where(x => x.Builtin).Any();
 		if (hasBuiltin) { return; }
-		var g = CreateDefaultGroup();
-
-		this.Groups.Add(g);
-		this.SelectedGroup = g;
+		AddGroup(CreateDefaultGroup());
 	}
 
 	public static RequestGroup CreateDefaultGroup()
@@ -313,8 +325,7 @@ public class Data : INotifyPropertyChanged
 			Guid	= Guid.NewGuid()
 		};
 		g.AddNewRequest();
-		this.Groups.Add(g);
-		this.SelectedGroup = g;
+		AddGroup(g);
 	}
 
 	private static string GuessGroupName(string fileName)
@@ -344,8 +355,7 @@ public class Data : INotifyPropertyChanged
 			Guid = loaded.Guid
 		};
 		g.SelectedRequest = g.Requests[0];
-		this.Groups.Add(g);
-		this.SelectedGroup = g;
+		AddGroup(g);
 	}
 
 	internal void ForgetGroup()
