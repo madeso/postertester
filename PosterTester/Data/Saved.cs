@@ -34,12 +34,18 @@ public class Request
 
     [JsonProperty("post")]
     public string TextContent { get; set; }
+
+	[JsonProperty("guid")]
+	public string Guid { get; internal set; }
 }
 
 public class RequestsFile
 {
     [JsonProperty("requests")]
     public Request[] Requests { get; set; }
+
+	[JsonProperty("guid")]
+	public string Guid { get; internal set; }
 }
 
 public class HeaderRow
@@ -94,6 +100,9 @@ public class Result
 
 	[JsonProperty("attack")]
 	public Attack Attack { get; internal set; }
+
+	[JsonProperty("guid")]
+	public string Guid { get; internal set; }
 }
 
 public class Group
@@ -110,7 +119,10 @@ public class Group
     [JsonProperty("name")]
     public string Name { get; set; }
 
-    public const string BuiltinFile = "<my requests>";
+	[JsonProperty("guid")]
+	public string Guid { get; internal set; }
+
+	public const string BuiltinFile = "<my requests>";
 }
 
 public class RequestInGroup

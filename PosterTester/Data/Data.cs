@@ -9,58 +9,68 @@ namespace PosterTester.Data;
 
 public class RequestGroup : INotifyPropertyChanged
 {
-    private bool _builtin;
-    private string _name;
-    private string _file;
+	private bool _builtin;
+	private string _name;
+	private string _file;
 
-    private Request selectedRequest = null;
-    private ObservableCollection<Request> requests = new ObservableCollection<Request>();
+	private Request selectedRequest = null;
+	private ObservableCollection<Request> requests = new ObservableCollection<Request>();
+	private Guid guid;
 
-    public ObservableCollection<Request> Requests
-    {
-        get => this.requests; set
-        {
-            this.requests = value;
-            OnPropertyChanged();
-        }
-    }
+	public ObservableCollection<Request> Requests
+	{
+		get => this.requests; set
+		{
+			this.requests = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public Request SelectedRequest
-    {
-        get => this.selectedRequest; set
-        {
-            this.selectedRequest = value;
-            OnPropertyChanged();
+	public Request SelectedRequest
+	{
+		get => this.selectedRequest; set
+		{
+			this.selectedRequest = value;
+			OnPropertyChanged();
 			OnSelectionChanged();
-        }
-    }
+		}
+	}
 
-    public bool Builtin
-    {
-        get => this._builtin; set
-        {
-            this._builtin = value;
-            OnPropertyChanged();
-        }
-    }
+	public Guid Guid
+	{
+		get => guid; set
+		{
+			guid = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public string Name
-    {
-        get => this._name; set
-        {
-            this._name = value;
-            OnPropertyChanged();
-        }
-    }
+	public bool Builtin
+	{
+		get => this._builtin; set
+		{
+			this._builtin = value;
+			OnPropertyChanged();
+		}
+	}
 
-    public string File
-    {
-        get => this._file; set
-        {
-            this._file = value;
-            OnPropertyChanged();
-        }
-    }
+	public string Name
+	{
+		get => this._name; set
+		{
+			this._name = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public string File
+	{
+		get => this._file; set
+		{
+			this._file = value;
+			OnPropertyChanged();
+		}
+	}
 
 	public Data ParentData { get; internal set; }
 	public Action OnSelectionChanged { get; set; } = () => { };
@@ -70,43 +80,43 @@ public class RequestGroup : INotifyPropertyChanged
 	}
 
 	public void AddNewRequest()
-    {
-        var r = new Request();
-        if (this.SelectedRequest != null)
-        {
-            var newUrl = new UriBuilder(new Uri(this.SelectedRequest.Url))
-            {
-                Path = "",
-                Query = ""
-            };
-            r.Url = newUrl.Uri.AbsoluteUri;
-        }
-        this.Requests.Add(r);
-        this.SelectedRequest = r;
-    }
+	{
+		var r = new Request() { Guid = Guid.NewGuid() };
+		if (this.SelectedRequest != null)
+		{
+			var newUrl = new UriBuilder(new Uri(this.SelectedRequest.Url))
+			{
+				Path = "",
+				Query = ""
+			};
+			r.Url = newUrl.Uri.AbsoluteUri;
+		}
+		this.Requests.Add(r);
+		this.SelectedRequest = r;
+	}
 
-    // return the next selected request (or null)
-    public Request DeleteSelectedRequest()
-    {
-        if (this.SelectedRequest == null) { return null; }
-        if (this.Requests.Count <= 1) { return null; }
+	// return the next selected request (or null)
+	public Request DeleteSelectedRequest()
+	{
+		if (this.SelectedRequest == null) { return null; }
+		if (this.Requests.Count <= 1) { return null; }
 
-        int index = this.Requests.IndexOf(this.SelectedRequest);
-        this.Requests.RemoveAt(index);
-        var nextRequest = this.Requests.Count > 0 ? this.Requests[Math.Min(index, this.Requests.Count - 1)]
-            : null;
+		int index = this.Requests.IndexOf(this.SelectedRequest);
+		this.Requests.RemoveAt(index);
+		var nextRequest = this.Requests.Count > 0 ? this.Requests[Math.Min(index, this.Requests.Count - 1)]
+			: null;
 
-        this.SelectedRequest = nextRequest;
+		this.SelectedRequest = nextRequest;
 
-        return nextRequest;
-    }
+		return nextRequest;
+	}
 
-    public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler PropertyChanged;
 
-    protected void OnPropertyChanged([CallerMemberName] string name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
+	protected void OnPropertyChanged([CallerMemberName] string name = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+	}
 }
 
 
@@ -286,7 +296,8 @@ public class Data : INotifyPropertyChanged
 		{
 			Builtin = true,
 			Name = "My requests",
-			File = Disk.PathToMyRequests
+			File = Disk.PathToMyRequests,
+			Guid = Guid.NewGuid(),
 		};
 		g.AddNewRequest();
 		return g;
@@ -294,10 +305,13 @@ public class Data : INotifyPropertyChanged
 
 	internal void CreateNewGroup(string fileName)
 	{
-		var g = new RequestGroup();
-		g.Name = GuessGroupName(fileName);
-		g.File = fileName;
-		g.Builtin = false;
+		var g = new RequestGroup
+		{
+			Name = GuessGroupName(fileName),
+			File = fileName,
+			Builtin = false,
+			Guid	= Guid.NewGuid()
+		};
 		g.AddNewRequest();
 		this.Groups.Add(g);
 		this.SelectedGroup = g;
@@ -320,11 +334,15 @@ public class Data : INotifyPropertyChanged
 
 	internal void AddExistingGroup(string fileName)
 	{
-		var g = new RequestGroup();
-		g.Requests = Disk.LoadRequests(fileName);
-		g.Name = GuessGroupName(fileName);
-		g.File = fileName;
-		g.Builtin = false;
+		var loaded = Disk.LoadRequests(fileName);
+		var g = new RequestGroup
+		{
+			Requests = loaded.Requests,
+			Name = GuessGroupName(fileName),
+			File = fileName,
+			Builtin = false,
+			Guid = loaded.Guid
+		};
 		g.SelectedRequest = g.Requests[0];
 		this.Groups.Add(g);
 		this.SelectedGroup = g;

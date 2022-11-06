@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -51,7 +52,7 @@ public static class Disk
         return JsonConvert.DeserializeObject<T>(data);
     }
 
-    internal static ObservableCollection<Request> LoadRequests(string file)
+    internal static RequestsWithGuid LoadRequests(string file)
     {
         static ContentType MakeType(Saved.ContentType t)
         {
@@ -66,6 +67,7 @@ public static class Disk
         {
             return new Request
             {
+				Guid = FromSavedGuid(r.Guid),
                 Url = r.Url,
                 Title = r.Title,
                 Method = r.Method,
@@ -76,10 +78,10 @@ public static class Disk
 
         var json = ReadFile<Saved.RequestsFile>(file);
         var req = new ObservableCollection<Request>(json.Requests.Select(ToReq));
-        return req;
+        return new RequestsWithGuid { Requests = req, Guid = FromSavedGuid(json.Guid) };
     }
 
-    private static Data Load(string file)
+	private static Data Load(string file)
     {
 		static Headers TransformHeaders(Saved.Headers src)
 		{
@@ -104,7 +106,8 @@ public static class Disk
 			}
 			else
 			{
-				var requests = LoadRequests(file);
+				var loadedRequests = LoadRequests(file);
+				var requests = loadedRequests.Requests;
 				if (g.Results != null)
 				{
 					for (int i = 0; i < g.Results.Length; i += 1)
@@ -141,6 +144,7 @@ public static class Disk
 					File = file,
 					Name = g.Name,
 					Builtin = isbuiltin,
+					Guid = FromSavedGuid(g.Guid),
 					SelectedRequest = g.SelectedRequest == -1 ? null : requests[g.SelectedRequest]
 				};
 			}
@@ -198,6 +202,7 @@ public static class Disk
         {
             return new Saved.Request
             {
+				Guid = ToSaved(r.Guid),
                 Url = r.Url,
                 Title = r.Title,
                 Method = r.Method,
@@ -205,11 +210,22 @@ public static class Disk
                 TextContent = r.TextContent
             };
         }
-        var rf = new Saved.RequestsFile { Requests = g.Requests.Select(ToReq).ToArray() };
+        var rf = new Saved.RequestsFile { Guid = ToSaved(g.Guid), Requests = g.Requests.Select(ToReq).ToArray() };
+		VerifyGuids( rf.Requests.Select(x=>x.Guid) );
         WriteJson(rf, g.File);
     }
 
-    private static void Save(Data data, string file)
+	private static void VerifyGuids(IEnumerable<string> itguids)
+	{
+		var guids = itguids.ToArray();
+		var dist = guids.Distinct().Count();
+		if(dist != guids.Length)
+		{
+			throw new Exception("Guids were not distinct");
+		}
+	}
+
+	private static void Save(Data data, string file)
     {
 		static Saved.Headers TransformHeaders(Headers src)
 		{
@@ -222,10 +238,12 @@ public static class Disk
 
             return new Saved.Group
             {
+				Guid = ToSaved(g.Guid),
                 File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
 				Results = g.Requests.Select(x => 
 				new Result
 				{
+					Guid = ToSaved(x.Guid),
 					Attack = x.AttackOptions == null || x.AttackResult == null ? null : new Attack
 					{
 						AttackAtTheSameTime = x.AttackOptions.AtTheSameTime,
@@ -269,10 +287,32 @@ public static class Disk
 			AttackAtTheSameTime = data.Attack.AtTheSameTime,
 			AttackCount = data.Attack.Count
         };
+		VerifyGuids(jsonFile.Groups.Select(x => x.Guid));
         WriteJson(jsonFile, file);
     }
 
-    public static Data LoadOrCreateNew()
+	private static string ToSaved(Guid guid)
+	{
+		/*
+		 * D  32 digits separated by hyphens:
+			  00000000-0000-0000-0000-000000000000
+		 */
+		return guid.ToString("D");
+	}
+
+	private static Guid FromSavedGuid(string guid)
+	{
+		if(string.IsNullOrEmpty(guid))
+		{
+			return Guid.NewGuid();
+		}
+		else
+		{
+			return Guid.Parse(guid);
+		}
+	}
+
+	public static Data LoadOrCreateNew()
     {
         if (File.Exists(PathToSettings))
         {
@@ -290,4 +330,10 @@ public static class Disk
     {
         Save(data, PathToSettings);
     }
+}
+
+internal class RequestsWithGuid
+{
+	public ObservableCollection<Request> Requests { get; internal set; }
+	public Guid Guid { get; internal set; }
 }

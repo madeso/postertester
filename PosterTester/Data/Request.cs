@@ -19,12 +19,22 @@ public class Request : INotifyPropertyChanged
 	private bool _hasPost = false;
 	private AttackResult attackResult;
 	private AttackOptions attackOptions;
+	private Guid guid;
 
 	public string TitleOrUrl
 	{
 		get => this._titleOrUrl; private set
 		{
 			this._titleOrUrl = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public Guid Guid
+	{
+		get => guid; set
+		{
+			guid = value;
 			OnPropertyChanged();
 		}
 	}
