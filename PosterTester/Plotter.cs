@@ -14,60 +14,63 @@ internal static class Plotter
 {
 	public static void Plot(WpfPlot wpf, Request r)
 	{
-		Data.AttackOptions attack = r.AttackOptions;
-
 		var plt = wpf.Plot;
 		plt.Clear();
 
-		var values = r.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray();
+		if (r != null && r.AttackResult != null && r.AttackOptions != null)
+		{
+			Data.AttackOptions attack = r.AttackOptions;
 
-		var mi = values.Min();
-		var ma = values.Max();
+			var values = r.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray();
 
-		// create a histogram
-		(double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: mi, max: ma, binSize: 1);
-		double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
+			var mi = values.Min();
+			var ma = values.Max();
 
-		// display histogram probabability as a bar plot
-		var bar = plt.AddBar(values: counts, positions: leftEdges);
-		bar.FillColor = ColorTranslator.FromHtml("#9bc3eb");
-		bar.BorderLineWidth = 0;
+			// create a histogram
+			(double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: mi, max: ma, binSize: 1);
+			double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
 
-		// display histogram distribution curve as a line plot on a secondary Y axis
-		double[] smoothEdges = ScottPlot.DataGen.Range(start: binEdges.First(), stop: binEdges.Last(), step: 0.1, includeStop: true);
-		double[] smoothDensities = ScottPlot.Statistics.Common.ProbabilityDensity(values, smoothEdges, percent: true);
-		var probPlot = plt.AddScatterLines(
-			xs: smoothEdges,
-			ys: smoothDensities,
-			lineWidth: 2,
-			label: "probability");
-		probPlot.YAxisIndex = 1;
-		plt.YAxis2.Ticks(true);
+			// display histogram probabability as a bar plot
+			var bar = plt.AddBar(values: counts, positions: leftEdges);
+			bar.FillColor = ColorTranslator.FromHtml("#9bc3eb");
+			bar.BorderLineWidth = 0;
 
-		// display vertical lines at points of interest
-		var stats = new ScottPlot.Statistics.BasicStats(values);
+			// display histogram distribution curve as a line plot on a secondary Y axis
+			double[] smoothEdges = ScottPlot.DataGen.Range(start: binEdges.First(), stop: binEdges.Last(), step: 0.1, includeStop: true);
+			double[] smoothDensities = ScottPlot.Statistics.Common.ProbabilityDensity(values, smoothEdges, percent: true);
+			var probPlot = plt.AddScatterLines(
+				xs: smoothEdges,
+				ys: smoothDensities,
+				lineWidth: 2,
+				label: "probability");
+			probPlot.YAxisIndex = 1;
+			plt.YAxis2.Ticks(true);
 
-		plt.AddVerticalLine(stats.Mean, Color.Black, 2, LineStyle.Solid, "mean");
+			// display vertical lines at points of interest
+			var stats = new ScottPlot.Statistics.BasicStats(values);
 
-		plt.AddVerticalLine(stats.Mean - stats.StDev, Color.Black, 2, LineStyle.Dash, "1 SD");
-		plt.AddVerticalLine(stats.Mean + stats.StDev, Color.Black, 2, LineStyle.Dash);
+			plt.AddVerticalLine(stats.Mean, Color.Black, 2, LineStyle.Solid, "mean");
 
-		plt.AddVerticalLine(stats.Mean - stats.StDev * 2, Color.Black, 2, LineStyle.Dot, "2 SD");
-		plt.AddVerticalLine(stats.Mean + stats.StDev * 2, Color.Black, 2, LineStyle.Dot);
+			plt.AddVerticalLine(stats.Mean - stats.StDev, Color.Black, 2, LineStyle.Dash, "1 SD");
+			plt.AddVerticalLine(stats.Mean + stats.StDev, Color.Black, 2, LineStyle.Dash);
 
-		plt.AddVerticalLine(stats.Min, Color.Gray, 1, LineStyle.Dash, "min/max");
-		plt.AddVerticalLine(stats.Max, Color.Gray, 1, LineStyle.Dash);
+			plt.AddVerticalLine(stats.Mean - stats.StDev * 2, Color.Black, 2, LineStyle.Dot, "2 SD");
+			plt.AddVerticalLine(stats.Mean + stats.StDev * 2, Color.Black, 2, LineStyle.Dot);
 
-		plt.Legend(location: Alignment.UpperRight);
+			plt.AddVerticalLine(stats.Min, Color.Gray, 1, LineStyle.Dash, "min/max");
+			plt.AddVerticalLine(stats.Max, Color.Gray, 1, LineStyle.Dash);
 
-		// customize the plot style
-		var sorp = attack.AtTheSameTime ? "Paralell" : "Serial";
-		plt.Title($"{sorp} attack of {attack.Count}");
-		plt.YAxis.Label("Count (#)");
-		plt.YAxis2.Label("Probability (%)");
-		plt.XAxis.Label("Time taken (ms)");
-		plt.SetAxisLimits(yMin: 0);
-		plt.SetAxisLimits(yMin: 0, yAxisIndex: 1);
+			plt.Legend(location: Alignment.UpperRight);
+
+			// customize the plot style
+			var sorp = attack.AtTheSameTime ? "Paralell" : "Serial";
+			plt.Title($"{sorp} attack of {attack.Count}");
+			plt.YAxis.Label("Count (#)");
+			plt.YAxis2.Label("Probability (%)");
+			plt.XAxis.Label("Time taken (ms)");
+			plt.SetAxisLimits(yMin: 0);
+			plt.SetAxisLimits(yMin: 0, yAxisIndex: 1);
+		}
 
 		wpf.Refresh();
 	}

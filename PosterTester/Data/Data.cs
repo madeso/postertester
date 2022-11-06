@@ -31,6 +31,7 @@ public class RequestGroup : INotifyPropertyChanged
         {
             this.selectedRequest = value;
             OnPropertyChanged();
+			OnSelectionChanged();
         }
     }
 
@@ -61,7 +62,14 @@ public class RequestGroup : INotifyPropertyChanged
         }
     }
 
-    public void AddNewRequest()
+	public Data ParentData { get; internal set; }
+	public Action OnSelectionChanged { get; set; } = () => { };
+	private void SelectionHasChanged()
+	{
+		this.OnSelectionChanged?.Invoke();
+	}
+
+	public void AddNewRequest()
     {
         var r = new Request();
         if (this.SelectedRequest != null)
@@ -114,6 +122,13 @@ public class Data : INotifyPropertyChanged
 	private bool _formatResponse = true;
 	private AttackOptions attack = new AttackOptions();
 
+	public Action OnSelectionChanged { get; set; } = () => { };
+
+	private void SelectionHasChanged()
+	{
+		this.OnSelectionChanged?.Invoke();
+	}
+
 	public ObservableCollection<RequestGroup> Groups
 	{
 		get => this.requests; set
@@ -128,6 +143,12 @@ public class Data : INotifyPropertyChanged
 		get => this.selectedRequest; set
 		{
 			this.selectedRequest = value;
+			if(value != null)
+			{
+				value.ParentData = this;
+				value.OnSelectionChanged += () => this.SelectionHasChanged();
+			}
+			SelectionHasChanged();
 			OnPropertyChanged();
 		}
 	}

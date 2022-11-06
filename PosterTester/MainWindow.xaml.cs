@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Effects;
@@ -49,6 +50,11 @@ public partial class MainWindow : Window
 		this.Data = Disk.LoadOrCreateNew();
 		this.DataContext = this.Data;
 		this.Closed += (closedSender, closedArgs) => Save();
+
+		// https://scottplot.net/faq/mvvm/
+		this.Data.OnSelectionChanged += () => UpdatePlotForSelectedRequest();
+
+		UpdatePlotForSelectedRequest();
 	}
 
     private void Save()
@@ -118,6 +124,11 @@ public partial class MainWindow : Window
 	private void UpdatePlotForRequest(Request r)
 	{
 		Plotter.Plot(this.dlgPlot, r);
+	}
+
+	private void UpdatePlotForSelectedRequest()
+	{
+		UpdatePlotForRequest(this.Data.SelectedGroup == null ? null : this.Data.SelectedGroup.SelectedRequest);
 	}
 
 	public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)
