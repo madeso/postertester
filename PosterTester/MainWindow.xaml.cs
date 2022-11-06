@@ -40,20 +40,21 @@ public partial class MainWindow : Window
     private const string PostGroupExt = "PosterTesterGroup";
     private const string PostGroupFilesFilter = $"Post group files (*.{PostGroupExt})|*.{PostGroupExt}|All files (*.*)|*.*";
 
-
     public Data.Data Data { get; internal set; }
 
     public MainWindow()
     {
         InitializeComponent();
-    }
 
-    public Action OnSave { get; set; } = () => { };
+		this.Data = Disk.LoadOrCreateNew();
+		this.DataContext = this.Data;
+		this.Closed += (closedSender, closedArgs) => Save();
+	}
 
     private void Save()
     {
-        this.OnSave?.Invoke();
-    }
+		Disk.Save(this.Data);
+	}
 
     private Data.Request GetSelectedRequest()
     {
