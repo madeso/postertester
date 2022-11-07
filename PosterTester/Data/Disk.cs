@@ -77,7 +77,7 @@ public static class Disk
         }
 
         var json = ReadFile<Saved.RequestsFile>(file);
-        var req = new ObservableCollection<Request>(json.Requests.Select(ToReq));
+        var req = json.Requests.Select(ToReq).ToObservableCollectionOrEmpty();
         return new RequestsWithGuid { Requests = req, Guid = FromSavedGuid(json.Guid) };
     }
 
@@ -136,7 +136,7 @@ public static class Disk
 						{
 							req.AttackOptions = new AttackOptions { AtTheSameTime = attack.AttackAtTheSameTime, Count = attack.AttackCount };
 							var spans = attack.AttackResult.Select(x => TimeSpan.FromMilliseconds(x));
-							req.AttackResult = new AttackResult { Error = attack.AttackError, Result = new ObservableCollection<TimeSpan>(spans) };
+							req.AttackResult = new AttackResult { Errors = attack.AttackErrors.ToObservableCollectionOrEmpty(), Result = spans.ToObservableCollectionOrEmpty() };
 						}
 					}
 				}
@@ -171,7 +171,7 @@ public static class Disk
 
         var container = ReadFile<Saved.Root>(file);
         var rc = container.Groups.Select(TransformGroupOrNull).Where(x => x != null);
-        var groups = new ObservableCollection<RequestGroup>(rc);
+        var groups = rc.ToObservableCollectionOrEmpty();
         return new Data
         {
             Groups = groups,
@@ -253,7 +253,7 @@ public static class Disk
 					{
 						AttackAtTheSameTime = x.AttackOptions.AtTheSameTime,
 						AttackCount = x.AttackOptions.Count,
-						AttackError = x.AttackResult.Error,
+						AttackErrors = x.AttackResult.Errors.ToArray(),
 						AttackResult = x.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray()
 					},
 					Response = x.Response == null ? null : new Saved.Response

@@ -14,7 +14,7 @@ public class RequestGroup : INotifyPropertyChanged
 	private string _file;
 
 	private Request selectedRequest = null;
-	private ObservableCollection<Request> requests = new ObservableCollection<Request>();
+	private ObservableCollection<Request> requests = new();
 	private Guid guid;
 	private Data parentData;
 
@@ -142,7 +142,7 @@ public class Data : INotifyPropertyChanged
 	private RequestGroup selectedRequest = null;
 	private RequestGroup leftGroup = null;
 	private RequestGroup rightGroup = null;
-	private ObservableCollection<RequestGroup> requests = new ObservableCollection<RequestGroup>();
+	private ObservableCollection<RequestGroup> requests = new();
 	private bool _formatResponse = true;
 	private AttackOptions attack = new AttackOptions();
 	private int selectedResponseIndex = 1;
@@ -231,7 +231,7 @@ public class Data : INotifyPropertyChanged
 		}
 	}
 
-	public ObservableCollection<HttpMethod> AllRequestMethods { get; } = new ObservableCollection<HttpMethod>
+	public ObservableCollection<HttpMethod> AllRequestMethods { get; } = new()
 	{
 		HttpMethod.Get,
 		HttpMethod.Post,
@@ -240,7 +240,7 @@ public class Data : INotifyPropertyChanged
 		HttpMethod.Patch
 	};
 
-	public ObservableCollection<ContentType> AllContentTypes { get; } = new ObservableCollection<ContentType>
+	public ObservableCollection<ContentType> AllContentTypes { get; } = new()
 	{
 		ContentTypeJson.Instance,
 		ContentTypeText.Instance

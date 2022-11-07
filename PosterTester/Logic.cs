@@ -200,37 +200,36 @@ public static class Logic
 		using var locked = new WorkingLock(r);
 
 		var attack = root.Attack.Clone();
-		var spans = new List<TimeSpan>();
+		var ret = new AttackResult();
 
-		try
+		// todo(Gustav): implment "at the same time"
+		for (int i = 0; i < attack.Count; i += 1)
 		{
-			// todo(Gustav): implment "at the same time"
-			for(int i = 0; i<attack.Count; i+=1)
+			try
 			{
 				var start = DateTime.Now;
 				var data = await MakeRequest(r);
 				// todo(Gustav): verify data... both status code and actual data
 				var end = DateTime.Now;
 				var time = end.Subtract(start);
-				spans.Add(time);
+				ret.Result.Add(time);
 			}
-		}
-		catch (Exception xx)
-		{
-			var end = DateTime.Now;
-			string builder = String.Empty;
-
-			var x = xx;
-			while (x != null)
+			catch (Exception xx)
 			{
-				builder += x.Message + "\r\n";
-				x = x.InnerException;
-			}
+				string builder = String.Empty;
 
-			return new AttackResult { Error = builder };
+				var x = xx;
+				while (x != null)
+				{
+					builder += x.Message + "\r\n";
+					x = x.InnerException;
+				}
+
+				ret.Errors.Add(builder);
+			}
 		}
 
-		return new AttackResult { Result = new ObservableCollection<TimeSpan>(spans) };
+		return ret;
 	}
 }
 

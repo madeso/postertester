@@ -192,10 +192,10 @@ public class Request : INotifyPropertyChanged
 
 public class AttackResult : INotifyPropertyChanged
 {
-	private string error = null;
+	private ObservableCollection<string> error = new();
 	private ObservableCollection<TimeSpan> result = new();
 
-	public string Error
+	public ObservableCollection<string> Errors
 	{
 		get => error; set
 		{

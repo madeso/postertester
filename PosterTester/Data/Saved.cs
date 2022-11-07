@@ -71,8 +71,8 @@ public class Attack
 	[JsonProperty("count")]
 	public int AttackCount { get; internal set; }
 
-	[JsonProperty("got_error")]
-	public string AttackError { get; internal set; }
+	[JsonProperty("got_errors")]
+	public string[] AttackErrors { get; internal set; }
 
 	[JsonProperty("got_result")]
 	public double[] AttackResult { get; internal set; }
