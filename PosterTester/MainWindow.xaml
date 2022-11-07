@@ -42,6 +42,7 @@
         <CommandBinding Command="posterTester:CustomCommands.FocusUrl" Executed="FocusUrlExecuted" />
         <CommandBinding Command="posterTester:CustomCommands.FocusPost" Executed="FocusPostExecuted" />
         <CommandBinding Command="posterTester:CustomCommands.Compare" Executed="CompareExecuted" />
+		<CommandBinding Command="posterTester:CustomCommands.CompareAttack" Executed="CompareAttackExecuted" />
 
         <CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
@@ -104,6 +105,7 @@
                 <MenuItem Header="_Forget current group (won't delete file)" Command="posterTester:CustomCommands.ForgetGroup"/>
                 <Separator />
                 <MenuItem Header="Compare responses from 2 requests..." Command="posterTester:CustomCommands.Compare"/>
+				<MenuItem Header="Compare attacks from 2 requests..." Command="posterTester:CustomCommands.CompareAttack"/>
             </MenuItem>
             <MenuItem Header="_Request">
                 <MenuItem Header="_New Request" Command="posterTester:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />

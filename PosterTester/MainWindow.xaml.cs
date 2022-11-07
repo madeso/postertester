@@ -222,7 +222,19 @@ public partial class MainWindow : Window
         }
     }
 
-    private void LoadPostExecuted(object sender, ExecutedRoutedEventArgs e)
+	private void CompareAttackExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		var dlg = new CompareRequests(this.Data);
+		using var blur = new DialogBackground(this, dlg);
+		if (dlg.ShowDialog() ?? false)
+		{
+			new PlotDisplay(plot => {
+				Plotter.ComparePlot(plot, this.Data.LeftCompare, this.Data.RightCompare);
+			}).ShowDialog();
+		}
+	}
+
+	private void LoadPostExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
         if (r == null)
