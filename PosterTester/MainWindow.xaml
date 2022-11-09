@@ -22,6 +22,7 @@
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"  True="Visible"   False="Collapsed" />
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfFalseConverter" True="Collapsed" False="Visible" />
 		<converters:NumberOfItemsConverter x:Key="NumberOfItemsConverter" />
+		<converters:ConcatStringsConverter x:Key="ConcatStringsConverter" />
 	</Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Exit" Executed="ExitExecuted" />
@@ -293,6 +294,11 @@
 								<TabControl Grid.Row="2" x:Name="dlgAttackTab">
 									<TabItem Header="Histogram">
 										<WpfPlot x:Name="dlgPlot" />
+									</TabItem>
+									<TabItem Header="Errors">
+										<TextBox Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource ConcatStringsConverter}}"
+											FontFamily="Consolas" FontSize="11" IsReadOnly="True" Background="LightGray"
+											HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
 									</TabItem>
 								</TabControl>
 							</Grid>
