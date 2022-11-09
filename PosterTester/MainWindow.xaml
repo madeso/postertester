@@ -21,7 +21,8 @@
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"  True="Visible"   False="Collapsed" />
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfFalseConverter" True="Collapsed" False="Visible" />
-    </Window.Resources>
+		<converters:NumberOfItemsConverter x:Key="NumberOfItemsConverter" />
+	</Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Exit" Executed="ExitExecuted" />
 		<CommandBinding Command="posterTester:CustomCommands.BrowseData" Executed="BrowseDataExecuted" />
@@ -273,10 +274,27 @@
 							<Grid>
 								<Grid.RowDefinitions>
 									<RowDefinition Height="auto" />
+									<RowDefinition Height="auto" />
 									<RowDefinition Height="*" />
 								</Grid.RowDefinitions>
 								<ProgressBar Grid.Row="0" Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" Margin="3" Height="5" IsIndeterminate="True" />
-								<WpfPlot Grid.Row="1" x:Name="dlgPlot" />
+
+								<StackPanel Grid.Row="1" Margin="3" Orientation="Horizontal">
+									<TextBlock Text="Points:" Margin="3,0"/>
+									<TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackOptions.Count}" />
+									
+									<TextBlock Text="Successful:" Margin="12,0,3,0"/>
+									<TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Result, Converter={StaticResource NumberOfItemsConverter}}" />
+									
+									<TextBlock Text="Failed:" Margin="12,0,3,0"/>
+									<TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource NumberOfItemsConverter}}" />
+								</StackPanel>
+
+								<TabControl Grid.Row="2" x:Name="dlgAttackTab">
+									<TabItem Header="Histogram">
+										<WpfPlot x:Name="dlgPlot" />
+									</TabItem>
+								</TabControl>
 							</Grid>
 							
 						</TabItem>
