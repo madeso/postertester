@@ -86,6 +86,27 @@ public partial class MainWindow : Window
         Save();
     }
 
+	public void SettingsExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		// todo(Gustav): move settings to a custom class so we can clone and update...
+		var oldBin = this.Data.BinSize;
+		var dlg = new SettingsDialog(this.Data);
+		using var blur = new DialogBackground(this, dlg);
+		if (dlg.ShowDialog() ?? false)
+		{
+			Save();
+			if(oldBin != this.Data.BinSize)
+			{
+				// bin size was updated: update plot
+				UpdatePlotForSelectedRequest();
+			}
+		}
+		else
+		{
+			this.Data.BinSize = oldBin;
+		}
+	}
+
 	private Data.AttackOptions RunAttackDialog()
 	{
 		var dlg = new AttackDialog(this.Data.Attack.Clone());
@@ -228,9 +249,20 @@ public partial class MainWindow : Window
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
-			new PlotDisplay(plot => {
-				Plotter.ComparePlot(plot, this.Data.LeftCompare, this.Data.RightCompare, this.Data.BinSize);
-			}).ShowDialog();
+			var displayDialog = true;
+			var dialog = new PlotDisplay(plot => {
+				var msg = Plotter.ComparePlot(plot, this.Data.LeftCompare, this.Data.RightCompare, this.Data.BinSize);
+				if (msg != null)
+				{
+					MessageBox.Show(msg, "Plott error", MessageBoxButton.OK, MessageBoxImage.Error);
+					displayDialog = false;
+				}
+			});
+
+			if(displayDialog)
+			{
+				dialog.ShowDialog();
+			}
 		}
 	}
 

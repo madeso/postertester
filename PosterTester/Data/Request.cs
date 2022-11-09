@@ -21,6 +21,7 @@ public class Request : INotifyPropertyChanged
 	private AttackOptions attackOptions;
 	private Guid guid;
 	private RequestGroup parentGroup;
+	private string plotStatus;
 
 	public string TitleOrUrl
 	{
@@ -173,6 +174,15 @@ public class Request : INotifyPropertyChanged
 		get => parentGroup; internal set
 		{
 			parentGroup = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public string PlotStatus
+	{
+		get => plotStatus; set
+		{
+			plotStatus = value;
 			OnPropertyChanged();
 		}
 	}

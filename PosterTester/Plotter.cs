@@ -52,15 +52,22 @@ internal static class Plotter
 	{
 		var plt = wpf.Plot;
 
+		r.PlotStatus = String.Empty;
+
 		plt.Clear();
-		SinglePlot(r, plt, binSize);
+		var status = SinglePlot(r, plt, binSize);
 
 		wpf.Refresh();
+
+		if(status != null)
+		{
+			r.PlotStatus = status;
+		}
 	}
 
-	private static void SinglePlot(Request r, Plot plt, double binSize)
+	private static string SinglePlot(Request r, Plot plt, double binSize)
 	{
-		if (CanPlot(r) == false) { return; }
+		if (CanPlot(r) == false) { return "Nothing to plot"; }
 
 		Data.AttackOptions attack = r.AttackOptions;
 
@@ -72,6 +79,12 @@ internal static class Plotter
 
 		var mi = values.Min();
 		var ma = values.Max();
+
+		var diff = ma - mi;
+		if(diff < binSize)
+		{
+			return $"Bin size needs to be less than {diff}";
+		}
 
 		// create a histogram
 		(double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: mi, max: ma, binSize: binSize);
@@ -119,6 +132,8 @@ internal static class Plotter
 		plt.XAxis.Label("Time taken (ms)");
 		plt.SetAxisLimits(yMin: 0);
 		plt.SetAxisLimits(yMin: 0, yAxisIndex: 1);
+
+		return null;
 	}
 
 	private static double[] ExtractPlottable(Request r)
@@ -126,9 +141,9 @@ internal static class Plotter
 		return r.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray();
 	}
 
-	internal static void ComparePlot(Plot plt, Request leftCompare, Request rightCompare, double binSize)
+	internal static string ComparePlot(Plot plt, Request leftCompare, Request rightCompare, double binSize)
 	{
-		if(CanPlot(leftCompare) == false || CanPlot(rightCompare) == false) { return; }
+		if(CanPlot(leftCompare) == false || CanPlot(rightCompare) == false) { return "Nothing to plot"; }
 
 		var heightsMale = ExtractPlottable(leftCompare);
 		var heightsFemale = ExtractPlottable(rightCompare);
@@ -137,6 +152,12 @@ internal static class Plotter
 
 		var mi = heightsFemale.Concat(heightsMale).Min();
 		var ma = heightsFemale.Concat(heightsMale).Max();
+
+		var diff = ma - mi;
+		if(diff < binSize)
+		{
+			return $"Bin size needs to be less than {diff}";
+		}
 
 		// calculate histograms for male and female datasets
 		(double[] probMale, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(heightsMale, min: mi, max: ma, binSize: binSize, density: false);
@@ -188,6 +209,8 @@ internal static class Plotter
 
 		plt.Legend(location: ScottPlot.Alignment.UpperLeft);
 		plt.SetAxisLimits(yMin: 0);
+
+		return null;
 	}
 
 	private static bool CanPlot(Request r)

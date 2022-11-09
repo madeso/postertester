@@ -26,6 +26,7 @@
 	</Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Exit" Executed="ExitExecuted" />
+		<CommandBinding Command="posterTester:CustomCommands.Settings" Executed="SettingsExecuted" />
 		<CommandBinding Command="posterTester:CustomCommands.BrowseData" Executed="BrowseDataExecuted" />
 
 		<CommandBinding Command="posterTester:CustomCommands.CreateNewGroup" Executed="CreateNewGroupExecuted"/>
@@ -97,8 +98,8 @@
         <Menu Width="Auto" Grid.Row="0">
             <MenuItem Header="_File">
 				<MenuItem Header="_Save" Command="posterTester:CustomCommands.Save" InputGestureText="Ctrl-S" />
-				<MenuItem Header="_Browse local data..." Command="posterTester:CustomCommands.BrowseData"/>
-                <MenuItem Header="E_xit" Command="posterTester:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
+				<MenuItem Header="_Settings..." Command="posterTester:CustomCommands.Settings"/>
+				<MenuItem Header="E_xit" Command="posterTester:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="_Group">
                 <MenuItem Header="Create _new group..." Command="posterTester:CustomCommands.CreateNewGroup"/>
@@ -114,6 +115,7 @@
                 <MenuItem Header="Rename request" Command="posterTester:CustomCommands.Rename" InputGestureText="F2"/>
                 <MenuItem Header="Delete selected request" Command="posterTester:CustomCommands.DeleteSelectedRequest"/>
                 <Separator />
+				<MenuItem Header="_Browse local data..." Command="posterTester:CustomCommands.BrowseData"/>
                 <MenuItem Header="Format request body" Command="posterTester:CustomCommands.Format" InputGestureText="Ctrl-F" />
                 <MenuItem Header="Import request body from file" Command="posterTester:CustomCommands.LoadPost"/>
                 <Separator />
@@ -289,6 +291,8 @@
 									
 									<TextBlock Text="Failed:" Margin="12,0,3,0"/>
 									<TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource NumberOfItemsConverter}}" />
+
+									<TextBlock FontWeight="Bold" Margin="12,0,3,0" Text="{Binding SelectedGroup.SelectedRequest.PlotStatus}" />
 								</StackPanel>
 
 								<TabControl Grid.Row="2" x:Name="dlgAttackTab">

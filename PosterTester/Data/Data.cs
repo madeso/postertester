@@ -276,7 +276,7 @@ public class Data : INotifyPropertyChanged
 
 	public double BinSize
 	{
-		get => binSize; internal set
+		get => binSize; set
 		{
 			binSize = value;
 			OnPropertyChanged();

@@ -9,8 +9,9 @@ namespace PosterTester
         public static RoutedCommand Save = new RoutedCommand();
 		public static RoutedCommand BrowseData = new RoutedCommand();
 		public static RoutedCommand Exit = new RoutedCommand();
+		public static RoutedCommand Settings = new RoutedCommand();
 
-        public static RoutedCommand CreateNewGroup = new RoutedCommand();
+		public static RoutedCommand CreateNewGroup = new RoutedCommand();
         public static RoutedCommand AddExistingGroup = new RoutedCommand();
         public static RoutedCommand ForgetGroup = new RoutedCommand();
 
