@@ -159,4 +159,7 @@ public class Root
 
 	[JsonProperty("attack_at_the_same_time")]
 	public bool AttackAtTheSameTime { get; set; }
+
+	[JsonProperty("bin_size")]
+	public double BinSize { get; set; } = 50.0;
 }

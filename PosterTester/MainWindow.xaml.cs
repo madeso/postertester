@@ -123,7 +123,7 @@ public partial class MainWindow : Window
 
 	private void UpdatePlotForRequest(Request r)
 	{
-		Plotter.Plot(this.dlgPlot, r);
+		Plotter.Plot(this.dlgPlot, r, this.Data.BinSize);
 	}
 
 	private void UpdatePlotForSelectedRequest()
@@ -229,7 +229,7 @@ public partial class MainWindow : Window
 		if (dlg.ShowDialog() ?? false)
 		{
 			new PlotDisplay(plot => {
-				Plotter.ComparePlot(plot, this.Data.LeftCompare, this.Data.RightCompare);
+				Plotter.ComparePlot(plot, this.Data.LeftCompare, this.Data.RightCompare, this.Data.BinSize);
 			}).ShowDialog();
 		}
 	}

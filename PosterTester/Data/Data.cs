@@ -146,6 +146,7 @@ public class Data : INotifyPropertyChanged
 	private bool _formatResponse = true;
 	private AttackOptions attack = new AttackOptions();
 	private int selectedResponseIndex = 1;
+	private double binSize = 50.0;
 
 	public Action OnSelectionChanged { get; set; } = () => { };
 
@@ -269,6 +270,15 @@ public class Data : INotifyPropertyChanged
 		get => this._formatResponse; set
 		{
 			this._formatResponse = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public double BinSize
+	{
+		get => binSize; internal set
+		{
+			binSize = value;
 			OnPropertyChanged();
 		}
 	}

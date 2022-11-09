@@ -13,7 +13,6 @@ namespace PosterTester;
 
 internal static class Plotter
 {
-	private const int BIN_SIZE = 50;
 	private const int PROBABILITY_ALPHA = 250;
 	private const int BAR_ALPHA = 200;
 
@@ -49,17 +48,17 @@ internal static class Plotter
 		return r % COLORS.Length;
 	}
 
-	public static void Plot(WpfPlot wpf, Request r)
+	public static void Plot(WpfPlot wpf, Request r, double binSize)
 	{
 		var plt = wpf.Plot;
 
 		plt.Clear();
-		SinglePlot(r, plt);
+		SinglePlot(r, plt, binSize);
 
 		wpf.Refresh();
 	}
 
-	private static void SinglePlot(Request r, Plot plt)
+	private static void SinglePlot(Request r, Plot plt, double binSize)
 	{
 		if (CanPlot(r) == false) { return; }
 
@@ -75,13 +74,13 @@ internal static class Plotter
 		var ma = values.Max();
 
 		// create a histogram
-		(double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: mi, max: ma, binSize: BIN_SIZE);
+		(double[] counts, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(values, min: mi, max: ma, binSize: binSize);
 		double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
 
 		// display histogram probabability as a bar plot
 		var bar = plt.AddBar(values: counts, positions: leftEdges);
 		bar.BorderLineWidth = 0;
-		bar.BarWidth = BIN_SIZE;
+		bar.BarWidth = binSize;
 		bar.FillColor = Color.FromArgb(BAR_ALPHA, color);
 
 		// display histogram distribution curve as a line plot on a secondary Y axis
@@ -127,7 +126,7 @@ internal static class Plotter
 		return r.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray();
 	}
 
-	internal static void ComparePlot(Plot plt, Request leftCompare, Request rightCompare)
+	internal static void ComparePlot(Plot plt, Request leftCompare, Request rightCompare, double binSize)
 	{
 		if(CanPlot(leftCompare) == false || CanPlot(rightCompare) == false) { return; }
 
@@ -140,8 +139,8 @@ internal static class Plotter
 		var ma = heightsFemale.Concat(heightsMale).Max();
 
 		// calculate histograms for male and female datasets
-		(double[] probMale, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(heightsMale, min: mi, max: ma, binSize: BIN_SIZE, density: false);
-		(double[] probFemale, _) = ScottPlot.Statistics.Common.Histogram(heightsFemale, min: mi, max: ma, binSize: BIN_SIZE, density: false);
+		(double[] probMale, double[] binEdges) = ScottPlot.Statistics.Common.Histogram(heightsMale, min: mi, max: ma, binSize: binSize, density: false);
+		(double[] probFemale, _) = ScottPlot.Statistics.Common.Histogram(heightsFemale, min: mi, max: ma, binSize: binSize, density: false);
 		double[] leftEdges = binEdges.Take(binEdges.Length - 1).ToArray();
 
 		// plot histograms
@@ -160,9 +159,9 @@ internal static class Plotter
 			rightColorIndex = (rightColorIndex + 1) % COLORS.Length;
 		}
 
-		barMale.BarWidth = BIN_SIZE;
+		barMale.BarWidth = binSize;
 		barMale.FillColor = Color.FromArgb(BAR_ALPHA, COLORS[leftColorIndex]);
-		barFemale.BarWidth = BIN_SIZE;
+		barFemale.BarWidth = binSize;
 		barFemale.FillColor = Color.FromArgb(BAR_ALPHA, COLORS[rightColorIndex]);
 
 		// plot probability function curves

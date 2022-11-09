@@ -174,6 +174,7 @@ public static class Disk
         var groups = rc.ToObservableCollectionOrEmpty();
         return new Data
         {
+			BinSize = container.BinSize,
             Groups = groups,
             SelectedGroup = container.SelectedGroup == -1 ? null : groups[container.SelectedGroup],
             LeftGroup = FindGroup(groups, container.LeftCompare),
@@ -284,6 +285,7 @@ public static class Disk
 
         var jsonFile = new Saved.Root
         {
+			BinSize = data.BinSize,
             Groups = data.Groups.Select(TransformGroup).ToArray(),
             SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),
             LeftCompare = FindRequest(data.LeftGroup, data.LeftCompare),
