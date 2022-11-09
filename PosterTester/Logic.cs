@@ -209,10 +209,17 @@ public static class Logic
 			{
 				var start = DateTime.Now;
 				var data = await MakeRequest(r);
-				// todo(Gustav): verify data... both status code and actual data
-				var end = DateTime.Now;
-				var time = end.Subtract(start);
-				ret.Result.Add(time);
+				// todo(Gustav): verify data...
+				if(data.Status != HttpStatusCode.OK)
+				{
+					ret.Errors.Add(data.Body);
+				}
+				else
+				{
+					var end = DateTime.Now;
+					var time = end.Subtract(start);
+					ret.Result.Add(time);
+				}
 			}
 			catch (Exception xx)
 			{
