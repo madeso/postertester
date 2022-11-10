@@ -107,7 +107,7 @@
 			</TabItem>
 			
 			<TabItem Header="Content">
-				<TextBox x:Name="uiPost" Text="{Binding Body}"
+				<TextBox x:Name="uiPost" Text="{Binding Body}" Padding="3" Margin="3"
 					FontFamily="Consolas" FontSize="11" IsReadOnly="True" Background="LightGray"
 					HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
 			</TabItem>

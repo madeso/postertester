@@ -25,7 +25,7 @@
 		</Grid.RowDefinitions>
 
 		<TextBlock Margin="3" Grid.Row="0" Grid.Column="0" Text="Bin size:" />
-		<TextBox x:Name="dlgCount" Margin="3" Grid.Row="0" Grid.Column="1" Text="{Binding BinSize}"/>
+		<TextBox x:Name="dlgCount" Margin="3" Padding="3" Grid.Row="0" Grid.Column="1" Text="{Binding BinSize}"/>
 
 		<StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
 			<Button Margin="3" IsDefault="True" Command="posterTester:CustomCommands.Ok">

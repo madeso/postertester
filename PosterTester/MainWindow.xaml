@@ -194,7 +194,7 @@
                     </Grid.RowDefinitions>
 
                     <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedGroup.SelectedRequest.Method}"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="uiUrl" Margin="3" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
+					<TextBox Padding="3" Grid.Row="0" Grid.Column="1" x:Name="uiUrl" Margin="3" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
 
 					<TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom" x:Name="dlgMainTab">
 						<TabItem Header="Response" x:Name="dlgTabResponse">
@@ -248,7 +248,7 @@
 													<RowDefinition Height="*" />
 												</Grid.RowDefinitions>
 												<ComboBox Grid.Row="0" Margin="3" ItemsSource="{Binding AllContentTypes}" SelectedItem="{Binding SelectedGroup.SelectedRequest.ContentType}" DisplayMemberPath="Name"/>
-												<TextBox Grid.Row="1" Margin="3" x:Name="uiPost" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
+												<TextBox Padding="3" Grid.Row="1" Margin="3" x:Name="uiPost" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
                                              FontFamily="Consolas" FontSize="11"
                                              AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
 											</Grid>
@@ -301,7 +301,7 @@
 										<WpfPlot x:Name="dlgPlot" />
 									</TabItem>
 									<TabItem Header="Errors">
-										<TextBox Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource ConcatStringsConverter}}"
+										<TextBox Padding="3" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource ConcatStringsConverter}}"
 											FontFamily="Consolas" FontSize="11" IsReadOnly="True" Background="LightGray"
 											HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
 									</TabItem>

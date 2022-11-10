@@ -28,7 +28,7 @@
 		<CheckBox Margin="3" Grid.Row="0" Grid.ColumnSpan="2" Content="At the same time?" IsChecked="{Binding AtTheSameTime}" />
 
 		<TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="Count:" />
-		<TextBox x:Name="dlgCount" Margin="3" Grid.Row="1" Grid.Column="1" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}"/>
+		<TextBox Padding="3" x:Name="dlgCount" Margin="3" Grid.Row="1" Grid.Column="1" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}"/>
 
 		<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
 			<Button Margin="3" IsDefault="True" Command="posterTester:CustomCommands.Ok">
