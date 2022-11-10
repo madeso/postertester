@@ -32,6 +32,7 @@
 		<CommandBinding Command="posterTester:CustomCommands.CreateNewGroup" Executed="CreateNewGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.AddExistingGroup" Executed="AddExistingGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.ForgetGroup" Executed="ForgetGroupExecuted"/>
+		<CommandBinding Command="posterTester:CustomCommands.GroupSettings" Executed="GroupSettingsExecuted"/>
 
 		<CommandBinding Command="posterTester:CustomCommands.Attack" Executed="AttackExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.Execute" Executed="ExecuteExecuted"/>
@@ -103,8 +104,8 @@
             </MenuItem>
             <MenuItem Header="_Group">
                 <MenuItem Header="Create _new group..." Command="posterTester:CustomCommands.CreateNewGroup"/>
-                <MenuItem Header="Add _existing group..." Command="posterTester:CustomCommands.AddExistingGroup"/>
-                <!-- rename current group -->
+				<MenuItem Header="Add _existing group..." Command="posterTester:CustomCommands.AddExistingGroup"/>
+				<MenuItem Header="Rename current group..." Command="posterTester:CustomCommands.GroupSettings"/>
                 <MenuItem Header="_Forget current group (won't delete file)" Command="posterTester:CustomCommands.ForgetGroup"/>
                 <Separator />
                 <MenuItem Header="Compare responses from 2 requests..." Command="posterTester:CustomCommands.Compare"/>

@@ -14,8 +14,9 @@ namespace PosterTester
 		public static RoutedCommand CreateNewGroup = new RoutedCommand();
         public static RoutedCommand AddExistingGroup = new RoutedCommand();
         public static RoutedCommand ForgetGroup = new RoutedCommand();
+		public static RoutedCommand GroupSettings = new RoutedCommand();
 
-        public static RoutedCommand NewRequest = new RoutedCommand();
+		public static RoutedCommand NewRequest = new RoutedCommand();
         public static RoutedCommand Execute = new RoutedCommand();
 		public static RoutedCommand Attack = new RoutedCommand();
 		public static RoutedCommand Format = new RoutedCommand();

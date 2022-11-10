@@ -107,6 +107,23 @@ public partial class MainWindow : Window
 		}
 	}
 
+	public void GroupSettingsExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		var group = this.Root.SelectedGroup;
+		if(group == null) { return; }
+		var oldName = group.Name;
+		var dlg = new GroupSettings(group);
+		using var blur = new DialogBackground(this, dlg);
+		if (dlg.ShowDialog() ?? false)
+		{
+			Save();
+		}
+		else
+		{
+			group.Name = oldName;
+		}
+	}
+
 	private Data.AttackOptions RunAttackDialog()
 	{
 		var dlg = new AttackDialog(this.Root.Attack.Clone());
