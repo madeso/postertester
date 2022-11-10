@@ -41,7 +41,7 @@ public partial class MainWindow : Window
     private const string PostGroupExt = "PosterTesterGroup";
     private const string PostGroupFilesFilter = $"Post group files (*.{PostGroupExt})|*.{PostGroupExt}|All files (*.*)|*.*";
 
-    public Data.Data Data { get; internal set; }
+    public Data.Root Data { get; internal set; }
 
     public MainWindow()
     {

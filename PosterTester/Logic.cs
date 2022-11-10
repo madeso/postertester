@@ -133,7 +133,7 @@ public static class Logic
         return new Data.Response(status: response.StatusCode, body: responseBody, responseHeaders:resh);
     }
 
-    public static async Task Request(Data.Data root, Data.Request r)
+    public static async Task Request(Data.Root root, Data.Request r)
     {
         // silently ignore double commands
         if (r.IsWorking == true) { return; }
@@ -191,7 +191,7 @@ public static class Logic
 		Process.Start(startInfo);
 	}
 
-	internal static async Task<AttackResult> Attack(Data.Data root, Data.Request r)
+	internal static async Task<AttackResult> Attack(Data.Root root, Data.Request r)
 	{
 		// silently ignore double commands
 		if (r.IsWorking == true) { return null; }

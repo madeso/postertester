@@ -81,7 +81,7 @@ public static class Disk
         return new RequestsWithGuid { Requests = req, Guid = FromSavedGuid(json.Guid) };
     }
 
-	private static Data Load(string file)
+	private static Root Load(string file)
     {
 		static Headers TransformHeaders(Saved.Headers src)
 		{
@@ -101,7 +101,7 @@ public static class Disk
 				}
 				else
 				{
-					return Data.CreateDefaultGroup();
+					return Root.CreateDefaultGroup();
 				}
 			}
 			else
@@ -172,7 +172,7 @@ public static class Disk
         var container = ReadFile<Saved.Root>(file);
         var rc = container.Groups.Select(TransformGroupOrNull).Where(x => x != null);
         var groups = rc.ToObservableCollectionOrEmpty();
-        return new Data
+        return new Root
         {
 			BinSize = container.BinSize,
             Groups = groups,
@@ -231,7 +231,7 @@ public static class Disk
 		}
 	}
 
-	private static void Save(Data data, string file)
+	private static void Save(Root data, string file)
     {
 		static Saved.Headers TransformHeaders(Headers src)
 		{
@@ -320,7 +320,7 @@ public static class Disk
 		}
 	}
 
-	public static Data LoadOrCreateNew()
+	public static Root LoadOrCreateNew()
     {
         if (File.Exists(PathToSettings))
         {
@@ -328,13 +328,13 @@ public static class Disk
         }
         else
         {
-            var r = new Data { };
+            var r = new Root { };
             r.CreateBuiltinIfMissing();
             return r;
         }
     }
 
-    public static void Save(Data data)
+    public static void Save(Root data)
     {
         Save(data, PathToSettings);
     }

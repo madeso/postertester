@@ -8,7 +8,7 @@ namespace PosterTester;
 /// </summary>
 public partial class CompareRequests : Window
 {
-    public CompareRequests(Data.Data data)
+    public CompareRequests(Data.Root data)
     {
         InitializeComponent();
         this.DataContext = data;
