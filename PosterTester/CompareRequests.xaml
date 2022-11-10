@@ -9,7 +9,7 @@
         Icon="icon.ico"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
-        d:DataContext="{d:DesignInstance data:Data}"
+        d:DataContext="{d:DesignInstance data:Root}"
         mc:Ignorable="d" Height="127" Width="648"
         >
     <Window.CommandBindings>

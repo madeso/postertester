@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PosterTester;
@@ -8,10 +8,10 @@ namespace PosterTester;
 /// </summary>
 public partial class CompareRequests : Window
 {
-    public CompareRequests(Data.Root data)
+	public CompareRequests(Data.Root root)
     {
         InitializeComponent();
-        this.DataContext = data;
+        this.DataContext = root;
     }
 
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)

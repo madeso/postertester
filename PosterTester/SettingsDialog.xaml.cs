@@ -10,10 +10,10 @@ namespace PosterTester;
 /// </summary>
 public partial class SettingsDialog : Window
 {
-	public SettingsDialog(Data.Root theData)
+	public SettingsDialog(Data.Root root)
 	{
 		InitializeComponent();
-		this.DataContext = theData;
+		this.DataContext = root;
 	}
 
 	private void Window_Activated(object sender, EventArgs e)

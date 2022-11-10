@@ -41,30 +41,30 @@ public partial class MainWindow : Window
     private const string PostGroupExt = "PosterTesterGroup";
     private const string PostGroupFilesFilter = $"Post group files (*.{PostGroupExt})|*.{PostGroupExt}|All files (*.*)|*.*";
 
-    public Data.Root Data { get; internal set; }
+    public Data.Root Root { get; internal set; }
 
     public MainWindow()
     {
         InitializeComponent();
 
-		this.Data = Disk.LoadOrCreateNew();
-		this.DataContext = this.Data;
+		this.Root = Disk.LoadOrCreateNew();
+		this.DataContext = this.Root;
 		this.Closed += (closedSender, closedArgs) => Save();
 
 		// https://scottplot.net/faq/mvvm/
-		this.Data.OnSelectionChanged += () => UpdatePlotForSelectedRequest();
+		this.Root.OnSelectionChanged += () => UpdatePlotForSelectedRequest();
 
 		UpdatePlotForSelectedRequest();
 	}
 
     private void Save()
     {
-		Disk.Save(this.Data);
+		Disk.Save(this.Root);
 	}
 
     private Data.Request GetSelectedRequest()
     {
-        var g = this.Data.SelectedGroup;
+        var g = this.Root.SelectedGroup;
         if (g == null) { return null; }
         return g.SelectedRequest;
     }
@@ -82,20 +82,20 @@ public partial class MainWindow : Window
             return;
         }
 		dlgMainTab.SelectedItem = dlgTabResponse;
-		await Logic.Request(this.Data, r);
+		await Logic.Request(this.Root, r);
         Save();
     }
 
 	public void SettingsExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
 		// todo(Gustav): move settings to a custom class so we can clone and update...
-		var oldBin = this.Data.BinSize;
-		var dlg = new SettingsDialog(this.Data);
+		var oldBin = this.Root.BinSize;
+		var dlg = new SettingsDialog(this.Root);
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
 			Save();
-			if(oldBin != this.Data.BinSize)
+			if(oldBin != this.Root.BinSize)
 			{
 				// bin size was updated: update plot
 				UpdatePlotForSelectedRequest();
@@ -103,13 +103,13 @@ public partial class MainWindow : Window
 		}
 		else
 		{
-			this.Data.BinSize = oldBin;
+			this.Root.BinSize = oldBin;
 		}
 	}
 
 	private Data.AttackOptions RunAttackDialog()
 	{
-		var dlg = new AttackDialog(this.Data.Attack.Clone());
+		var dlg = new AttackDialog(this.Root.Attack.Clone());
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
@@ -129,10 +129,10 @@ public partial class MainWindow : Window
 		var options = RunAttackDialog();
 		if (options != null)
 		{
-			this.Data.Attack.GetFrom(options);
+			this.Root.Attack.GetFrom(options);
 			Save();
 			dlgMainTab.SelectedItem = dlgTabAttack;
-			var result = await Logic.Attack(this.Data, r);
+			var result = await Logic.Attack(this.Root, r);
 
 			// todo(Gustav): display error!
 			r.AttackResult = result;
@@ -144,12 +144,12 @@ public partial class MainWindow : Window
 
 	private void UpdatePlotForRequest(Request r)
 	{
-		Plotter.Plot(this.dlgPlot, r, this.Data.BinSize);
+		Plotter.Plot(this.dlgPlot, r, this.Root.BinSize);
 	}
 
 	private void UpdatePlotForSelectedRequest()
 	{
-		UpdatePlotForRequest(this.Data.SelectedGroup == null ? null : this.Data.SelectedGroup.SelectedRequest);
+		UpdatePlotForRequest(this.Root.SelectedGroup == null ? null : this.Root.SelectedGroup.SelectedRequest);
 	}
 
 	public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -162,7 +162,7 @@ public partial class MainWindow : Window
         bool? dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
-        this.Data.CreateNewGroup(fdlg.FileName);
+        this.Root.CreateNewGroup(fdlg.FileName);
         Save();
     }
 
@@ -175,13 +175,13 @@ public partial class MainWindow : Window
         bool? dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
-        this.Data.AddExistingGroup(fdlg.FileName);
+        this.Root.AddExistingGroup(fdlg.FileName);
         Save();
     }
 
     public void ForgetGroupExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        this.Data.ForgetGroup();
+        this.Root.ForgetGroup();
         Save();
     }
 
@@ -199,7 +199,7 @@ public partial class MainWindow : Window
 
     private void NewRequestExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        this.Data.AddNewRequest();
+        this.Root.AddNewRequest();
         Save();
     }
 
@@ -210,7 +210,7 @@ public partial class MainWindow : Window
 
     private void DeleteSelectedRequestExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        this.Data.DeleteSelectedRequest();
+        this.Root.DeleteSelectedRequest();
         Save();
     }
 
@@ -235,23 +235,23 @@ public partial class MainWindow : Window
 
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var dlg = new CompareRequests(this.Data);
+        var dlg = new CompareRequests(this.Root);
         using var blur = new DialogBackground(this, dlg);
         if (dlg.ShowDialog() ?? false)
         {
-            this.Data.Compare();
+            this.Root.Compare();
         }
     }
 
 	private void CompareAttackExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
-		var dlg = new CompareRequests(this.Data);
+		var dlg = new CompareRequests(this.Root);
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
 			var displayDialog = true;
 			var dialog = new PlotDisplay(plot => {
-				var msg = Plotter.ComparePlot(plot, this.Data.LeftCompare, this.Data.RightCompare, this.Data.BinSize);
+				var msg = Plotter.ComparePlot(plot, this.Root.LeftCompare, this.Root.RightCompare, this.Root.BinSize);
 				if (msg != null)
 				{
 					MessageBox.Show(msg, "Plott error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -309,7 +309,7 @@ public partial class MainWindow : Window
 
     private void SelectRequest(int i1)
     {
-        var g = this.Data.SelectedGroup;
+        var g = this.Root.SelectedGroup;
         if (g == null) { return; }
 
         int i = i1 - 1;

@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Icon="icon.ico"
         Width="800" Height="600"
-        d:DataContext="{d:DesignInstance data:Data}"
+        d:DataContext="{d:DesignInstance data:Root}"
         >
     <Window.Title>
         <MultiBinding StringFormat="PosterTester - {0} - {1}">
