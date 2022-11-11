@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -76,7 +77,10 @@ public partial class MainWindow : Window
 
 	private void ShowError(string err)
 	{
-		MessageBox.Show(this, err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		// MessageBox.Show(this, err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		var dlg = new Dialogs.ExMessageBox(err, "Error", SystemIcons.Error);
+		using var blur = new DialogBackground(this, dlg);
+		dlg.ShowDialog();
 	}
 
 	public async void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
