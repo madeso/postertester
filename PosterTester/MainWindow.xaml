@@ -223,7 +223,7 @@
 											<TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
 											<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
 										</DockPanel>
-										<local:ResponseControl Grid.Row="2" DataContext="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}" />
+										<local:ResponseControl Grid.Row="2" DataContext="{Binding}" />
 									</Grid>
 
 
@@ -266,7 +266,7 @@
 												<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
 											</DockPanel>
 
-											<local:ResponseControl Grid.Row="2" DataContext="{Binding SelectedGroup.SelectedRequest.Response, UpdateSourceTrigger=PropertyChanged}" />
+											<local:ResponseControl Grid.Row="2" DataContext="{Binding}" />
 										</Grid>
 									</Grid>
 								</Grid>
