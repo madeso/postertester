@@ -194,16 +194,22 @@ public class Root : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}
 
-	internal void Compare()
+	internal string Compare()
 	{
 		var lhs = this.LeftCompare;
 		var rhs = this.RightCompare;
 		if (lhs == null || rhs == null)
 		{
-			return;
+			return "Either left or right aren't selected!";
+		}
+
+		if(lhs.Response == null || rhs.Response == null)
+		{
+			return "Either left or right have missing response";
 		}
 
 		DiffTool.LaunchDiff(lhs.Response, rhs.Response);
+		return null;
 	}
 
 	internal void CreateBuiltinIfMissing()

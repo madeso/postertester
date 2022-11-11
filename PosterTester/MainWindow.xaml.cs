@@ -283,13 +283,21 @@ public partial class MainWindow : Window
 
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var dlg = new CompareRequests(this.Root);
-        using var blur = new DialogBackground(this, dlg);
-        if (dlg.ShowDialog() ?? false)
-        {
-            this.Root.Compare();
-        }
-    }
+		string error = null;
+		{
+			var dlg = new CompareRequests(this.Root);
+			using var blur = new DialogBackground(this, dlg);
+			if (dlg.ShowDialog() ?? false)
+			{
+				error = this.Root.Compare();
+			}
+		}
+
+		if (error != null)
+		{
+			ShowError(error);
+		}
+	}
 
 	private void CompareAttackExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
