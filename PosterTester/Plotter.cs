@@ -134,7 +134,7 @@ internal static class Plotter
 		plt.Legend(location: Alignment.UpperRight);
 
 		// customize the plot style
-		var sorp = attack.AtTheSameTime ? "Paralell" : "Serial";
+		var sorp = attack.AtTheSameTime ? "Parallel" : "Serial";
 		plt.Title($"{sorp} attack of {attack.Count}");
 		plt.YAxis.Label("Count (#)");
 		plt.YAxis2.Label("Probability (%)");
