@@ -54,7 +54,7 @@ internal static class Plotter
 
 		r.PlotStatus = String.Empty;
 
-		plt.Clear();
+		CleanPlot(plt);
 		var status = SinglePlot(r, plt, binSize);
 
 		wpf.Refresh();
@@ -63,6 +63,15 @@ internal static class Plotter
 		{
 			r.PlotStatus = status;
 		}
+	}
+
+	private static void CleanPlot(Plot plt)
+	{
+		plt.Clear();
+		plt.Title(String.Empty);
+		plt.YAxis.Label(String.Empty);
+		plt.YAxis2.Label(String.Empty);
+		plt.XAxis.Label(String.Empty);
 	}
 
 	private static string SinglePlot(Request r, Plot plt, double binSize)
