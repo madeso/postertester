@@ -196,7 +196,6 @@ public static class Logic
 		// silently ignore double commands
 		if (r.IsWorking == true) { return null; }
 
-		r.Response = null;
 		using var locked = new WorkingLock(r);
 
 		var attack = root.Attack.Clone();
