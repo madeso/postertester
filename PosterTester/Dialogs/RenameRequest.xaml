@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:posterTester="clr-namespace:PosterTester"
         xmlns:converters="clr-namespace:PosterTester.Converters"
-        Icon="icon.ico"
+        Icon="../icon.ico"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
         d:DataContext="{d:DesignInstance posterTester:RenameRequestData}"

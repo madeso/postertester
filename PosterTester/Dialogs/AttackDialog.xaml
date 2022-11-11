@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:posterTester="clr-namespace:PosterTester"
 		xmlns:data="clr-namespace:PosterTester.Data"
-        Icon="icon.ico"
+        Icon="../icon.ico"
         WindowStartupLocation="CenterOwner"
         d:DataContext="{d:DesignInstance data:AttackOptions}"
         mc:Ignorable="d" Height="131" Width="323"  Activated="Window_Activated"

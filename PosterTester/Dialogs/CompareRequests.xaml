@@ -6,7 +6,7 @@
         xmlns:posterTester="clr-namespace:PosterTester"
         xmlns:converters="clr-namespace:PosterTester.Converters"
         xmlns:data="clr-namespace:PosterTester.Data"
-        Icon="icon.ico"
+        Icon="../icon.ico"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
         d:DataContext="{d:DesignInstance data:Root}"
