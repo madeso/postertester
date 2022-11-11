@@ -74,17 +74,25 @@ public partial class MainWindow : Window
 		Logic.BrowseFolder(PosterTester.Data.Disk.GetAppFolder());
 	}
 
+	private void ShowError(string err)
+	{
+		MessageBox.Show(this, err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+	}
+
 	public async void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
-        if (r == null)
-        {
-            return;
-        }
+        if (r == null) { ShowMissingRequest(); return; }
+
 		dlgMainTab.SelectedItem = dlgTabResponse;
 		await Logic.Request(this.Root, r);
         Save();
     }
+
+	private void ShowMissingRequest()
+	{
+		ShowError("No request is selected!");
+	}
 
 	public void SettingsExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
@@ -110,7 +118,7 @@ public partial class MainWindow : Window
 	public void GroupSettingsExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
 		var group = this.Root.SelectedGroup;
-		if(group == null) { return; }
+		if(group == null) { ShowMissingGroup(); return; }
 		var oldName = group.Name;
 		var dlg = new GroupSettings(group);
 		using var blur = new DialogBackground(this, dlg);
@@ -122,6 +130,11 @@ public partial class MainWindow : Window
 		{
 			group.Name = oldName;
 		}
+	}
+
+	private void ShowMissingGroup()
+	{
+		ShowError("No group is selected!");
 	}
 
 	private Data.AttackOptions RunAttackDialog()
@@ -141,7 +154,7 @@ public partial class MainWindow : Window
 	private async void AttackExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
 		var r = GetSelectedRequest();
-		if (r == null) { return; }
+		if (r == null) { ShowMissingRequest(); return; }
 
 		var options = RunAttackDialog();
 		if (options != null)
@@ -172,7 +185,7 @@ public partial class MainWindow : Window
 	public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var fdlg = new SaveFileDialog();
-        fdlg.Title = "Crete post data";
+        fdlg.Title = "Create new group";
         fdlg.Filter = PostGroupFilesFilter;
         fdlg.RestoreDirectory = true;
         fdlg.DefaultExt = PostGroupExt;
@@ -198,6 +211,10 @@ public partial class MainWindow : Window
 
     public void ForgetGroupExecuted(object sender, ExecutedRoutedEventArgs e)
     {
+		var group = Root.SelectedGroup;
+		if (group == null) { ShowMissingGroup(); return; }
+		if (group.Builtin) { ShowError("You can't forget the builtin group");  return; }
+
         this.Root.ForgetGroup();
         Save();
     }
@@ -205,10 +222,8 @@ public partial class MainWindow : Window
     private void FormatExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
-        if (r == null)
-        {
-            return;
-        }
+        if (r == null) { ShowMissingRequest(); return; }
+
         r.TextContent = Logic.FormatJsonOrNot(r.TextContent);
         r.Response.Body = Logic.FormatJsonOrNot(r.Response.Body);
         Save();
@@ -216,18 +231,30 @@ public partial class MainWindow : Window
 
     private void NewRequestExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        this.Root.AddNewRequest();
-        Save();
+		if(this.Root.SelectedGroup != null) { ShowMissingGroup(); return; }
+
+		this.Root.AddNewRequest();
+		Save();
     }
 
     private void ExitExecuted(object sender, ExecutedRoutedEventArgs e)
     {
+		Save();
         Close();
     }
 
     private void DeleteSelectedRequestExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        this.Root.DeleteSelectedRequest();
+		var r = GetSelectedRequest();
+		if (r == null) { ShowMissingRequest(); return; }
+
+		var removed = this.Root.DeleteSelectedRequest();
+		if(removed == false)
+		{
+			ShowError("Unable to remove the last request!");
+			return;
+		}
+
         Save();
     }
 
@@ -239,7 +266,7 @@ public partial class MainWindow : Window
 	private void RenameExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
-        if (r == null) { return; }
+        if (r == null) { ShowMissingRequest(); return; }
 
         var dlg = new RenameRequest(r);
         using var blur = new DialogBackground(this, dlg);
@@ -288,15 +315,18 @@ public partial class MainWindow : Window
         var r = GetSelectedRequest();
         if (r == null)
         {
+			ShowMissingRequest();
             return;
         }
 
 
-        var fdlg = new OpenFileDialog();
-        fdlg.Title = "Browse post data";
-        fdlg.Filter = "Text files (json,txt,xml)|*.json;*.txt;*.xml|All files (*.*)|*.*";
-        fdlg.RestoreDirectory = true;
-        bool? dr = fdlg.ShowDialog();
+		var fdlg = new OpenFileDialog
+		{
+			Title = "Browse post data",
+			Filter = "Text files (json,txt,xml)|*.json;*.txt;*.xml|All files (*.*)|*.*",
+			RestoreDirectory = true
+		};
+		bool? dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
         r.TextContent = File.ReadAllText(fdlg.FileName);
@@ -316,10 +346,8 @@ public partial class MainWindow : Window
     private void FocusPostExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         var r = GetSelectedRequest();
-        if (r == null)
-        {
-            return;
-        }
+        if (r == null) { ShowMissingRequest(); return; }
+
         this.uiPost.Focus();
         this.uiPost.SelectAll();
     }
@@ -327,7 +355,7 @@ public partial class MainWindow : Window
     private void SelectRequest(int i1)
     {
         var g = this.Root.SelectedGroup;
-        if (g == null) { return; }
+        if (g == null) { ShowMissingGroup(); return; }
 
         int i = i1 - 1;
         if (i < 0) return;

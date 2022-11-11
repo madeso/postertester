@@ -164,10 +164,10 @@ public class Root : INotifyPropertyChanged
 		g.AddNewRequest();
 	}
 
-	public void DeleteSelectedRequest()
+	public bool DeleteSelectedRequest()
 	{
 		var g = this.SelectedGroup;
-		if (g == null) { return; }
+		if (g == null) { return false; }
 
 		var previous = g.SelectedRequest;
 		var next = g.DeleteSelectedRequest();
@@ -181,6 +181,10 @@ public class Root : INotifyPropertyChanged
 		{
 			this.RightCompare = next;
 		}
+
+		if(next == null) { return false; }
+
+		return true;
 	}
 
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -266,10 +270,10 @@ public class Root : INotifyPropertyChanged
 		AddGroup(g);
 	}
 
-	internal void ForgetGroup()
+	internal bool ForgetGroup()
 	{
-		if (this.SelectedGroup == null) { return; }
-		if (this.SelectedGroup.Builtin) { return; }
+		if (this.SelectedGroup == null) { return false; }
+		if (this.SelectedGroup.Builtin) { return false; }
 
 		Disk.SaveGroup(this.SelectedGroup);
 
@@ -277,5 +281,7 @@ public class Root : INotifyPropertyChanged
 		this.Groups.Remove(this.SelectedGroup);
 		index = Math.Min(index, this.Groups.Count - 1);
 		this.SelectedGroup = this.Groups[index];
+
+		return true;
 	}
 }
