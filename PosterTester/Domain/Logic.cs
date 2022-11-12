@@ -69,10 +69,9 @@ public static class Logic
 		}
 	}
 
-	private static readonly HttpClientHandler handler = new HttpClientHandler();
+	private static readonly HttpClientHandler handler = new();
 	private static readonly CookieContainer cookieContainer = handler.CookieContainer;
-	private static readonly HttpClient client = new HttpClient(handler);
-	// private static readonly HttpClient client = new HttpClient();
+	private static readonly HttpClient client = new(handler);
 
 
 	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent content)
@@ -124,8 +123,8 @@ public static class Logic
 		using var response = await GetResponse(action, url, content);
 		string responseBody = await response.Content.ReadAsStringAsync();
 
-		var resh = Data.Headers.Collect(response.Headers);
-		var conh = Data.Headers.Collect(response.Content.Headers);
+		var resh = Headers.Collect(response.Headers);
+		var conh = Headers.Collect(response.Content.Headers);
 
 		return new Response(status: response.StatusCode, body: responseBody, responseHeaders: resh);
 	}
