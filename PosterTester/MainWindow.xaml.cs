@@ -1,39 +1,15 @@
-using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Effects;
 using Microsoft.Win32;
 using PosterTester.Data;
 using PosterTester.Domain;
 using ScottPlot;
 
 namespace PosterTester;
-
-public class DialogBackground : IDisposable
-{
-    private Window Parent { get; }
-    public DialogBackground(Window parent, Window dialog)
-    {
-        this.Parent = parent;
-
-        parent.Opacity = 0.5;
-        parent.Effect = new BlurEffect();
-
-        dialog.Owner = parent;
-        dialog.ShowInTaskbar = false;
-        dialog.Topmost = true;
-    }
-
-    public void Dispose()
-    {
-        this.Parent.Opacity = 1;
-        this.Parent.Effect = null;
-    }
-}
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -78,9 +54,8 @@ public partial class MainWindow : Window
 
 	private void ShowError(string err)
 	{
-		// MessageBox.Show(this, err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		var dlg = new Dialogs.ExMessageBox(err, "Error", SystemIcons.Error);
-		using var blur = new DialogBackground(this, dlg);
+		using var blur = new DialogBackgroundWithDialog(this, dlg);
 		dlg.ShowDialog();
 	}
 
@@ -104,7 +79,7 @@ public partial class MainWindow : Window
 		// todo(Gustav): move settings to a custom class so we can clone and update...
 		var oldBin = this.Root.BinSize;
 		var dlg = new Dialogs.SettingsDialog(this.Root);
-		using var blur = new DialogBackground(this, dlg);
+		using var blur = new DialogBackgroundWithDialog(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
 			Save();
@@ -126,7 +101,7 @@ public partial class MainWindow : Window
 		if(group == null) { ShowMissingGroup(); return; }
 		var oldName = group.Name;
 		var dlg = new Dialogs.GroupSettings(group);
-		using var blur = new DialogBackground(this, dlg);
+		using var blur = new DialogBackgroundWithDialog(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
 			Save();
@@ -147,7 +122,7 @@ public partial class MainWindow : Window
 		AttackOptions? RunAttackDialog()
 		{
 			var dlg = new Dialogs.AttackDialog(this.Root.Attack.Clone());
-			using var blur = new DialogBackground(this, dlg);
+			using var blur = new DialogBackgroundWithDialog(this, dlg);
 			if (dlg.ShowDialog() ?? false)
 			{
 				return dlg.AttackOptions;
@@ -197,7 +172,9 @@ public partial class MainWindow : Window
 			RestoreDirectory = true,
 			DefaultExt = PostGroupExt
 		};
-        if (fdlg.ShowDialog() == false) { return; }
+
+		using var blur = new DialogBackground(this);
+		if (fdlg.ShowDialog() == false) { return; }
 
         this.Root.CreateNewGroup(fdlg.FileName);
         Save();
@@ -211,7 +188,8 @@ public partial class MainWindow : Window
 			Filter = PostGroupFilesFilter,
 			RestoreDirectory = true
 		};
-        if (fdlg.ShowDialog() == false) { return; }
+		using var blur = new DialogBackground(this);
+		if (fdlg.ShowDialog() == false) { return; }
 
         this.Root.AddExistingGroup(fdlg.FileName);
         Save();
@@ -280,7 +258,7 @@ public partial class MainWindow : Window
         if (r == null) { ShowMissingRequest(); return; }
 
         var dlg = new Dialogs.RenameRequest(r);
-        using var blur = new DialogBackground(this, dlg);
+        using var blur = new DialogBackgroundWithDialog(this, dlg);
         if (dlg.ShowDialog() ?? false)
         {
             r.Title = dlg.RequestTitle;
@@ -293,7 +271,7 @@ public partial class MainWindow : Window
 		string? error = null;
 		{
 			var dlg = new Dialogs.CompareRequests(this.Root);
-			using var blur = new DialogBackground(this, dlg);
+			using var blur = new DialogBackgroundWithDialog(this, dlg);
 			if (dlg.ShowDialog() ?? false)
 			{
 				error = this.Root.Compare();
@@ -308,12 +286,12 @@ public partial class MainWindow : Window
 
 	private void CompareAttackExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
-		var dlg = new Dialogs.CompareRequests(this.Root);
-		using var blur = new DialogBackground(this, dlg);
-		if (dlg.ShowDialog() ?? false)
+		var compareRequestsDialog = new Dialogs.CompareRequests(this.Root);
+		using var blur = new DialogBackgroundWithDialog(this, compareRequestsDialog);
+		if (compareRequestsDialog.ShowDialog() ?? false)
 		{
 			var displayDialog = true;
-			var dialog = new Dialogs.PlotDisplay(plot => {
+			var plotDisplayDialog = new Dialogs.PlotDisplay(plot => {
 				var msg = Plotter.ComparePlot(plot, this.Root.LeftCompare, this.Root.RightCompare, this.Root.BinSize);
 				if (msg != null)
 				{
@@ -324,7 +302,7 @@ public partial class MainWindow : Window
 
 			if(displayDialog)
 			{
-				dialog.ShowDialog();
+				plotDisplayDialog.ShowDialog();
 			}
 		}
 	}
@@ -345,6 +323,8 @@ public partial class MainWindow : Window
 			Filter = "Text files (json,txt,xml)|*.json;*.txt;*.xml|All files (*.*)|*.*",
 			RestoreDirectory = true
 		};
+
+		using var blur = new DialogBackground(this);
 		bool? dr = fdlg.ShowDialog();
         if (dr == false) { return; }
 
