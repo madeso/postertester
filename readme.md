@@ -19,11 +19,11 @@ Main GUI showing groups, url, mehtod dropdown and failed response from localhost
 Compare dialog
 
 
-![Histogram showing the response time of 50 attacks in the main GUI](data/attack-single.png)
+![Histogram showing the response time of 50 attacks in the main GUI. The rest of the gui is blurred, since theese are real numbers and the endpoints are under NDA](data/attack-single.png)
 The response times plotted after calling the endpoint 50 times in a row
 
-![A histogram showing 2 distinct response times. A blueish that never goes about 2.5 seconds and a redish that never goes below 5 seconds. The actual endooints are blured.](data/attack-compare.png)
-Compare the response time for 2 requests. Does 2 endpoins take the same time to "call"? Duplicate one request and test out some optimization? Your imagination is the limit!
+![A histogram showing 2 distinct response times. A blueish that never goes about 2.5 seconds and a redish that never goes below 5 seconds. The actual endooints are blured due to NDA.](data/attack-compare.png)
+Compare the response time for 2 requests. Does two different endpoints roughly take the same time? Duplicate one request and test out some optimization? Your imagination is the limit!
 
 
 ## Possible some time in the future (not necessarily in a specifc order)
