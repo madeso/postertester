@@ -15,7 +15,6 @@ public class RequestGroup : INotifyPropertyChanged
 	private Request? selectedRequest = null;
 	private ObservableCollection<Request> requests = new();
 	private Guid guid;
-	private Root? parentData;
 
 	public ObservableCollection<Request> Requests
 	{
@@ -72,15 +71,6 @@ public class RequestGroup : INotifyPropertyChanged
 		}
 	}
 
-	public Root? ParentData
-	{
-		get => parentData; internal set
-		{
-			parentData = value;
-			OnPropertyChanged();
-		}
-	}
-
 	public Action OnSelectionChanged { get; set; } = () => { };
 
 	public void AddNewRequest()
@@ -96,7 +86,6 @@ public class RequestGroup : INotifyPropertyChanged
 			r.Url = newUrl.Uri.AbsoluteUri;
 		}
 		this.Requests.Add(r);
-		r.ParentGroup = this;
 		this.SelectedRequest = r;
 	}
 
@@ -121,13 +110,5 @@ public class RequestGroup : INotifyPropertyChanged
 	protected void OnPropertyChanged([CallerMemberName] string? name = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-	}
-
-	internal void LinkParents()
-	{
-		foreach (var req in Requests)
-		{
-			req.ParentGroup = this;
-		}
 	}
 }

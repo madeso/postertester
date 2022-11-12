@@ -73,7 +73,6 @@ public class Root : INotifyPropertyChanged
 
 	private void LinkAddedGroup(RequestGroup group)
 	{
-		group.ParentData = this;
 		group.OnSelectionChanged += () => this.SelectionHasChanged();
 	}
 
@@ -272,7 +271,6 @@ public class Root : INotifyPropertyChanged
 			Builtin = false,
 			Guid = loaded.Guid
 		};
-		g.LinkParents();
 		g.SelectedRequest = g.Requests[0];
 		AddGroup(g);
 	}

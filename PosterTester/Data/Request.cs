@@ -20,7 +20,6 @@ public class Request : INotifyPropertyChanged
 	private AttackResult? attackResult;
 	private AttackOptions? attackOptions;
 	private Guid guid;
-	private RequestGroup? parentGroup;
 	private string plotStatus = string.Empty;
 
 	public string TitleOrUrl
@@ -134,10 +133,6 @@ public class Request : INotifyPropertyChanged
 		get => this._response; set
 		{
 			this._response = value;
-			if (value != null)
-			{
-				value.ParentRequest = this;
-			}
 			OnPropertyChanged();
 		}
 	}
@@ -165,15 +160,6 @@ public class Request : INotifyPropertyChanged
 		get => attackOptions; internal set
 		{
 			attackOptions = value;
-			OnPropertyChanged();
-		}
-	}
-
-	public RequestGroup? ParentGroup
-	{
-		get => parentGroup; internal set
-		{
-			parentGroup = value;
 			OnPropertyChanged();
 		}
 	}

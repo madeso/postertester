@@ -49,7 +49,6 @@ public class Response : INotifyPropertyChanged
 	private string _body;
 	private TimeSpan _time;
 	private Headers responseHeaders;
-	private Request? parentRequest;
 
 	public HttpStatusCode Status { get; }
 
@@ -76,15 +75,6 @@ public class Response : INotifyPropertyChanged
 		get => this._time; internal set
 		{
 			this._time = value;
-			OnPropertyChanged();
-		}
-	}
-
-	public Request? ParentRequest
-	{
-		get => parentRequest; internal set
-		{
-			parentRequest = value;
 			OnPropertyChanged();
 		}
 	}

@@ -178,8 +178,7 @@ public static class Disk
 							var headers = TransformHeaders(savedResponse.ResponseHeaders);
 							req.Response = new Response(status, body, headers)
 							{
-								Time = TimeSpan.FromSeconds(savedResponse.Seconds),
-								ParentRequest = req
+								Time = TimeSpan.FromSeconds(savedResponse.Seconds)
 							};
 						}
 
@@ -192,7 +191,7 @@ public static class Disk
 						}
 					}
 				}
-				var ret = new RequestGroup
+				return new RequestGroup
 				{
 					Requests = requests,
 					File = file,
@@ -201,8 +200,6 @@ public static class Disk
 					Guid = FromSavedGuid(sourceGroup.Guid),
 					SelectedRequest = sourceGroup.SelectedRequest == -1 ? null : requests[sourceGroup.SelectedRequest]
 				};
-				ret.LinkParents();
-				return ret;
 			}
 		}
 
