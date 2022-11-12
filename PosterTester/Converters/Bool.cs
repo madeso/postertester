@@ -1,4 +1,4 @@
-﻿namespace PosterTester.Converters;
+namespace PosterTester.Converters;
 
 using System;
 using System.Collections.Generic;
@@ -9,17 +9,18 @@ using System.Windows.Data;
 
 public class BooleanConverter<T> : IValueConverter
 {
-    public BooleanConverter(T trueValue, T falseValue)
+    public BooleanConverter(T? trueValue, T? falseValue)
     {
         this.True = trueValue;
         this.False = falseValue;
     }
 
-    public T True { get; set; }
-    public T False { get; set; }
+    public T? True { get; set; }
+    public T? False { get; set; }
 
-    public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public virtual object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
+		if (value == null) { return this.False; }
         return value is bool && ((bool)value) ? this.True : this.False;
     }
 
@@ -34,5 +35,6 @@ public sealed class BooleanToVisibilityConverter : BooleanConverter<Visibility>
 {
     public BooleanToVisibilityConverter() :
         base(Visibility.Visible, Visibility.Collapsed)
-    { }
+    {
+	}
 }

@@ -64,7 +64,7 @@ public partial class MainWindow : Window
 		Disk.Save(this.Root);
 	}
 
-    private Request GetSelectedRequest()
+    private Request? GetSelectedRequest()
     {
         var g = this.Root.SelectedGroup;
         if (g == null) { return null; }
@@ -142,22 +142,22 @@ public partial class MainWindow : Window
 		ShowError("No group is selected!");
 	}
 
-	private AttackOptions RunAttackDialog()
-	{
-		var dlg = new Dialogs.AttackDialog(this.Root.Attack.Clone());
-		using var blur = new DialogBackground(this, dlg);
-		if (dlg.ShowDialog() ?? false)
-		{
-			return dlg.AttackOptions;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 	private async void AttackExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
+		AttackOptions? RunAttackDialog()
+		{
+			var dlg = new Dialogs.AttackDialog(this.Root.Attack.Clone());
+			using var blur = new DialogBackground(this, dlg);
+			if (dlg.ShowDialog() ?? false)
+			{
+				return dlg.AttackOptions;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
 		var r = GetSelectedRequest();
 		if (r == null) { ShowMissingRequest(); return; }
 
@@ -177,8 +177,9 @@ public partial class MainWindow : Window
 		}
 	}
 
-	private void UpdatePlotForRequest(Request r)
+	private void UpdatePlotForRequest(Request? r)
 	{
+		if(r== null) { return; }
 		Plotter.Plot(this.dlgPlot, r, this.Root.BinSize);
 	}
 
@@ -189,13 +190,14 @@ public partial class MainWindow : Window
 
 	public void CreateNewGroupExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var fdlg = new SaveFileDialog();
-        fdlg.Title = "Create new group";
-        fdlg.Filter = PostGroupFilesFilter;
-        fdlg.RestoreDirectory = true;
-        fdlg.DefaultExt = PostGroupExt;
-        bool? dr = fdlg.ShowDialog();
-        if (dr == false) { return; }
+		var fdlg = new SaveFileDialog
+		{
+			Title = "Create new group",
+			Filter = PostGroupFilesFilter,
+			RestoreDirectory = true,
+			DefaultExt = PostGroupExt
+		};
+        if (fdlg.ShowDialog() == false) { return; }
 
         this.Root.CreateNewGroup(fdlg.FileName);
         Save();
@@ -203,12 +205,13 @@ public partial class MainWindow : Window
 
     public void AddExistingGroupExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var fdlg = new OpenFileDialog();
-        fdlg.Title = "Select existing group file";
-        fdlg.Filter = PostGroupFilesFilter;
-        fdlg.RestoreDirectory = true;
-        bool? dr = fdlg.ShowDialog();
-        if (dr == false) { return; }
+		var fdlg = new OpenFileDialog
+		{
+			Title = "Select existing group file",
+			Filter = PostGroupFilesFilter,
+			RestoreDirectory = true
+		};
+        if (fdlg.ShowDialog() == false) { return; }
 
         this.Root.AddExistingGroup(fdlg.FileName);
         Save();
@@ -230,8 +233,11 @@ public partial class MainWindow : Window
         if (r == null) { ShowMissingRequest(); return; }
 
         r.TextContent = Logic.FormatJsonOrNot(r.TextContent);
-        r.Response.Body = Logic.FormatJsonOrNot(r.Response.Body);
-        Save();
+		if(r.Response != null)
+		{
+			r.Response.Body = Logic.FormatJsonOrNot(r.Response.Body);
+		}
+		Save();
     }
 
     private void NewRequestExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -284,7 +290,7 @@ public partial class MainWindow : Window
 
     private void CompareExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-		string error = null;
+		string? error = null;
 		{
 			var dlg = new Dialogs.CompareRequests(this.Root);
 			using var blur = new DialogBackground(this, dlg);

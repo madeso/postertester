@@ -8,24 +8,32 @@ namespace PosterTester.Dialogs;
 
 public class RenameRequestData : INotifyPropertyChanged
 {
-    private string newDisplay;
-    private string oldDisplay;
-    private string title;
+    private string _newDisplay;
+    private string _oldDisplay;
+    private string _title;
 
-    public string Url { get; set; }
+	public RenameRequestData(string oldDisplay, string title, string url)
+	{
+		this._newDisplay = Data.Request.CalculateDisplay(url, title);
+		this._oldDisplay = oldDisplay;
+		this._title = title;
+		this.Url = url;
+	}
 
-    public string NewDisplay { get => this.newDisplay; set { this.newDisplay = value; OnPropertyChanged(); } }
-    public string OldDisplay { get => this.oldDisplay; set { this.oldDisplay = value; OnPropertyChanged(); } }
-    public string Title { get => this.title; set { this.title = value; OnPropertyChanged(); UpdateTitle(); } }
+	public string Url { get; set; }
+
+    public string NewDisplay { get => this._newDisplay; set { this._newDisplay = value; OnPropertyChanged(); } }
+    public string OldDisplay { get => this._oldDisplay; set { this._oldDisplay = value; OnPropertyChanged(); } }
+    public string Title { get => this._title; set { this._title = value; OnPropertyChanged(); UpdateTitle(); } }
 
     private void UpdateTitle()
     {
         this.NewDisplay = Data.Request.CalculateDisplay(this.Url, this.Title);
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected void OnPropertyChanged([CallerMemberName] string name = null)
+    protected void OnPropertyChanged([CallerMemberName] string? name = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
@@ -38,12 +46,11 @@ public partial class RenameRequest : Window
     public RenameRequest(Data.Request r)
     {
         InitializeComponent();
-        this.data = new RenameRequestData()
-        {
-            Url = r.Url,
-            OldDisplay = r.TitleOrUrl,
-            Title = r.Title
-        };
+        this.data = new RenameRequestData(
+            url: r.Url,
+            oldDisplay: r.TitleOrUrl,
+            title: r.Title
+        );
         this.DataContext = this.data;
     }
 

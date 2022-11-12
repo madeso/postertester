@@ -52,7 +52,7 @@ public static class Logic
 {
 	private static string FormatJson(string t)
 	{
-		object obj = JsonConvert.DeserializeObject(t);
+		object? obj = JsonConvert.DeserializeObject(t);
 		string f = JsonConvert.SerializeObject(obj, Formatting.Indented);
 		return f;
 	}
@@ -74,15 +74,15 @@ public static class Logic
 	private static readonly HttpClient client = new(handler);
 
 
-	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent content)
+	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent? content)
 	{
 		return action switch
 		{
 			HttpMethod.Get => await client.GetAsync(url),
-			HttpMethod.Post => await client.PostAsync(url, content),
-			HttpMethod.Put => await client.PutAsync(url, content),
+			HttpMethod.Post => await client.PostAsync(url, content!),
+			HttpMethod.Put => await client.PutAsync(url, content!),
 			HttpMethod.Delete => await client.DeleteAsync(url),
-			HttpMethod.Patch => await client.PatchAsync(url, content),
+			HttpMethod.Patch => await client.PatchAsync(url, content!),
 
 			_ => throw new Exception($"Invalid action: {action}"),
 		};
@@ -115,7 +115,7 @@ public static class Logic
 		return new StringContent(t, Encoding.UTF8, "application/json");
 	}
 
-	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
+	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content)
 	{
 		// todo(Gustav): expose and enrich headers
 		var headers = client.DefaultRequestHeaders.ToArray();
@@ -189,8 +189,28 @@ public static class Logic
 
 	internal class SingleAttackResult
 	{
-		public string Error { get; set; }
-		public TimeSpan Result { get; set; }
+		private SingleAttackResult(string error)
+		{
+			this.Error = error;
+		}
+
+		private SingleAttackResult(TimeSpan result)
+		{
+			this.Result = result;
+		}
+
+		public string? Error { get; private set; }
+		public TimeSpan Result { get; private set; }
+
+		public static SingleAttackResult FromSuccess(TimeSpan sp)
+		{
+			return new SingleAttackResult(sp);
+		}
+
+		public static SingleAttackResult FromError(String error)
+		{
+			return new SingleAttackResult(error);
+		}
 	}
 
 
@@ -203,13 +223,13 @@ public static class Logic
 			// todo(Gustav): verify data...
 			if (data.Status != HttpStatusCode.OK)
 			{
-				return new SingleAttackResult { Error = data.Body };
+				return SingleAttackResult.FromError(data.Body);
 			}
 			else
 			{
 				var end = DateTime.Now;
 				var time = end.Subtract(start);
-				return new SingleAttackResult { Result = time };
+				return SingleAttackResult.FromSuccess(time);
 			}
 		}
 		catch (Exception xx)
@@ -223,11 +243,11 @@ public static class Logic
 				x = x.InnerException;
 			}
 
-			return new SingleAttackResult { Error = builder };
+			return SingleAttackResult.FromError(builder);
 		}
 	}
 
-	internal static async Task<AttackResult> Attack(Root root, Request r)
+	internal static async Task<AttackResult?> Attack(Root root, Request r)
 	{
 		// silently ignore double commands
 		if (r.IsWorking == true) { return null; }

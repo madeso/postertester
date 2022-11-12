@@ -8,14 +8,14 @@ namespace PosterTester.Data;
 
 public class RequestGroup : INotifyPropertyChanged
 {
-	private bool _builtin;
-	private string _name;
-	private string _file;
+	private bool _builtin = false;
+	private string _name = "";
+	private string _file = "";
 
-	private Request selectedRequest = null;
+	private Request? selectedRequest = null;
 	private ObservableCollection<Request> requests = new();
 	private Guid guid;
-	private Root parentData;
+	private Root? parentData;
 
 	public ObservableCollection<Request> Requests
 	{
@@ -26,7 +26,7 @@ public class RequestGroup : INotifyPropertyChanged
 		}
 	}
 
-	public Request SelectedRequest
+	public Request? SelectedRequest
 	{
 		get => this.selectedRequest; set
 		{
@@ -72,7 +72,7 @@ public class RequestGroup : INotifyPropertyChanged
 		}
 	}
 
-	public Root ParentData
+	public Root? ParentData
 	{
 		get => parentData; internal set
 		{
@@ -101,7 +101,7 @@ public class RequestGroup : INotifyPropertyChanged
 	}
 
 	// return the next selected request (or null)
-	public Request DeleteSelectedRequest()
+	public Request? DeleteSelectedRequest()
 	{
 		if (this.SelectedRequest == null) { return null; }
 		if (this.Requests.Count <= 1) { return null; }
@@ -116,9 +116,9 @@ public class RequestGroup : INotifyPropertyChanged
 		return nextRequest;
 	}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected void OnPropertyChanged([CallerMemberName] string name = null)
+	protected void OnPropertyChanged([CallerMemberName] string? name = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}

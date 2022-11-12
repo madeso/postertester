@@ -11,17 +11,17 @@ public class Request : INotifyPropertyChanged
 	private string _url = "http://localhost:8080/";
 	private string _title = "";
 	private string _textConent = string.Empty;
-	private Response _response = null;
+	private Response? _response = null;
 	private bool _isWorking = false;
 	private ContentType _contentType = ContentTypeJson.Instance;
 
 	private string _titleOrUrl = "";
 	private bool _hasPost = false;
-	private AttackResult attackResult;
-	private AttackOptions attackOptions;
+	private AttackResult? attackResult;
+	private AttackOptions? attackOptions;
 	private Guid guid;
-	private RequestGroup parentGroup;
-	private string plotStatus;
+	private RequestGroup? parentGroup;
+	private string plotStatus = string.Empty;
 
 	public string TitleOrUrl
 	{
@@ -129,7 +129,7 @@ public class Request : INotifyPropertyChanged
 		}
 	}
 
-	public Response Response
+	public Response? Response
 	{
 		get => this._response; set
 		{
@@ -151,7 +151,7 @@ public class Request : INotifyPropertyChanged
 		}
 	}
 
-	public AttackResult AttackResult
+	public AttackResult? AttackResult
 	{
 		get => attackResult; internal set
 		{
@@ -160,7 +160,7 @@ public class Request : INotifyPropertyChanged
 		}
 	}
 
-	public AttackOptions AttackOptions
+	public AttackOptions? AttackOptions
 	{
 		get => attackOptions; internal set
 		{
@@ -169,7 +169,7 @@ public class Request : INotifyPropertyChanged
 		}
 	}
 
-	public RequestGroup ParentGroup
+	public RequestGroup? ParentGroup
 	{
 		get => parentGroup; internal set
 		{
@@ -187,9 +187,9 @@ public class Request : INotifyPropertyChanged
 		}
 	}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected void OnPropertyChanged([CallerMemberName] string name = null)
+	protected void OnPropertyChanged([CallerMemberName] string? name = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}

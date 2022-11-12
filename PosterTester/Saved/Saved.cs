@@ -18,10 +18,10 @@ public enum ContentType
 public class Request
 {
 	[JsonProperty("url")]
-	public string Url { get; set; }
+	public string? Url { get; set; }
 
 	[JsonProperty("title")]
-	public string Title { get; set; }
+	public string? Title { get; set; }
 
 	[JsonProperty("method")]
 	public HttpMethod Method { get; set; }
@@ -30,34 +30,34 @@ public class Request
 	public ContentType ContentType { get; set; }
 
 	[JsonProperty("post")]
-	public string TextContent { get; set; }
+	public string? TextContent { get; set; }
 
 	[JsonProperty("guid")]
-	public string Guid { get; internal set; }
+	public string? Guid { get; internal set; }
 }
 
 public class RequestsFile
 {
 	[JsonProperty("requests")]
-	public Request[] Requests { get; set; }
+	public Request[]? Requests { get; set; }
 
 	[JsonProperty("guid")]
-	public string Guid { get; internal set; }
+	public string? Guid { get; internal set; }
 }
 
 public class HeaderRow
 {
 	[JsonProperty("name")]
-	public string Name { get; set; }
+	public string? Name { get; set; }
 
 	[JsonProperty("values")]
-	public string[] Values { get; set; }
+	public string[]? Values { get; set; }
 }
 
 public class Headers
 {
 	[JsonProperty("rows")]
-	public HeaderRow[] Rows { get; set; }
+	public HeaderRow[]? Rows { get; set; }
 }
 
 public class Attack
@@ -69,16 +69,16 @@ public class Attack
 	public int AttackCount { get; internal set; }
 
 	[JsonProperty("got_errors")]
-	public string[] AttackErrors { get; internal set; }
+	public string[]? AttackErrors { get; internal set; }
 
 	[JsonProperty("got_result")]
-	public double[] AttackResult { get; internal set; }
+	public double[]? AttackResult { get; internal set; }
 }
 
 public class Response
 {
 	[JsonProperty("body")]
-	public string Body { get; set; }
+	public string? Body { get; set; }
 
 	[JsonProperty("status")]
 	public int Status { get; set; }
@@ -87,19 +87,19 @@ public class Response
 	public double Seconds { get; internal set; }
 
 	[JsonProperty("response_headers")]
-	public Headers ResponseHeaders { get; internal set; }
+	public Headers? ResponseHeaders { get; internal set; }
 }
 
 public class Result
 {
 	[JsonProperty("response")]
-	public Response Response { get; internal set; }
+	public Response? Response { get; internal set; }
 
 	[JsonProperty("attack")]
-	public Attack Attack { get; internal set; }
+	public Attack? Attack { get; internal set; }
 
 	[JsonProperty("guid")]
-	public string Guid { get; internal set; }
+	public string? Guid { get; internal set; }
 }
 
 public class Group
@@ -108,16 +108,16 @@ public class Group
 	public int SelectedRequest { get; set; }
 
 	[JsonProperty("result")]
-	public Result[] Results { get; set; }
+	public Result[]? Results { get; set; }
 
 	[JsonProperty("file")]
-	public string File { get; set; }
+	public string? File { get; set; }
 
 	[JsonProperty("name")]
-	public string Name { get; set; }
+	public string? Name { get; set; }
 
 	[JsonProperty("guid")]
-	public string Guid { get; internal set; }
+	public string? Guid { get; internal set; }
 
 	public const string BuiltinFile = "<my requests>";
 }
@@ -134,16 +134,16 @@ public class RequestInGroup
 public class Root
 {
 	[JsonProperty("groups")]
-	public Group[] Groups { get; set; }
+	public Group[]? Groups { get; set; }
 
 	[JsonProperty("selected_group")]
 	public int SelectedGroup { get; set; }
 
 	[JsonProperty("left_compare")]
-	public RequestInGroup LeftCompare { get; set; }
+	public RequestInGroup? LeftCompare { get; set; }
 
 	[JsonProperty("right_compare")]
-	public RequestInGroup RightCompare { get; set; }
+	public RequestInGroup? RightCompare { get; set; }
 
 	[JsonProperty("format_response")]
 	public bool FormatResponse { get; set; } = false;

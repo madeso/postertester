@@ -11,11 +11,11 @@ namespace PosterTester.Data;
 
 public class Root : INotifyPropertyChanged
 {
-	private Request leftCompare = null;
-	private Request rightCompare = null;
-	private RequestGroup selectedRequest = null;
-	private RequestGroup leftGroup = null;
-	private RequestGroup rightGroup = null;
+	private Request? leftCompare = null;
+	private Request? rightCompare = null;
+	private RequestGroup? selectedRequest = null;
+	private RequestGroup? leftGroup = null;
+	private RequestGroup? rightGroup = null;
 	private ObservableCollection<RequestGroup> requests = new();
 	private bool _formatResponse = true;
 	private AttackOptions attack = new AttackOptions();
@@ -45,7 +45,7 @@ public class Root : INotifyPropertyChanged
 		}
 	}
 
-	public RequestGroup SelectedGroup
+	public RequestGroup? SelectedGroup
 	{
 		get => this.selectedRequest; set
 		{
@@ -77,7 +77,7 @@ public class Root : INotifyPropertyChanged
 		group.OnSelectionChanged += () => this.SelectionHasChanged();
 	}
 
-	public RequestGroup LeftGroup
+	public RequestGroup? LeftGroup
 	{
 		get => this.leftGroup; set
 		{
@@ -87,7 +87,7 @@ public class Root : INotifyPropertyChanged
 		}
 	}
 
-	public RequestGroup RightGroup
+	public RequestGroup? RightGroup
 	{
 		get => this.rightGroup; set
 		{
@@ -121,7 +121,7 @@ public class Root : INotifyPropertyChanged
 		ContentTypeText.Instance
 	};
 
-	public Request LeftCompare
+	public Request? LeftCompare
 	{
 		get => this.leftCompare; set
 		{
@@ -130,7 +130,7 @@ public class Root : INotifyPropertyChanged
 		}
 	}
 
-	public Request RightCompare
+	public Request? RightCompare
 	{
 		get => this.rightCompare; set
 		{
@@ -188,14 +188,14 @@ public class Root : INotifyPropertyChanged
 		return true;
 	}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected void OnPropertyChanged([CallerMemberName] string name = null)
+	protected void OnPropertyChanged([CallerMemberName] string? name = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}
 
-	internal string Compare()
+	internal string? Compare()
 	{
 		var lhs = this.LeftCompare;
 		var rhs = this.RightCompare;
@@ -249,11 +249,11 @@ public class Root : INotifyPropertyChanged
 	private static string GuessGroupName(string fileName)
 	{
 		var info = new FileInfo(fileName);
-		string gitfolder = Path.Join(info.Directory.FullName, ".git");
+		string gitfolder = Path.Join(info.Directory?.FullName, ".git");
 		string name = Path.GetFileNameWithoutExtension(fileName);
 		if (new DirectoryInfo(gitfolder).Exists)
 		{
-			return $"{name} for {info.Directory.Name}";
+			return $"{name} for {info.Directory?.Name}";
 		}
 		else
 		{

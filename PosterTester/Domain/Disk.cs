@@ -81,14 +81,25 @@ public static class Disk
 	private static T ReadFile<T>(string path)
 	{
 		string data = File.ReadAllText(path);
-		return JsonConvert.DeserializeObject<T>(data);
+		var parsed = JsonConvert.DeserializeObject<T>(data);
+		if(parsed == null)
+		{
+			throw new Exception(@"Failed to parse json {path}");
+		}
+		return parsed;
 	}
 
 
 	internal class RequestsWithGuid
 	{
-		public ObservableCollection<Request> Requests { get; internal set; }
-		public Guid Guid { get; internal set; }
+		public RequestsWithGuid(ObservableCollection<Request> requests, Guid guid)
+		{
+			this.Requests = requests;
+			this.Guid = guid;
+		}
+
+		public ObservableCollection<Request> Requests { get; private set; }
+		public Guid Guid { get; private set; }
 	}
 
 
@@ -117,19 +128,19 @@ public static class Disk
 		}
 
 		var json = ReadFile<Saved.RequestsFile>(file);
-		var req = json.Requests.Select(ToReq).ToObservableCollectionOrEmpty();
-		return new RequestsWithGuid { Requests = req, Guid = FromSavedGuid(json.Guid) };
+		var req = json.Requests?.Select(ToReq);
+		return new RequestsWithGuid(req.ToObservableCollectionOrEmpty(), FromSavedGuid(json?.Guid));
 	}
 
 	private static Root Load(string file)
 	{
-		static Headers TransformHeaders(Saved.Headers src)
+		static Headers TransformHeaders(Saved.Headers? src)
 		{
 			if (src == null) { return new Headers(); }
-			return new Headers { Rows = src.Rows.Select(x => new Headers.HeaderRow { Name = x.Name, Values = x.Values }).ToArray() };
+			return new Headers { Rows = src.Rows.Select(x => new Headers.Row(x.Name, x.Values)).ToArray() };
 		}
 
-		static RequestGroup TransformGroupOrNull(Saved.Group sourceGroup)
+		static RequestGroup? TransformGroupOrNull(Saved.Group sourceGroup)
 		{
 			bool isbuiltin = sourceGroup.File == Saved.Group.BuiltinFile;
 			string file = isbuiltin ? PathToMyRequests : sourceGroup.File;
@@ -154,6 +165,7 @@ public static class Disk
 					foreach (var saved in sourceGroup.Results)
 					{
 						if (saved == null) { continue; }
+						if(saved.Guid == null) { continue; }
 
 						var req = reqDict[saved.Guid];
 						if (req == null) { continue; }
@@ -162,7 +174,7 @@ public static class Disk
 						if (savedResponse != null)
 						{
 							var status = IntToStatus(savedResponse.Status);
-							string body = savedResponse.Body;
+							string body = savedResponse.Body ?? string.Empty;
 							var headers = TransformHeaders(savedResponse.ResponseHeaders);
 							req.Response = new Response(status, body, headers)
 							{
@@ -172,7 +184,7 @@ public static class Disk
 						}
 
 						var attack = saved.Attack;
-						if (attack != null)
+						if (attack != null && attack.AttackResult != null)
 						{
 							req.AttackOptions = new AttackOptions { AtTheSameTime = attack.AttackAtTheSameTime, Count = attack.AttackCount };
 							var spans = attack.AttackResult.Select(x => TimeSpan.FromMilliseconds(x));
@@ -194,14 +206,14 @@ public static class Disk
 			}
 		}
 
-		static RequestGroup FindGroup(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
+		static RequestGroup? FindGroup(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup? i)
 		{
 			if (i == null) { return null; }
 			if (i.Group == -1) { return null; }
 			return groups[i.Group];
 		}
 
-		static Request FindRequest(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup i)
+		static Request? FindRequest(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup? i)
 		{
 			if (i == null) { return null; }
 			if (i.Group == -1) { return null; }
@@ -210,7 +222,7 @@ public static class Disk
 		}
 
 		var container = ReadFile<Saved.Root>(file);
-		var rc = container.Groups.Select(TransformGroupOrNull).Where(x => x != null);
+		var rc = container.Groups?.Select(TransformGroupOrNull).NotNull();
 		var groups = rc.ToObservableCollectionOrEmpty();
 		return new Root
 		{
@@ -261,7 +273,7 @@ public static class Disk
 		WriteJson(writer, rf, g.File);
 	}
 
-	private static void VerifyGuids(IEnumerable<string> itguids)
+	private static void VerifyGuids(IEnumerable<string?> itguids)
 	{
 		var guids = itguids.ToArray();
 		var dist = guids.Distinct().Count();
@@ -310,7 +322,7 @@ public static class Disk
 			};
 		}
 
-		Saved.RequestInGroup FindRequest(RequestGroup g, Request r)
+		Saved.RequestInGroup? FindRequest(RequestGroup? g, Request? r)
 		{
 			if (g == null) { return null; }
 			if (r == null) { return null; }
@@ -327,7 +339,7 @@ public static class Disk
 		{
 			BinSize = data.BinSize,
 			Groups = data.Groups.Select(x => TransformGroup(writer, x)).ToArray(),
-			SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),
+			SelectedGroup = FindGroup(data.Groups, data.SelectedGroup),
 			LeftCompare = FindRequest(data.LeftGroup, data.LeftCompare),
 			RightCompare = FindRequest(data.RightGroup, data.RightCompare),
 			FormatResponse = data.FormatResponse,
@@ -337,6 +349,12 @@ public static class Disk
 		};
 		VerifyGuids(jsonFile.Groups.Select(x => x.Guid));
 		WriteJson(writer, jsonFile, file);
+
+		static int FindGroup(ObservableCollection<RequestGroup> groups, RequestGroup? selectedGroup)
+		{
+			if (selectedGroup == null) { return -1; }
+			return groups.IndexOf(selectedGroup);
+		}
 	}
 
 	private static string ToSaved(Guid guid)
@@ -348,7 +366,7 @@ public static class Disk
 		return guid.ToString("D");
 	}
 
-	private static Guid FromSavedGuid(string guid)
+	private static Guid FromSavedGuid(string? guid)
 	{
 		if (string.IsNullOrEmpty(guid))
 		{

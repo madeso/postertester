@@ -74,11 +74,11 @@ internal static class Plotter
 		plt.XAxis.Label(string.Empty);
 	}
 
-	private static string SinglePlot(Request r, Plot plt, double binSize)
+	private static string? SinglePlot(Request r, Plot plt, double binSize)
 	{
 		if (CanPlot(r) == false) { return "Nothing to plot"; }
 
-		var attack = r.AttackOptions;
+		var attack = r.AttackOptions!;
 
 		var color = COLORS[GetColorIndex(r)];
 
@@ -147,13 +147,17 @@ internal static class Plotter
 
 	private static double[] ExtractPlottable(Request r)
 	{
-		return r.AttackResult.Result.Select(x => x.TotalMilliseconds).ToArray();
+		return r.AttackResult!.Result.Select(x => x.TotalMilliseconds).ToArray();
 	}
 
-	internal static string ComparePlot(Plot plt, Request leftCompare, Request rightCompare, double binSize)
+	internal static string? ComparePlot(Plot plt, Request? leftCompare, Request? rightCompare, double binSize)
 	{
 		if (CanPlot(leftCompare) == false || CanPlot(rightCompare) == false) { return "Nothing to plot"; }
+		else return PleaseComparePlot(plt, leftCompare!, rightCompare!, binSize);
+	}
 
+	internal static string? PleaseComparePlot(Plot plt, Request leftCompare, Request rightCompare, double binSize)
+	{
 		var heightsMale = ExtractPlottable(leftCompare);
 		var heightsFemale = ExtractPlottable(rightCompare);
 
@@ -222,7 +226,7 @@ internal static class Plotter
 		return null;
 	}
 
-	private static bool CanPlot(Request r)
+	private static bool CanPlot(Request? r)
 	{
 		return r != null && r.AttackResult != null && r.AttackOptions != null;
 	}

@@ -10,13 +10,19 @@ namespace PosterTester.Data;
 
 public class Headers
 {
-	public class HeaderRow
+	public class Row
 	{
-		public string Name { get; set; }
-		public string[] Values { get; set; }
+		public Row(string name, string[] values)
+		{
+			this.Name = name;
+			this.Values = values;
+		}
+
+		public string Name { get; private set; }
+		public string[] Values { get; private set; }
 	}
 
-	public HeaderRow[] Rows { get; set; } = Array.Empty<HeaderRow>();
+	public Row[] Rows { get; set; } = Array.Empty<Row>();
 
 	internal static Headers Collect(HttpResponseHeaders src)
 	{
@@ -28,12 +34,12 @@ public class Headers
 		return new Headers { Rows = CollectToRows(src).ToArray() };
 	}
 
-	private static IEnumerable<HeaderRow> CollectToRows<T>(T src)
+	private static IEnumerable<Row> CollectToRows<T>(T src)
 		where T : IEnumerable<KeyValuePair<string, IEnumerable<string>>>
 	{
 		foreach (var e in src)
 		{
-			yield return new HeaderRow { Name = e.Key, Values = e.Value.ToArray() };
+			yield return new Row(e.Key, e.Value.ToArray());
 		}
 	}
 }
@@ -43,7 +49,7 @@ public class Response : INotifyPropertyChanged
 	private string _body;
 	private TimeSpan _time;
 	private Headers responseHeaders;
-	private Request parentRequest;
+	private Request? parentRequest;
 
 	public HttpStatusCode Status { get; }
 
@@ -74,7 +80,7 @@ public class Response : INotifyPropertyChanged
 		}
 	}
 
-	public Request ParentRequest
+	public Request? ParentRequest
 	{
 		get => parentRequest; internal set
 		{
@@ -86,14 +92,14 @@ public class Response : INotifyPropertyChanged
 	public Response(HttpStatusCode status, string body, Headers responseHeaders)
 	{
 		this.Status = status;
-		this.Body = body;
-		this.ResponseHeaders = responseHeaders;
+		this._body = body;
+		this.responseHeaders = responseHeaders;
 	}
 
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected void OnPropertyChanged([CallerMemberName] string name = null)
+	protected void OnPropertyChanged([CallerMemberName] string? name = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}
