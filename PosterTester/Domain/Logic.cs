@@ -17,41 +17,41 @@ using Newtonsoft.Json.Converters;
 using PosterTester.Data;
 using PosterTester.Data.Saved;
 
-namespace PosterTester;
+namespace PosterTester.Domain;
 
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum HttpMethod
 {
-    [EnumMember(Value = "get")]
-    Get,
-    // Head,
+	[EnumMember(Value = "get")]
+	Get,
+	// Head,
 
-    [EnumMember(Value = "post")]
-    Post,
+	[EnumMember(Value = "post")]
+	Post,
 
-    [EnumMember(Value = "put")]
-    Put,
+	[EnumMember(Value = "put")]
+	Put,
 
-    [EnumMember(Value = "delete")]
-    Delete,
-    // Connect,
-    // Options,
-    // Trace,
+	[EnumMember(Value = "delete")]
+	Delete,
+	// Connect,
+	// Options,
+	// Trace,
 
-    [EnumMember(Value = "patch")]
-    Patch
+	[EnumMember(Value = "patch")]
+	Patch
 
-    // Link,
-    // Unlink,
-    // Purge,
-    // View,
+	// Link,
+	// Unlink,
+	// Purge,
+	// View,
 
-    // web dav
-    // Copy,
-    // Lock,
-    // PropFind,
-    // Unlock
+	// web dav
+	// Copy,
+	// Lock,
+	// PropFind,
+	// Unlock
 }
 
 internal class SingleAttackResult
@@ -65,7 +65,7 @@ public static class Logic
 	private static string FormatJson(string t)
 	{
 		object obj = JsonConvert.DeserializeObject(t);
-		string f = JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented);
+		string f = JsonConvert.SerializeObject(obj, Formatting.Indented);
 		return f;
 	}
 
@@ -167,7 +167,7 @@ public static class Logic
 		catch (Exception xx)
 		{
 			var end = DateTime.Now;
-			string builder = String.Empty;
+			string builder = string.Empty;
 
 			var x = xx;
 			while (x != null)
@@ -220,7 +220,7 @@ public static class Logic
 		}
 		catch (Exception xx)
 		{
-			string builder = String.Empty;
+			string builder = string.Empty;
 
 			var x = xx;
 			while (x != null)
@@ -243,11 +243,11 @@ public static class Logic
 		var attack = root.Attack.Clone();
 		var ret = new AttackResult();
 
-		if(attack.AtTheSameTime)
+		if (attack.AtTheSameTime)
 		{
 			var tasks = Enumerable.Range(0, attack.Count).Select(i => SingleAttack(r));
 			var results = await Task.WhenAll(tasks);
-			foreach (SingleAttackResult callResult in results)
+			foreach (var callResult in results)
 			{
 				AddAttackResult(ret, callResult);
 			}

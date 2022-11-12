@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media.Effects;
 using Microsoft.Win32;
 using PosterTester.Data;
+using PosterTester.Domain;
 using ScottPlot;
 
 namespace PosterTester;

@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace PosterTester;
+namespace PosterTester.Extensions;
 
-public static class Extensions
+public static class EnumerableExtensions
 {
 	public static ObservableCollection<T> ToObservableCollectionOrEmpty<T>(this IEnumerable<T> col)
 	{
-		if(col == null)
+		if (col == null)
 		{
 			return new ObservableCollection<T>();
 		}

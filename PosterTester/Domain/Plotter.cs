@@ -9,7 +9,7 @@ using PosterTester.Data;
 using ScottPlot;
 using ScottPlot.Control.EventProcess.Events;
 
-namespace PosterTester;
+namespace PosterTester.Domain;
 
 internal static class Plotter
 {
@@ -41,7 +41,7 @@ internal static class Plotter
 	{
 		var arr = rq.Guid.ToByteArray();
 		int r = 0;
-		foreach(var b in arr)
+		foreach (var b in arr)
 		{
 			r += b;
 		}
@@ -52,14 +52,14 @@ internal static class Plotter
 	{
 		var plt = wpf.Plot;
 
-		r.PlotStatus = String.Empty;
+		r.PlotStatus = string.Empty;
 
 		CleanPlot(plt);
 		var status = SinglePlot(r, plt, binSize);
 
 		wpf.Refresh();
 
-		if(status != null)
+		if (status != null)
 		{
 			r.PlotStatus = status;
 		}
@@ -68,29 +68,29 @@ internal static class Plotter
 	private static void CleanPlot(Plot plt)
 	{
 		plt.Clear();
-		plt.Title(String.Empty);
-		plt.YAxis.Label(String.Empty);
-		plt.YAxis2.Label(String.Empty);
-		plt.XAxis.Label(String.Empty);
+		plt.Title(string.Empty);
+		plt.YAxis.Label(string.Empty);
+		plt.YAxis2.Label(string.Empty);
+		plt.XAxis.Label(string.Empty);
 	}
 
 	private static string SinglePlot(Request r, Plot plt, double binSize)
 	{
 		if (CanPlot(r) == false) { return "Nothing to plot"; }
 
-		Data.AttackOptions attack = r.AttackOptions;
+		var attack = r.AttackOptions;
 
 		var color = COLORS[GetColorIndex(r)];
 
 		var values = ExtractPlottable(r);
 
-		plt.Palette = ScottPlot.Palette.Microcharts;
+		plt.Palette = Palette.Microcharts;
 
 		var mi = values.Min();
 		var ma = values.Max();
 
 		var diff = ma - mi;
-		if(diff < binSize)
+		if (diff < binSize)
 		{
 			return $"Bin size needs to be less than {diff}";
 		}
@@ -106,7 +106,7 @@ internal static class Plotter
 		bar.FillColor = Color.FromArgb(BAR_ALPHA, color);
 
 		// display histogram distribution curve as a line plot on a secondary Y axis
-		double[] smoothEdges = ScottPlot.DataGen.Range(start: binEdges.First(), stop: binEdges.Last(), step: 0.1, includeStop: true);
+		double[] smoothEdges = DataGen.Range(start: binEdges.First(), stop: binEdges.Last(), step: 0.1, includeStop: true);
 		double[] smoothDensities = ScottPlot.Statistics.Common.ProbabilityDensity(values, smoothEdges, percent: true);
 		var probPlot = plt.AddScatterLines(
 			xs: smoothEdges,
@@ -152,18 +152,18 @@ internal static class Plotter
 
 	internal static string ComparePlot(Plot plt, Request leftCompare, Request rightCompare, double binSize)
 	{
-		if(CanPlot(leftCompare) == false || CanPlot(rightCompare) == false) { return "Nothing to plot"; }
+		if (CanPlot(leftCompare) == false || CanPlot(rightCompare) == false) { return "Nothing to plot"; }
 
 		var heightsMale = ExtractPlottable(leftCompare);
 		var heightsFemale = ExtractPlottable(rightCompare);
 
-		plt.Palette = ScottPlot.Palette.Microcharts;
+		plt.Palette = Palette.Microcharts;
 
 		var mi = heightsFemale.Concat(heightsMale).Min();
 		var ma = heightsFemale.Concat(heightsMale).Max();
 
 		var diff = ma - mi;
-		if(diff < binSize)
+		if (diff < binSize)
 		{
 			return $"Bin size needs to be less than {diff}";
 		}
@@ -182,7 +182,7 @@ internal static class Plotter
 		// barFemale.BarWidth = 1;
 		barFemale.BorderLineWidth = 0;
 
-		var leftColorIndex = GetColorIndex(leftCompare);	
+		var leftColorIndex = GetColorIndex(leftCompare);
 		var rightColorIndex = GetColorIndex(rightCompare);
 		if (rightColorIndex == leftColorIndex)
 		{
@@ -216,7 +216,7 @@ internal static class Plotter
 		plt.YAxis.Label("Count (#)");
 		plt.XAxis.Label("Time taken (ms)");
 
-		plt.Legend(location: ScottPlot.Alignment.UpperLeft);
+		plt.Legend(location: Alignment.UpperLeft);
 		plt.SetAxisLimits(yMin: 0);
 
 		return null;

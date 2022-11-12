@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using PosterTester.Domain;
 
 namespace PosterTester.Data;
 
