@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PosterTester"
         xmlns:data="clr-namespace:PosterTester.Data"
+		xmlns:controls="clr-namespace:PosterTester.Controls"
         xmlns:converters="clr-namespace:PosterTester.Converters"
         mc:Ignorable="d"
         Icon="icon.ico"
@@ -223,7 +224,7 @@
 											<TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
 											<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
 										</DockPanel>
-										<local:ResponseControl Grid.Row="2" DataContext="{Binding}" />
+										<controls:ResponseControl Grid.Row="2" DataContext="{Binding}" />
 									</Grid>
 
 
@@ -266,7 +267,7 @@
 												<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
 											</DockPanel>
 
-											<local:ResponseControl Grid.Row="2" DataContext="{Binding}" />
+											<controls:ResponseControl Grid.Row="2" DataContext="{Binding}" />
 										</Grid>
 									</Grid>
 								</Grid>

@@ -1,6 +1,6 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
 
-namespace PosterTester
+namespace PosterTester.Controls
 {
     /// <summary>
     /// Interaction logic for ResponseControl.xaml
