@@ -1,21 +1,14 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Markup;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using PosterTester.Data;
-using PosterTester.Data.Saved;
 
 namespace PosterTester.Domain;
 
@@ -54,11 +47,6 @@ public enum HttpMethod
 	// Unlock
 }
 
-internal class SingleAttackResult
-{
-	public string Error { get; set; }
-	public TimeSpan Result { get; set; }
-}
 
 public static class Logic
 {
@@ -128,7 +116,7 @@ public static class Logic
 		return new StringContent(t, Encoding.UTF8, "application/json");
 	}
 
-	public static async Task<Data.Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
+	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent content)
 	{
 		// todo(Gustav): expose and enrich headers
 		var headers = client.DefaultRequestHeaders.ToArray();
@@ -139,10 +127,10 @@ public static class Logic
 		var resh = Data.Headers.Collect(response.Headers);
 		var conh = Data.Headers.Collect(response.Content.Headers);
 
-		return new Data.Response(status: response.StatusCode, body: responseBody, responseHeaders: resh);
+		return new Response(status: response.StatusCode, body: responseBody, responseHeaders: resh);
 	}
 
-	public static async Task Request(Data.Root root, Data.Request r)
+	public static async Task Request(Root root, Request r)
 	{
 		// silently ignore double commands
 		if (r.IsWorking == true) { return; }
@@ -176,12 +164,12 @@ public static class Logic
 				x = x.InnerException;
 			}
 
-			r.Response = new Data.Response(status: HttpStatusCode.BadRequest, body: builder, new Data.Headers());
+			r.Response = new Response(status: HttpStatusCode.BadRequest, body: builder, new Headers());
 			r.Response.Time = end.Subtract(start);
 		}
 	}
 
-	private static async Task<Data.Response> MakeRequest(Data.Request r)
+	private static async Task<Response> MakeRequest(Request r)
 	{
 		var url = new Uri(r.Url);
 		var data = HasContent(r.Method)
@@ -200,7 +188,14 @@ public static class Logic
 		Process.Start(startInfo);
 	}
 
-	internal static async Task<SingleAttackResult> SingleAttack(Data.Request r)
+	internal class SingleAttackResult
+	{
+		public string Error { get; set; }
+		public TimeSpan Result { get; set; }
+	}
+
+
+	internal static async Task<SingleAttackResult> SingleAttack(Request r)
 	{
 		try
 		{
@@ -233,7 +228,7 @@ public static class Logic
 		}
 	}
 
-	internal static async Task<AttackResult> Attack(Data.Root root, Data.Request r)
+	internal static async Task<AttackResult> Attack(Root root, Request r)
 	{
 		// silently ignore double commands
 		if (r.IsWorking == true) { return null; }
@@ -279,9 +274,9 @@ public static class Logic
 
 public class WorkingLock : IDisposable
 {
-	private readonly Data.Request r;
+	private readonly Request r;
 
-	public WorkingLock(Data.Request r)
+	public WorkingLock(Request r)
 	{
 		this.r = r;
 		r.IsWorking = true;

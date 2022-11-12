@@ -43,7 +43,7 @@ public partial class MainWindow : Window
     private const string PostGroupExt = "PosterTesterGroup";
     private const string PostGroupFilesFilter = $"Post group files (*.{PostGroupExt})|*.{PostGroupExt}|All files (*.*)|*.*";
 
-    public Data.Root Root { get; internal set; }
+    public Root Root { get; internal set; }
 
     public MainWindow()
     {
@@ -64,7 +64,7 @@ public partial class MainWindow : Window
 		Disk.Save(this.Root);
 	}
 
-    private Data.Request GetSelectedRequest()
+    private Request GetSelectedRequest()
     {
         var g = this.Root.SelectedGroup;
         if (g == null) { return null; }
@@ -73,7 +73,7 @@ public partial class MainWindow : Window
 
 	public void BrowseDataExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
-		Logic.BrowseFolder(PosterTester.Data.Disk.GetAppFolder());
+		Logic.BrowseFolder(Disk.GetAppFolder());
 	}
 
 	private void ShowError(string err)
@@ -142,7 +142,7 @@ public partial class MainWindow : Window
 		ShowError("No group is selected!");
 	}
 
-	private Data.AttackOptions RunAttackDialog()
+	private AttackOptions RunAttackDialog()
 	{
 		var dlg = new AttackDialog(this.Root.Attack.Clone());
 		using var blur = new DialogBackground(this, dlg);
