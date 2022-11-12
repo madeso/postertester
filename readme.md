@@ -1,6 +1,6 @@
 # PosterTester
 
-Basic "postman" clone in .NET 6 in WPF (windows only).
+Basic "postman" clone in .NET 6 in WPF (i.e windows only at the moment).
 
 Warning: Still in development, stored data might be destroyed after a update
 
