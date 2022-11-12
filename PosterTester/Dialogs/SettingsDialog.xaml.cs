@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 
-namespace PosterTester;
+namespace PosterTester.Dialogs;
 
 
 /// <summary>

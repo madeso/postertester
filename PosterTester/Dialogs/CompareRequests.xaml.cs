@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace PosterTester;
+namespace PosterTester.Dialogs;
 
 /// <summary>
 /// Interaction logic for CompareRequests.xaml

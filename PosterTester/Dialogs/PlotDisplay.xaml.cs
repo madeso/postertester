@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 
-namespace PosterTester;
+namespace PosterTester.Dialogs;
 
 /// <summary>
 /// Interaction logic for PlotDisplay.xaml

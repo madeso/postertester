@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
-namespace PosterTester;
+namespace PosterTester.Dialogs;
 
 public class RenameRequestData : INotifyPropertyChanged
 {

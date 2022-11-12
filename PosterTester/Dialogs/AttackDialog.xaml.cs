@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using PosterTester.Data;
 
-namespace PosterTester;
+namespace PosterTester.Dialogs;
 
 /// <summary>
 /// Interaction logic for AttackDialog.xaml

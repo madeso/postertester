@@ -103,7 +103,7 @@ public partial class MainWindow : Window
 	{
 		// todo(Gustav): move settings to a custom class so we can clone and update...
 		var oldBin = this.Root.BinSize;
-		var dlg = new SettingsDialog(this.Root);
+		var dlg = new Dialogs.SettingsDialog(this.Root);
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
@@ -125,7 +125,7 @@ public partial class MainWindow : Window
 		var group = this.Root.SelectedGroup;
 		if(group == null) { ShowMissingGroup(); return; }
 		var oldName = group.Name;
-		var dlg = new GroupSettings(group);
+		var dlg = new Dialogs.GroupSettings(group);
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
@@ -144,7 +144,7 @@ public partial class MainWindow : Window
 
 	private AttackOptions RunAttackDialog()
 	{
-		var dlg = new AttackDialog(this.Root.Attack.Clone());
+		var dlg = new Dialogs.AttackDialog(this.Root.Attack.Clone());
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
@@ -273,7 +273,7 @@ public partial class MainWindow : Window
         var r = GetSelectedRequest();
         if (r == null) { ShowMissingRequest(); return; }
 
-        var dlg = new RenameRequest(r);
+        var dlg = new Dialogs.RenameRequest(r);
         using var blur = new DialogBackground(this, dlg);
         if (dlg.ShowDialog() ?? false)
         {
@@ -286,7 +286,7 @@ public partial class MainWindow : Window
     {
 		string error = null;
 		{
-			var dlg = new CompareRequests(this.Root);
+			var dlg = new Dialogs.CompareRequests(this.Root);
 			using var blur = new DialogBackground(this, dlg);
 			if (dlg.ShowDialog() ?? false)
 			{
@@ -302,12 +302,12 @@ public partial class MainWindow : Window
 
 	private void CompareAttackExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
-		var dlg = new CompareRequests(this.Root);
+		var dlg = new Dialogs.CompareRequests(this.Root);
 		using var blur = new DialogBackground(this, dlg);
 		if (dlg.ShowDialog() ?? false)
 		{
 			var displayDialog = true;
-			var dialog = new PlotDisplay(plot => {
+			var dialog = new Dialogs.PlotDisplay(plot => {
 				var msg = Plotter.ComparePlot(plot, this.Root.LeftCompare, this.Root.RightCompare, this.Root.BinSize);
 				if (msg != null)
 				{
