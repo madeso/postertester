@@ -8,18 +8,19 @@ Warning: Still in development, stored data might be destroyed after a update
 * No external services or call-to-home. 
 * Share requests by saving project files to a shared place (shared folder, git repo, etc)
 * Compare the output of 2 different requests
+* "Attack" a endpoint by "calling" it many times and plot the reponse times
 
 ## Screenshots
 
 ![Main GUI showing groups, url, mehtod dropdown and failed response from localhost since the backend isn't online, response headers are hidden](data/demo.png)
-Main GUI showing groups, url, mehtod dropdown and failed response from localhost since the backend isn't online. Response headers are hidden
+Main GUI showing groups, url, mehtod dropdown and failed response from localhost
 
 ![Compare dialog comparing 2 requests from 2 different groups](data/compare.png)
-Compare dialog comparing 2 requests from 2 different groups
+Compare dialog
 
 
-![Histogram showing the response time of 50 attacks](data/attack-single.png)
-"Attack" a endpoint and display the response times.
+![Histogram showing the response time of 50 attacks in the main GUI](data/attack-single.png)
+The response times plotted after calling the endpoint 50 times in a row
 
 ![A histogram showing 2 distinct response times. A blueish that never goes about 2.5 seconds and a redish that never goes below 5 seconds. The actual endooints are blured.](data/attack-compare.png)
 Compare the response time for 2 requests. Does 2 endpoins take the same time to "call"? Duplicate one request and test out some optimization? Your imagination is the limit!
