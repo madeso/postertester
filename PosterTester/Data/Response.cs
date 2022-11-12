@@ -8,14 +8,14 @@ using System.Runtime.CompilerServices;
 
 namespace PosterTester.Data;
 
-public class HeaderRow
-{
-	public string Name { get; set; }
-	public string[] Values { get; set; }
-}
-
 public class Headers
 {
+	public class HeaderRow
+	{
+		public string Name { get; set; }
+		public string[] Values { get; set; }
+	}
+
 	public HeaderRow[] Rows { get; set; } = Array.Empty<HeaderRow>();
 
 	internal static Headers Collect(HttpResponseHeaders src)

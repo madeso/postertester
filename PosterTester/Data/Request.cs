@@ -1,5 +1,4 @@
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using PosterTester.Domain;
@@ -71,7 +70,7 @@ public class Request : INotifyPropertyChanged
 
 	public bool HasPost
 	{
-		get => this._hasPost; set
+		get => this._hasPost; private set
 		{
 			this._hasPost = value;
 			OnPropertyChanged();
@@ -201,33 +200,3 @@ public class Request : INotifyPropertyChanged
 	}
 }
 
-public class AttackResult : INotifyPropertyChanged
-{
-	private ObservableCollection<string> error = new();
-	private ObservableCollection<TimeSpan> result = new();
-
-	public ObservableCollection<string> Errors
-	{
-		get => error; set
-		{
-			error = value;
-			OnPropertyChanged();
-		}
-	}
-	public ObservableCollection<TimeSpan> Result
-	{
-		get => result; set
-		{
-			result = value;
-			OnPropertyChanged();
-		}
-	}
-
-
-	public event PropertyChangedEventHandler PropertyChanged;
-
-	protected void OnPropertyChanged([CallerMemberName] string name = null)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-	}
-}

@@ -126,7 +126,7 @@ public static class Disk
 		static Headers TransformHeaders(Saved.Headers src)
 		{
 			if (src == null) { return new Headers(); }
-			return new Headers { Rows = src.Rows.Select(x => new HeaderRow { Name = x.Name, Values = x.Values }).ToArray() };
+			return new Headers { Rows = src.Rows.Select(x => new Headers.HeaderRow { Name = x.Name, Values = x.Values }).ToArray() };
 		}
 
 		static RequestGroup TransformGroupOrNull(Saved.Group sourceGroup)
