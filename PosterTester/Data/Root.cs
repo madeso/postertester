@@ -282,7 +282,9 @@ public class Root : INotifyPropertyChanged
 		if (this.SelectedGroup == null) { return false; }
 		if (this.SelectedGroup.Builtin) { return false; }
 
-		Disk.SaveGroup(this.SelectedGroup);
+		var wr = new Disk.Writer();
+		Disk.SaveGroup(wr, this.SelectedGroup);
+		wr.WriteAll();
 
 		int index = this.Groups.IndexOf(this.SelectedGroup);
 		this.Groups.Remove(this.SelectedGroup);

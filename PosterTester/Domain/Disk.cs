@@ -12,6 +12,38 @@ namespace PosterTester.Domain;
 
 public static class Disk
 {
+	// if there was a error generating the sources for any files,
+	// this makes sure we don't write partial data
+	internal class Writer
+	{
+		public void Add(string path, string contents)
+		{
+			files.Add(new(path, contents));
+		}
+
+		internal class ToWrite
+		{
+			public ToWrite(string path, string contents)
+			{
+				this.Path = path;
+				this.Contents = contents;
+			}
+
+			public string Path { get; internal set; }
+			public string Contents { get; internal set; }
+		}
+
+		private readonly List<ToWrite> files = new();
+
+		public void WriteAll()
+		{
+			foreach (var file in files)
+			{
+				File.WriteAllText(file.Path, file.Contents);
+			}
+		}
+	}
+
 	private static string PathToSettings
 	{
 		get
@@ -204,13 +236,13 @@ public static class Disk
 		return (int)status;
 	}
 
-	private static void WriteJson<T>(T jsonFile, string file)
+	private static void WriteJson<T>(Writer writer, T jsonFile, string file)
 	{
 		string jsonData = JsonConvert.SerializeObject(jsonFile, Formatting.Indented);
-		File.WriteAllText(file, jsonData);
+		writer.Add(file, jsonData);
 	}
 
-	internal static void SaveGroup(RequestGroup g)
+	internal static void SaveGroup(Writer writer, RequestGroup g)
 	{
 		static Saved.Request ToReq(Request r)
 		{
@@ -226,7 +258,7 @@ public static class Disk
 		}
 		var rf = new Saved.RequestsFile { Guid = ToSaved(g.Guid), Requests = g.Requests.Select(ToReq).ToArray() };
 		VerifyGuids(rf.Requests.Select(x => x.Guid));
-		WriteJson(rf, g.File);
+		WriteJson(writer, rf, g.File);
 	}
 
 	private static void VerifyGuids(IEnumerable<string> itguids)
@@ -239,16 +271,16 @@ public static class Disk
 		}
 	}
 
-	private static void Save(Root data, string file)
+	private static void Save(Writer writer, Root data, string file)
 	{
 		static Saved.Headers TransformHeaders(Headers src)
 		{
 			return new Saved.Headers { Rows = src.Rows.Select(x => new Saved.HeaderRow { Name = x.Name, Values = x.Values }).ToArray() };
 		}
 
-		static Saved.Group TransformGroup(RequestGroup g)
+		static Saved.Group TransformGroup(Writer writer, RequestGroup g)
 		{
-			SaveGroup(g);
+			SaveGroup(writer, g);
 
 			return new Saved.Group
 			{
@@ -294,7 +326,7 @@ public static class Disk
 		var jsonFile = new Saved.Root
 		{
 			BinSize = data.BinSize,
-			Groups = data.Groups.Select(TransformGroup).ToArray(),
+			Groups = data.Groups.Select(x => TransformGroup(writer, x)).ToArray(),
 			SelectedGroup = data.Groups.IndexOf(data.SelectedGroup),
 			LeftCompare = FindRequest(data.LeftGroup, data.LeftCompare),
 			RightCompare = FindRequest(data.RightGroup, data.RightCompare),
@@ -304,7 +336,7 @@ public static class Disk
 			SelectedResponseTab = data.SelectedResponseTab
 		};
 		VerifyGuids(jsonFile.Groups.Select(x => x.Guid));
-		WriteJson(jsonFile, file);
+		WriteJson(writer, jsonFile, file);
 	}
 
 	private static string ToSaved(Guid guid)
@@ -344,6 +376,8 @@ public static class Disk
 
 	public static void Save(Root data)
 	{
-		Save(data, PathToSettings);
+		Writer writer = new();
+		Save(writer, data, PathToSettings);
+		writer.WriteAll();
 	}
 }
