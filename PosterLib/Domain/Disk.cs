@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
-using PosterTester.Data;
+using PosterLib.Data;
 using PosterTester.Extensions;
 
-namespace PosterTester.Domain;
+namespace PosterLib.Domain;
 
 public static class Disk
 {

@@ -5,11 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using PosterTester.Data;
+using PosterLib.Data;
 using ScottPlot;
 using ScottPlot.Control.EventProcess.Events;
 
-namespace PosterTester.Domain;
+namespace PosterTester;
 
 internal static class Plotter
 {

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:posterTester="clr-namespace:PosterTester"
         xmlns:converters="clr-namespace:PosterTester.Converters"
-        xmlns:data="clr-namespace:PosterTester.Data"
+        xmlns:data="clr-namespace:PosterLib.Data;assembly=PosterLib"
         Icon="../icon.ico"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"

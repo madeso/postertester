@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PosterTester", "PosterTester\PosterTester.csproj", "{97141C39-35C7-4E69-AED8-244D4D9D0D6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PosterTester", "PosterTester\PosterTester.csproj", "{97141C39-35C7-4E69-AED8-244D4D9D0D6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PosterLib", "PosterLib\PosterLib.csproj", "{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{97141C39-35C7-4E69-AED8-244D4D9D0D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97141C39-35C7-4E69-AED8-244D4D9D0D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97141C39-35C7-4E69-AED8-244D4D9D0D6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

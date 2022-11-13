@@ -1,9 +1,9 @@
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using PosterTester.Domain;
+using PosterLib.Domain;
 
-namespace PosterTester.Saved;
+namespace PosterLib.Saved;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum ContentType

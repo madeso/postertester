@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using PosterTester.Domain;
+using PosterLib.Domain;
 
-namespace PosterTester.Data;
+namespace PosterLib.Data;
 
 public class Request : INotifyPropertyChanged
 {
@@ -148,7 +148,7 @@ public class Request : INotifyPropertyChanged
 
 	public AttackResult? AttackResult
 	{
-		get => attackResult; internal set
+		get => attackResult; set
 		{
 			attackResult = value;
 			OnPropertyChanged();
@@ -157,7 +157,7 @@ public class Request : INotifyPropertyChanged
 
 	public AttackOptions? AttackOptions
 	{
-		get => attackOptions; internal set
+		get => attackOptions; set
 		{
 			attackOptions = value;
 			OnPropertyChanged();

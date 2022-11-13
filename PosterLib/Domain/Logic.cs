@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using PosterTester.Data;
+using PosterLib.Data;
 
-namespace PosterTester.Domain;
+namespace PosterLib.Domain;
 
 
 [JsonConverter(typeof(StringEnumConverter))]
@@ -177,16 +177,6 @@ public static class Logic
 		return data;
 	}
 
-	internal static void BrowseFolder(string dir)
-	{
-		var startInfo = new ProcessStartInfo
-		{
-			FileName = "explorer.exe",
-			Arguments = dir
-		};
-		Process.Start(startInfo);
-	}
-
 	internal class SingleAttackResult
 	{
 		private SingleAttackResult(string error)
@@ -247,7 +237,7 @@ public static class Logic
 		}
 	}
 
-	internal static async Task<AttackResult?> Attack(Root root, Request r)
+	public static async Task<AttackResult?> Attack(Root root, Request r)
 	{
 		// silently ignore double commands
 		if (r.IsWorking == true) { return null; }

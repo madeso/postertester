@@ -7,7 +7,7 @@
              xmlns:converters="clr-namespace:PosterTester.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:data="clr-namespace:PosterTester.Data"
+             xmlns:data="clr-namespace:PosterLib.Data;assembly=PosterLib"
              d:DataContext="{d:DesignInstance data:Root}"
              >
     <UserControl.Resources>

@@ -5,8 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
-using PosterTester.Data;
-using PosterTester.Domain;
+using PosterLib.Data;
+using PosterLib.Domain;
 using ScottPlot;
 
 namespace PosterTester;
@@ -49,7 +49,7 @@ public partial class MainWindow : Window
 
 	public void BrowseDataExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
-		Logic.BrowseFolder(Disk.GetAppFolder());
+		Browser.BrowseFolder(Disk.GetAppFolder());
 	}
 
 	private void ShowError(string err)
@@ -274,7 +274,7 @@ public partial class MainWindow : Window
 			using var blur = new DialogBackgroundWithDialog(this, dlg);
 			if (dlg.ShowDialog() ?? false)
 			{
-				error = this.Root.Compare();
+				error = DiffTool.Compare(this.Root);
 			}
 		}
 

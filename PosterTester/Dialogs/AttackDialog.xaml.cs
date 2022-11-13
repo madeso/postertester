@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-using PosterTester.Data;
+using PosterLib.Data;
 
 namespace PosterTester.Dialogs;
 

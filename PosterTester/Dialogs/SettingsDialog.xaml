@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:posterTester="clr-namespace:PosterTester"
-		xmlns:data="clr-namespace:PosterTester.Data"
+		xmlns:data="clr-namespace:PosterLib.Data;assembly=PosterLib"
         Icon="../icon.ico"
         WindowStartupLocation="CenterOwner"
         d:DataContext="{d:DesignInstance data:Root}"

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace PosterTester.Data;
+namespace PosterLib.Data;
 
 public class AttackOptions : INotifyPropertyChanged
 {

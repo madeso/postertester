@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
+using Data = PosterLib.Data;
 namespace PosterTester.Dialogs;
 
 public class RenameRequestData : INotifyPropertyChanged

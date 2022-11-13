@@ -2,9 +2,9 @@
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using PosterTester.Domain;
+using PosterLib.Domain;
 
-namespace PosterTester.Data;
+namespace PosterLib.Data;
 
 
 public interface ContentType

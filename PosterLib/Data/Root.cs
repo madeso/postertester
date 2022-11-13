@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using PosterTester.Domain;
+using PosterLib.Domain;
 
-namespace PosterTester.Data;
+namespace PosterLib.Data;
 
 
 public class Root : INotifyPropertyChanged
@@ -194,24 +194,6 @@ public class Root : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}
 
-	internal string? Compare()
-	{
-		var lhs = this.LeftCompare;
-		var rhs = this.RightCompare;
-		if (lhs == null || rhs == null)
-		{
-			return "Either left or right aren't selected!";
-		}
-
-		if(lhs.Response == null || rhs.Response == null)
-		{
-			return "Either left or right have missing response";
-		}
-
-		DiffTool.LaunchDiff(lhs.Response, rhs.Response);
-		return null;
-	}
-
 	internal void CreateBuiltinIfMissing()
 	{
 		bool hasBuiltin = this.Groups.Where(x => x.Builtin).Any();
@@ -232,7 +214,7 @@ public class Root : INotifyPropertyChanged
 		return g;
 	}
 
-	internal void CreateNewGroup(string fileName)
+	public void CreateNewGroup(string fileName)
 	{
 		var g = new RequestGroup
 		{
@@ -260,7 +242,7 @@ public class Root : INotifyPropertyChanged
 		}
 	}
 
-	internal void AddExistingGroup(string fileName)
+	public void AddExistingGroup(string fileName)
 	{
 		var loaded = Disk.LoadRequests(fileName);
 		var g = new RequestGroup
@@ -275,7 +257,7 @@ public class Root : INotifyPropertyChanged
 		AddGroup(g);
 	}
 
-	internal bool ForgetGroup()
+	public bool ForgetGroup()
 	{
 		if (this.SelectedGroup == null) { return false; }
 		if (this.SelectedGroup.Builtin) { return false; }
