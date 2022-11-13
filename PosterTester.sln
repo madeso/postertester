@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PosterTester", "PosterTeste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PosterLib", "PosterLib\PosterLib.csproj", "{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pstrtstr", "pstrtstr\pstrtstr.csproj", "{35B90C03-3A8A-45EA-9350-532B2220F35B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67D3FAA8-9322-41E2-8F0A-468268AAFB3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35B90C03-3A8A-45EA-9350-532B2220F35B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35B90C03-3A8A-45EA-9350-532B2220F35B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35B90C03-3A8A-45EA-9350-532B2220F35B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35B90C03-3A8A-45EA-9350-532B2220F35B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
