@@ -90,7 +90,7 @@ public static class Disk
 	}
 
 
-	internal class RequestsWithGuid
+	public class RequestsWithGuid
 	{
 		public RequestsWithGuid(ObservableCollection<Request> requests, Guid guid)
 		{
@@ -103,7 +103,7 @@ public static class Disk
 	}
 
 
-	internal static RequestsWithGuid LoadRequests(string file)
+	public static RequestsWithGuid LoadRequests(string file)
 	{
 		static ContentType MakeType(Saved.ContentType t)
 		{
