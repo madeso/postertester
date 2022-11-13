@@ -220,7 +220,7 @@ public partial class MainWindow : Window
 
     private void NewRequestExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-		if(this.Root.SelectedGroup != null) { ShowMissingGroup(); return; }
+		if(this.Root.SelectedGroup == null) { ShowMissingGroup(); return; }
 
 		this.Root.AddNewRequest();
 		Save();
