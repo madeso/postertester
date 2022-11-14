@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -137,19 +138,26 @@ public static class Logic
 		r.Response = null;
 		using var locked = new WorkingLock(r);
 
+		var res = await RunRequest(root.FormatResponse, r);
+		r.Response = res;
+	}
+
+	private static async Task<Response> RunRequest(bool formatResponse, Request r)
+	{
 		var start = DateTime.Now;
 
 		try
 		{
-			var data = await MakeRequest(r);
+			var response = await MakeRequest(r);
 			var end = DateTime.Now;
-			r.Response = data;
-			r.Response.Time = end.Subtract(start);
+			response.Time = end.Subtract(start);
 
-			if (root.FormatResponse)
+			if (formatResponse)
 			{
-				r.Response.Body = FormatJsonOrNot(r.Response.Body);
+				response.Body = FormatJsonOrNot(response.Body);
 			}
+
+			return response;
 		}
 		catch (Exception xx)
 		{
@@ -163,8 +171,9 @@ public static class Logic
 				x = x.InnerException;
 			}
 
-			r.Response = new Response(status: HttpStatusCode.BadRequest, body: builder, new Headers());
-			r.Response.Time = end.Subtract(start);
+			var response = new Response(status: HttpStatusCode.BadRequest, body: builder, new Headers());
+			response.Time = end.Subtract(start);
+			return response;
 		}
 	}
 
@@ -177,7 +186,7 @@ public static class Logic
 		return data;
 	}
 
-	internal class SingleAttackResult
+	public class SingleAttackResult
 	{
 		private SingleAttackResult(string error)
 		{
@@ -204,7 +213,7 @@ public static class Logic
 	}
 
 
-	internal static async Task<SingleAttackResult> SingleAttack(Request r)
+	public static async Task<SingleAttackResult> SingleAttack(Request r)
 	{
 		try
 		{
@@ -277,6 +286,51 @@ public static class Logic
 			{
 				ret.Result.Add(callResult.Result);
 			}
+		}
+	}
+
+	public static string TimeSpanToString(TimeSpan t)
+	{
+		static int Floor(double totalMinutes)
+		{
+			return (int)Math.Floor(totalMinutes);
+		}
+
+		static string S(int x)
+		{
+			if (x == 0) { return string.Empty; }
+			else { return "s"; }
+		}
+
+		var r = new List<string>();
+
+		if (t.TotalMinutes > 1)
+		{
+			int min = Floor(t.TotalMinutes);
+			r.Add($"{min} minute{S(min)}");
+			t = t.Subtract(TimeSpan.FromMinutes(min));
+		}
+
+		if (t.TotalSeconds > 1)
+		{
+			int min = Floor(t.TotalSeconds);
+			r.Add($"{min} second{S(min)}");
+			t = t.Subtract(TimeSpan.FromSeconds(min));
+		}
+
+		if (t.TotalMilliseconds > 1)
+		{
+			int min = Floor(t.TotalMilliseconds);
+			r.Add($"{min} millisecond{S(min)}");
+		}
+
+		if (r.Count == 0)
+		{
+			return "Less than 1 ms";
+		}
+		else
+		{
+			return string.Join(" ", r);
 		}
 	}
 }
