@@ -4,11 +4,16 @@ Basic "postman" clone in .NET 6 in WPF (i.e windows only at the moment).
 
 Warning: Still in development, stored data might be destroyed after a update
 
+
+
 ## Current features
 * No external services or call-to-home. 
 * Share requests by saving project files to a shared place (shared folder, git repo, etc)
 * Compare the output of 2 different requests
 * "Attack" a endpoint by "calling" it many times and plot the reponse times
+* Commandline to run tests
+
+
 
 ## Screenshots
 
@@ -18,7 +23,6 @@ Main GUI showing groups, url, mehtod dropdown and failed response from localhost
 ![Compare dialog comparing 2 requests from 2 different groups](data/compare.png)
 Compare dialog
 
-
 ![Histogram showing the response time of 50 attacks in the main GUI. The rest of the gui is blurred, since theese are real numbers and the endpoints are under NDA](data/attack-single.png)
 The response times plotted after calling the endpoint 50 times in a row
 
@@ -26,13 +30,24 @@ The response times plotted after calling the endpoint 50 times in a row
 Compare the response time for 2 requests. Does two different endpoints roughly take the same time? Duplicate one request and test out some optimization? Your imagination is the limit!
 
 
+
+## Code layout
+| Project      | Usage                                 |
+|--------------|---------------------------------------|
+| PosterTester | Main WPF gui                          |
+| PosterLib    | Library that does all the actual work |
+| pstrtstr     | Commandline tool                      |
+
+
+
 ## Possible some time in the future (not necessarily in a specifc order)
 * Option to send compact json
 * Uri editor
+* Ctrl-tab functionality to switch between recently used requests
 * Use output from one request as input to another
 * Script tests and input "wizards" with .net
-* Commandline to run tests
 * Solarized light + dark theme
 * Cross platform
 * More features to the requests input
 * Login options (auth0 etc...)
+
