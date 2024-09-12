@@ -1,28 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net6.0-windows</TargetFramework>
-		<OutputType>WinExe</OutputType>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<UseWPF>true</UseWPF>
-		<Nullable>enable</Nullable>
-		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<ApplicationIcon>icon.ico</ApplicationIcon>
-	</PropertyGroup>
-	<ItemGroup>
-		<AppDesigner Include="Properties\" />
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="icon.ico" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="ScottPlot.WPF" Version="4.1.58" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\PosterLib\PosterLib.csproj" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.58" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PosterLib\PosterLib.csproj" />
+  </ItemGroup>
 </Project>
