@@ -43,11 +43,14 @@ Compare the response time for 2 requests. Does two different endpoints roughly t
 ## Possible some time in the future (not necessarily in a specifc order)
 * Option to send compact json
 * Uri editor
+* Ctrl-p to fuzzy match requests and groups
+* Better progress indicator when doing attacks
 * Ctrl-tab functionality to switch between recently used requests
 * Use output from one request as input to another
 * Script tests and input "wizards" with .net
 * Solarized light + dark theme
-* Cross platform
-* More features to the requests input
+* Make it cross platform
+* More features to the requests input (like timeout settings)
 * Login options (auth0 etc...)
-
+* Launch a diff between requests
+* Duplicate all request data
