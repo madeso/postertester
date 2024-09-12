@@ -242,7 +242,7 @@ public static class Logic
 				x = x.InnerException;
 			}
 
-			return SingleAttackResult.FromError(builder);
+			return SingleAttackResult.FromError($"Exception: {builder}");
 		}
 	}
 
