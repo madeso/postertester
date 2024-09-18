@@ -1,0 +1,62 @@
+﻿<Window x:Class="PosterTester.Dialogs.BrowseUrl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:PosterTester.Dialogs"
+    xmlns:posterTester="clr-namespace:PosterTester"
+    mc:Ignorable="d" Title="Browse url"
+    Height="550" Width="800"
+    >
+	<Window.CommandBindings>
+		<CommandBinding Command="posterTester:CustomCommands.Ok" Executed="OnOk" />
+	</Window.CommandBindings>
+	<Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/>
+
+				<RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+			<TextBlock Margin="3" Grid.Column="0" Grid.Row="1"  Text="AbsolutePath"/>  <TextBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="1"  Text="{Binding AbsolutePath}"/>    <!-- string -->
+            <TextBlock Margin="3" Grid.Column="0" Grid.Row="2"  Text="AbsoluteUri"/>   <TextBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="2"  Text="{Binding AbsoluteUri}"/>    <!-- string -->
+            
+
+            
+            <TextBlock Margin="3" Grid.Column="0" Grid.Row="5"  Text="Fragment"/>      <TextBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="5"  Text="{Binding Fragment}"/>    <!-- string -->
+            <TextBlock Margin="3" Grid.Column="0" Grid.Row="6"  Text="Host"/>          <TextBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="6"  Text="{Binding Host}"/>    <!-- string -->
+
+			<StackPanel Margin="3" Grid.Column="1" Grid.Row="8" Orientation="Horizontal">
+				<CheckBox VerticalContentAlignment="Center" Margin="3" Padding="3" IsChecked="{Binding IsFile}">File?</CheckBox>
+				<CheckBox VerticalContentAlignment="Center" Margin="3" Padding="3" IsChecked="{Binding IsDefaultPort}">Default port?</CheckBox>
+				<CheckBox VerticalContentAlignment="Center" Margin="3" Padding="3" IsChecked="{Binding IsAbsoluteUri}">Absolute URI?</CheckBox>
+				<CheckBox VerticalContentAlignment="Center" Margin="3" Padding="3" IsChecked="{Binding IsLoopback}">Loopback?</CheckBox>
+				<CheckBox VerticalContentAlignment="Center" Margin="3" Padding="3" IsChecked="{Binding IsUnc}">UNC?</CheckBox>
+				<CheckBox VerticalContentAlignment="Center" Margin="3" Padding="3" IsChecked="{Binding UserEscaped}">User escaped?</CheckBox>
+				
+			</StackPanel>
+
+			<TextBlock Margin="3" Grid.Column="0" Grid.Row="13" Text="Port"/>          <TextBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="13" Text="{Binding Port}"/>    <!-- int -->
+            <TextBlock Margin="3" Grid.Column="0" Grid.Row="14" Text="Scheme"/>        <TextBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="14" Text="{Binding Scheme}"/>    <!-- string -->
+            <TextBlock Margin="3" Grid.Column="0" Grid.Row="15" Text="UserInfo"/>      <TextBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="15" Text="{Binding UserInfo}"/>    <!-- string -->
+			
+			<TextBlock Margin="3" Grid.Column="0" Grid.Row="17" Text="Segments"/>      <ListBox Margin="3" Padding="3" Grid.Column="1" Grid.Row="17" ItemsSource="{Binding Segments}"/>    <!-- string[] -->
+
+
+			<StackPanel Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button Margin="3" Padding="3" IsDefault="True" Command="posterTester:CustomCommands.Ok">OK</Button>
+				<Button Margin="3" Padding="3" IsCancel="True">CANCEL</Button>
+			</StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -39,5 +39,8 @@ namespace PosterTester
         public static RoutedCommand FocusRequests = new RoutedCommand();
         public static RoutedCommand FocusUrl = new RoutedCommand();
         public static RoutedCommand FocusPost = new RoutedCommand();
-    }
+
+		public static RoutedCommand BrowseUrl = new RoutedCommand();
+
+	}
 }
