@@ -116,9 +116,10 @@ public static class Logic
 		return new StringContent(t, Encoding.UTF8, "application/json");
 	}
 
-	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content)
+	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content, long timeoutMs)
 	{
 		// todo(Gustav): expose and enrich headers
+		client.Timeout = new TimeSpan(timeoutMs * 10000);
 		var headers = client.DefaultRequestHeaders.ToArray();
 		var cookies = cookieContainer.GetAllCookies().ToList();
 		using var response = await GetResponse(action, url, content);
@@ -181,8 +182,8 @@ public static class Logic
 	{
 		var url = new Uri(r.Url);
 		var data = HasContent(r.Method)
-			? await GetUrl(HttpMethod.Post, url, r.GetContent())
-			: await GetUrl(HttpMethod.Get, url, null);
+			? await GetUrl(HttpMethod.Post, url, r.GetContent(), r.Timeout.TotalMilliSeconds)
+			: await GetUrl(HttpMethod.Get, url, null, r.Timeout.TotalMilliSeconds);
 		return data;
 	}
 

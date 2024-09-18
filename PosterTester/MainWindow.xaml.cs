@@ -140,6 +140,32 @@ public partial class MainWindow : Window
 		RunBrowseDialog();
 	}
 
+	private void ChangeTimeoutExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		Time? RunChangeTimeoutDialog(Request r)
+		{
+			var time = new Time { TotalMilliSeconds = r.Timeout.TotalMilliSeconds };
+			var dlg = new Dialogs.TimeEditDialog(time);
+			using var blur = new DialogBackgroundWithDialog(this, dlg);
+			if (dlg.ShowDialog() ?? false)
+			{
+				return time;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		var req = GetSelectedRequest();
+		if (req == null) return;
+		
+		var time = RunChangeTimeoutDialog(req);
+		if(time == null) return;
+
+		req.Timeout = time;
+	}
+
 	private async void AttackExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
 		AttackOptions? RunAttackDialog()

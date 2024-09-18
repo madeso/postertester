@@ -33,7 +33,10 @@ public class Request
 	public string? TextContent { get; set; }
 
 	[JsonProperty("guid")]
-	public string? Guid { get; internal set; }
+	public string? Guid { get; set; }
+
+	[JsonProperty("timeout_ms")]
+	public long? TimeoutInMs { get; set; }
 }
 
 public class RequestsFile

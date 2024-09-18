@@ -123,7 +123,8 @@ public static class Disk
 				Title = r.Title,
 				Method = r.Method,
 				ContentType = MakeType(r.ContentType),
-				TextContent = r.TextContent
+				TextContent = r.TextContent,
+				Timeout = new Time{TotalMilliSeconds = r.TimeoutInMs ?? Request.DefaultTimeoutMs},
 			};
 		}
 
@@ -262,7 +263,8 @@ public static class Disk
 				Title = r.Title,
 				Method = r.Method,
 				ContentType = r.ContentType.SavedType,
-				TextContent = r.TextContent
+				TextContent = r.TextContent,
+				TimeoutInMs = r.Timeout.TotalMilliSeconds,
 			};
 		}
 		var rf = new Saved.RequestsFile { Guid = ToSaved(g.Guid), Requests = g.Requests.Select(ToReq).ToArray() };

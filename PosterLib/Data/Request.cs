@@ -7,16 +7,19 @@ namespace PosterLib.Data;
 
 public class Request : INotifyPropertyChanged
 {
+	public const long DefaultTimeoutMs = 100000;
+
 	private HttpMethod _method = HttpMethod.Get;
 	private string _url = "http://localhost:8080/";
 	private string _title = "";
-	private string _textConent = string.Empty;
+	private string _textContent = string.Empty;
 	private Response? _response = null;
 	private bool _isWorking = false;
 	private ContentType _contentType = ContentTypeJson.Instance;
-
+	private Time _timeout = new Time{TotalMilliSeconds = DefaultTimeoutMs};
 	private string _titleOrUrl = "";
 	private bool _hasPost = false;
+
 	private AttackResult? attackResult;
 	private AttackOptions? attackOptions;
 	private Guid guid;
@@ -27,6 +30,16 @@ public class Request : INotifyPropertyChanged
 		get => this._titleOrUrl; private set
 		{
 			this._titleOrUrl = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public Time Timeout
+	{
+		get => this._timeout;
+		set
+		{
+			this._timeout = value;
 			OnPropertyChanged();
 		}
 	}
@@ -121,9 +134,9 @@ public class Request : INotifyPropertyChanged
 
 	public string TextContent
 	{
-		get => this._textConent; set
+		get => this._textContent; set
 		{
-			this._textConent = value;
+			this._textContent = value;
 			OnPropertyChanged();
 		}
 	}
