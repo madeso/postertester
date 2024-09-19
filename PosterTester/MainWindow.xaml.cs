@@ -143,7 +143,14 @@ public partial class MainWindow : Window
 
 	private void AbortExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
-		// todo
+		var req = GetSelectedRequest();
+		if (req == null) return;
+
+		var cancel = req.CancellationToken;
+		if(cancel == null) return;
+
+		if(cancel.IsCancellationRequested) return;
+		cancel.Cancel();
 	}
 
 	private void ChangeTimeoutExecuted(object sender, ExecutedRoutedEventArgs e)

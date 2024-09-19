@@ -34,10 +34,11 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 			await AnsiConsole.Status()
 				.StartAsync(CreateStatus(errorCount), async ctx =>
 				{
+					using var cancel = new CancellationTokenSource();
 					foreach (var req in loaded.Requests)
 					{
 						AnsiConsole.MarkupLineInterpolated($"Running [blue]{req.TitleOrUrl}[/]");
-						var response = await Logic.SingleAttack(req);
+						var response = await Logic.SingleAttack(req, cancel.Token);
 						SetSpinnerStatus(response, ctx, ref errorCount);
 
 						if (response.Error != null)

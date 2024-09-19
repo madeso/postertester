@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using PosterLib.Domain;
 
 namespace PosterLib.Data;
@@ -27,6 +28,8 @@ public class Request : INotifyPropertyChanged
 	private AttackOptions? attackOptions;
 	private Guid guid;
 	private string plotStatus = string.Empty;
+
+	public CancellationTokenSource? CancellationToken { get; set; } = null;
 
 	public string TitleOrUrl
 	{

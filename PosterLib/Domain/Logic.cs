@@ -77,15 +77,15 @@ public static class Logic
 	private static readonly HttpClient client = new(handler) { Timeout = new TimeSpan(24, 20, 31, 23) };
 
 
-	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent? content)
+	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent? content, CancellationToken ct)
 	{
 		return action switch
 		{
-			HttpMethod.Get => await client.GetAsync(url),
-			HttpMethod.Post => await client.PostAsync(url, content!),
-			HttpMethod.Put => await client.PutAsync(url, content!),
-			HttpMethod.Delete => await client.DeleteAsync(url),
-			HttpMethod.Patch => await client.PatchAsync(url, content!),
+			HttpMethod.Get => await client.GetAsync(url, ct),
+			HttpMethod.Post => await client.PostAsync(url, content!, ct),
+			HttpMethod.Put => await client.PutAsync(url, content!, ct),
+			HttpMethod.Delete => await client.DeleteAsync(url, ct),
+			HttpMethod.Patch => await client.PatchAsync(url, content!, ct),
 
 			_ => throw new Exception($"Invalid action: {action}"),
 		};
@@ -118,7 +118,7 @@ public static class Logic
 		return new StringContent(t, Encoding.UTF8, "application/json");
 	}
 
-	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content, long timeoutMs)
+	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content, long timeoutMs, CancellationToken ct)
 	{
 		// todo(Gustav): expose and enrich headers
 
@@ -126,11 +126,11 @@ public static class Logic
 
 		var headers = client.DefaultRequestHeaders.ToArray();
 		var cookies = cookieContainer.GetAllCookies().ToList();
-		var responseTask = GetResponse(action, url, content);
-		var resultTask = await Task.WhenAny(responseTask, Task.Delay(timeout));
+		var responseTask = GetResponse(action, url, content, ct);
+		var resultTask = await Task.WhenAny(responseTask, Task.Delay(timeout, ct));
 		if (responseTask.IsCompletedSuccessfully == false) throw new Exception($"Timeout after {timeout}");
 		using var response = responseTask.Result;
-		string responseBody = await response.Content.ReadAsStringAsync();
+		string responseBody = await response.Content.ReadAsStringAsync(ct);
 
 		var resh = Headers.Collect(response.Headers);
 		var conh = Headers.Collect(response.Content.Headers);
@@ -146,17 +146,17 @@ public static class Logic
 		r.Response = null;
 		using var locked = new WorkingLock(r);
 
-		var res = await RunRequest(root.FormatResponse, r);
+		var res = await RunRequest(root.FormatResponse, r, locked.CancellationToken.Token);
 		r.Response = res;
 	}
 
-	private static async Task<Response> RunRequest(bool formatResponse, Request r)
+	private static async Task<Response> RunRequest(bool formatResponse, Request r, CancellationToken ct)
 	{
 		var start = DateTime.Now;
 
 		try
 		{
-			var response = await MakeRequest(r);
+			var response = await MakeRequest(r, ct);
 			var end = DateTime.Now;
 			response.Time = end.Subtract(start);
 
@@ -185,12 +185,12 @@ public static class Logic
 		}
 	}
 
-	private static async Task<Response> MakeRequest(Request r)
+	private static async Task<Response> MakeRequest(Request r, CancellationToken ct)
 	{
 		var url = new Uri(r.Url);
 		var data = HasContent(r.Method)
-			? await GetUrl(HttpMethod.Post, url, r.GetContent(), r.Timeout.TotalMilliSeconds)
-			: await GetUrl(HttpMethod.Get, url, null, r.Timeout.TotalMilliSeconds);
+			? await GetUrl(HttpMethod.Post, url, r.GetContent(), r.Timeout.TotalMilliSeconds, ct)
+			: await GetUrl(HttpMethod.Get, url, null, r.Timeout.TotalMilliSeconds, ct);
 		return data;
 	}
 
@@ -221,12 +221,12 @@ public static class Logic
 	}
 
 
-	public static async Task<SingleAttackResult> SingleAttack(Request r)
+	public static async Task<SingleAttackResult> SingleAttack(Request r, CancellationToken ct)
 	{
 		try
 		{
 			var start = DateTime.Now;
-			var data = await MakeRequest(r);
+			var data = await MakeRequest(r, ct);
 			// todo(Gustav): verify data...
 			if (data.Status != HttpStatusCode.OK)
 			{
@@ -266,7 +266,8 @@ public static class Logic
 
 		if (attack.AtTheSameTime)
 		{
-			var tasks = Enumerable.Range(0, attack.Count).Select(i => SingleAttack(r));
+			var tasks = Enumerable.Range(0, attack.Count)
+				.Select(i => SingleAttack(r, locked.CancellationToken.Token));
 			var results = await Task.WhenAll(tasks);
 			foreach (var callResult in results)
 			{
@@ -277,7 +278,7 @@ public static class Logic
 		{
 			for (int i = 0; i < attack.Count; i += 1)
 			{
-				var callResult = await SingleAttack(r);
+				var callResult = await SingleAttack(r, locked.CancellationToken.Token);
 				AddAttackResult(ret, callResult);
 			}
 		}
@@ -347,15 +348,22 @@ public class WorkingLock : IDisposable
 {
 	private readonly Request r;
 
+	public CancellationTokenSource CancellationToken { get; private set; }
+
 	public WorkingLock(Request r)
 	{
 		this.r = r;
+
+		this.CancellationToken = new CancellationTokenSource();
 		r.IsWorking = true;
+		r.CancellationToken = this.CancellationToken;
 	}
 
 	public void Dispose()
 	{
 		r.IsWorking = false;
+		this.r.CancellationToken = null;
+		this.CancellationToken.Dispose();
 	}
 }
 
