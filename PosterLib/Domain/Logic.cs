@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -120,9 +121,15 @@ public static class Logic
 	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content, long timeoutMs)
 	{
 		// todo(Gustav): expose and enrich headers
+
+		var timeout = new TimeSpan(timeoutMs * 10000);
+
 		var headers = client.DefaultRequestHeaders.ToArray();
 		var cookies = cookieContainer.GetAllCookies().ToList();
-		using var response = await GetResponse(action, url, content);
+		var responseTask = GetResponse(action, url, content);
+		var resultTask = await Task.WhenAny(responseTask, Task.Delay(timeout));
+		if (responseTask.IsCompletedSuccessfully == false) throw new Exception($"Timeout after {timeout}");
+		using var response = responseTask.Result;
 		string responseBody = await response.Content.ReadAsStringAsync();
 
 		var resh = Headers.Collect(response.Headers);
