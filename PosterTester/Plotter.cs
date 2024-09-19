@@ -86,13 +86,15 @@ internal static class Plotter
 
 		plt.Palette = Palette.Microcharts;
 
+		if (values.Length == 0) { return "Empty data"; }
+
 		var mi = values.Min();
 		var ma = values.Max();
 
 		var diff = ma - mi;
 		if (diff < binSize)
 		{
-			return $"Bin size needs to be less than {diff}";
+			return $"The difference between min and max needs to be more than {binSize} but was {diff}";
 		}
 
 		// create a histogram
