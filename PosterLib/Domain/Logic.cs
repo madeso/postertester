@@ -72,7 +72,8 @@ public static class Logic
 
 	private static readonly HttpClientHandler handler = new();
 	private static readonly CookieContainer cookieContainer = handler.CookieContainer;
-	private static readonly HttpClient client = new(handler);
+	// Timeout must be less than or equal to '24.20:31:23.6470000'
+	private static readonly HttpClient client = new(handler) { Timeout = new TimeSpan(24, 20, 31, 23) };
 
 
 	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent? content)
@@ -119,7 +120,6 @@ public static class Logic
 	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content, long timeoutMs)
 	{
 		// todo(Gustav): expose and enrich headers
-		client.Timeout = new TimeSpan(timeoutMs * 10000);
 		var headers = client.DefaultRequestHeaders.ToArray();
 		var cookies = cookieContainer.GetAllCookies().ToList();
 		using var response = await GetResponse(action, url, content);
