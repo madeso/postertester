@@ -105,12 +105,12 @@ public static class Disk
 
 	public static RequestsWithGuid LoadRequests(string file)
 	{
-		static ContentType MakeType(Saved.ContentType t)
+		static ContentType MakeType(Saved.ContentType? t)
 		{
 			return t switch
 			{
 				Saved.ContentType.Json => ContentTypeJson.Instance,
-				Saved.ContentType.Text => ContentTypeText.Instance,
+				null or Saved.ContentType.Text => ContentTypeText.Instance,
 				_ => throw new NotImplementedException(),
 			};
 		}
@@ -119,11 +119,11 @@ public static class Disk
 			return new Request
 			{
 				Guid = FromSavedGuid(r.Guid),
-				Url = r.Url,
-				Title = r.Title,
-				Method = r.Method,
+				Url = r.Url ?? Request.DefaultUrl,
+				Title = r.Title ?? Request.DefaultTitle,
+				Method = r.Method ?? Request.DefaultMethod,
 				ContentType = MakeType(r.ContentType),
-				TextContent = r.TextContent,
+				TextContent = r.TextContent ?? "",
 				Timeout = new Time{TotalMilliSeconds = r.TimeoutInMs ?? Request.DefaultTimeoutMs},
 			};
 		}
@@ -138,16 +138,25 @@ public static class Disk
 		static Headers TransformHeaders(Saved.Headers? src)
 		{
 			if (src == null) { return new Headers(); }
-			return new Headers { Rows = src.Rows.Select(x => new Headers.Row(x.Name, x.Values)).ToArray() };
+			return new Headers {
+				Rows = src.Rows?.Select(x =>
+					       new Headers.Row(
+						       x.Name ?? "???",
+						       x.Values ?? Array.Empty<string>()
+						       )).ToArray()
+				       ?? Array.Empty<Headers.Row>()
+			};
 		}
 
 		static RequestGroup? TransformGroupOrNull(Saved.Group sourceGroup)
 		{
-			bool isbuiltin = sourceGroup.File == Saved.Group.BuiltinFile;
-			string file = isbuiltin ? PathToMyRequests : sourceGroup.File;
+			if(sourceGroup.File == null) { return null; }
+
+			bool isBuiltIn = sourceGroup.File == Saved.Group.BuiltinFile;
+			string file = isBuiltIn ? PathToMyRequests : sourceGroup.File;
 			if (File.Exists(file) == false)
 			{
-				if (isbuiltin == false)
+				if (isBuiltIn == false)
 				{
 					return null;
 				}
@@ -196,8 +205,8 @@ public static class Disk
 				{
 					Requests = requests,
 					File = file,
-					Name = sourceGroup.Name,
-					Builtin = isbuiltin,
+					Name = sourceGroup.Name ?? "missing name",
+					Builtin = isBuiltIn,
 					Guid = FromSavedGuid(sourceGroup.Guid),
 					SelectedRequest = sourceGroup.SelectedRequest == -1 ? null : requests[sourceGroup.SelectedRequest]
 				};
@@ -317,7 +326,7 @@ public static class Disk
 					}
 				}).ToArray(),
 				Name = g.Name,
-				SelectedRequest = g.Requests.IndexOf(g.SelectedRequest)
+				SelectedRequest = g.SelectedRequest == null ? 0 : g.Requests.IndexOf(g.SelectedRequest)
 			};
 		}
 

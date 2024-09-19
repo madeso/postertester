@@ -8,10 +8,13 @@ namespace PosterLib.Data;
 public class Request : INotifyPropertyChanged
 {
 	public const long DefaultTimeoutMs = 100000;
+	public const HttpMethod DefaultMethod = HttpMethod.Get;
+	public const string DefaultUrl = "http://localhost:8080/";
+	public const string DefaultTitle = "";
 
-	private HttpMethod _method = HttpMethod.Get;
-	private string _url = "http://localhost:8080/";
-	private string _title = "";
+	private HttpMethod _method = DefaultMethod;
+	private string _url = DefaultUrl;
+	private string _title = DefaultTitle;
 	private string _textContent = string.Empty;
 	private Response? _response = null;
 	private bool _isWorking = false;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -6,9 +5,9 @@ namespace PosterLib.Data;
 
 public class Time : INotifyPropertyChanged
 {
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+	protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{
 		this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}

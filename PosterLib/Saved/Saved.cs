@@ -24,10 +24,10 @@ public class Request
 	public string? Title { get; set; }
 
 	[JsonProperty("method")]
-	public HttpMethod Method { get; set; }
+	public HttpMethod? Method { get; set; }
 
 	[JsonProperty("post_type")]
-	public ContentType ContentType { get; set; }
+	public ContentType? ContentType { get; set; }
 
 	[JsonProperty("post")]
 	public string? TextContent { get; set; }
