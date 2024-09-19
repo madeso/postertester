@@ -140,6 +140,12 @@ public partial class MainWindow : Window
 		RunBrowseDialog();
 	}
 
+
+	private void AbortExecuted(object sender, ExecutedRoutedEventArgs e)
+	{
+		// todo
+	}
+
 	private void ChangeTimeoutExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
 		Time? RunChangeTimeoutDialog(Request r)

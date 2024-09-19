@@ -22,20 +22,20 @@
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"  True="Visible"   False="Collapsed" />
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfFalseConverter" True="Collapsed" False="Visible" />
-		<converters:NumberOfItemsConverter x:Key="NumberOfItemsConverter" />
-		<converters:ConcatStringsConverter x:Key="ConcatStringsConverter" />
-	</Window.Resources>
+        <converters:NumberOfItemsConverter x:Key="NumberOfItemsConverter" />
+        <converters:ConcatStringsConverter x:Key="ConcatStringsConverter" />
+    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Exit" Executed="ExitExecuted" />
-		<CommandBinding Command="posterTester:CustomCommands.Settings" Executed="SettingsExecuted" />
-		<CommandBinding Command="posterTester:CustomCommands.BrowseData" Executed="BrowseDataExecuted" />
+        <CommandBinding Command="posterTester:CustomCommands.Settings" Executed="SettingsExecuted" />
+        <CommandBinding Command="posterTester:CustomCommands.BrowseData" Executed="BrowseDataExecuted" />
 
-		<CommandBinding Command="posterTester:CustomCommands.CreateNewGroup" Executed="CreateNewGroupExecuted"/>
+        <CommandBinding Command="posterTester:CustomCommands.CreateNewGroup" Executed="CreateNewGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.AddExistingGroup" Executed="AddExistingGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.ForgetGroup" Executed="ForgetGroupExecuted"/>
-		<CommandBinding Command="posterTester:CustomCommands.GroupSettings" Executed="GroupSettingsExecuted"/>
+        <CommandBinding Command="posterTester:CustomCommands.GroupSettings" Executed="GroupSettingsExecuted"/>
 
-		<CommandBinding Command="posterTester:CustomCommands.Attack" Executed="AttackExecuted"/>
+        <CommandBinding Command="posterTester:CustomCommands.Attack" Executed="AttackExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.Execute" Executed="ExecuteExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.NewRequest" Executed="NewRequestExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.Format" Executed="FormatExecuted"/>
@@ -47,11 +47,12 @@
         <CommandBinding Command="posterTester:CustomCommands.FocusUrl" Executed="FocusUrlExecuted" />
         <CommandBinding Command="posterTester:CustomCommands.FocusPost" Executed="FocusPostExecuted" />
         <CommandBinding Command="posterTester:CustomCommands.Compare" Executed="CompareExecuted" />
-		<CommandBinding Command="posterTester:CustomCommands.CompareAttack" Executed="CompareAttackExecuted" />
-		<CommandBinding Command="posterTester:CustomCommands.BrowseUrl" Executed="BrowseUrlExecuted" />
-		<CommandBinding Command="posterTester:CustomCommands.ChangeTimeout" Executed="ChangeTimeoutExecuted" />
+        <CommandBinding Command="posterTester:CustomCommands.CompareAttack" Executed="CompareAttackExecuted" />
+        <CommandBinding Command="posterTester:CustomCommands.BrowseUrl" Executed="BrowseUrlExecuted" />
+        <CommandBinding Command="posterTester:CustomCommands.ChangeTimeout" Executed="ChangeTimeoutExecuted" />
+        <CommandBinding Command="posterTester:CustomCommands.Abort" Executed="AbortExecuted" />
 
-		<CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
+        <CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.SelectRequest1" Executed="SelectRequest1Executed"/>
         <CommandBinding Command="posterTester:CustomCommands.SelectRequest2" Executed="SelectRequest2Executed"/>
@@ -67,8 +68,8 @@
         <KeyBinding Modifiers="Control" Key="S" Command="posterTester:CustomCommands.Save" />
         <KeyBinding Modifiers="Control" Key="Q" Command="posterTester:CustomCommands.Exit" />
 
-		<KeyBinding Modifiers="Control+Shift" Key="Return" Command="posterTester:CustomCommands.Attack" />
-		<KeyBinding Modifiers="Control" Key="Return" Command="posterTester:CustomCommands.Execute" />
+        <KeyBinding Modifiers="Control+Shift" Key="Return" Command="posterTester:CustomCommands.Attack" />
+        <KeyBinding Modifiers="Control" Key="Return" Command="posterTester:CustomCommands.Execute" />
         <KeyBinding Modifiers="Control" Key="F" Command="posterTester:CustomCommands.Format" />
         <KeyBinding Modifiers="Control" Key="N" Command="posterTester:CustomCommands.NewRequest" />
         <KeyBinding Modifiers="Control" Key="P" Command="posterTester:CustomCommands.LoadPost" />
@@ -98,34 +99,34 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <Menu Width="Auto" Grid.Row="0">
             <MenuItem Header="_File">
-				<MenuItem Header="_Save" Command="posterTester:CustomCommands.Save" InputGestureText="Ctrl-S" />
-				<MenuItem Header="_Settings..." Command="posterTester:CustomCommands.Settings"/>
-				<MenuItem Header="E_xit" Command="posterTester:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
+                <MenuItem Header="_Save" Command="posterTester:CustomCommands.Save" InputGestureText="Ctrl-S" />
+                <MenuItem Header="_Settings..." Command="posterTester:CustomCommands.Settings"/>
+                <MenuItem Header="E_xit" Command="posterTester:CustomCommands.Exit" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="_Group">
                 <MenuItem Header="Create _new group..." Command="posterTester:CustomCommands.CreateNewGroup"/>
-				<MenuItem Header="Add _existing group..." Command="posterTester:CustomCommands.AddExistingGroup"/>
-				<MenuItem Header="Rename current group..." Command="posterTester:CustomCommands.GroupSettings"/>
+                <MenuItem Header="Add _existing group..." Command="posterTester:CustomCommands.AddExistingGroup"/>
+                <MenuItem Header="Rename current group..." Command="posterTester:CustomCommands.GroupSettings"/>
                 <MenuItem Header="_Forget current group (won't delete file)" Command="posterTester:CustomCommands.ForgetGroup"/>
                 <Separator />
                 <MenuItem Header="Compare responses from 2 requests..." Command="posterTester:CustomCommands.Compare"/>
-				<MenuItem Header="Compare attacks from 2 requests..." Command="posterTester:CustomCommands.CompareAttack"/>
+                <MenuItem Header="Compare attacks from 2 requests..." Command="posterTester:CustomCommands.CompareAttack"/>
             </MenuItem>
             <MenuItem Header="_Request">
                 <MenuItem Header="_New Request" Command="posterTester:CustomCommands.NewRequest" InputGestureText="Ctrl-N" />
                 <MenuItem Header="Rename request" Command="posterTester:CustomCommands.Rename" InputGestureText="F2"/>
                 <MenuItem Header="Delete selected request" Command="posterTester:CustomCommands.DeleteSelectedRequest"/>
                 <Separator />
-				<MenuItem Header="_Browse local data..." Command="posterTester:CustomCommands.BrowseData"/>
+                <MenuItem Header="_Browse local data..." Command="posterTester:CustomCommands.BrowseData"/>
                 <MenuItem Header="Format request body" Command="posterTester:CustomCommands.Format" InputGestureText="Ctrl-F" />
                 <MenuItem Header="Import request body from file" Command="posterTester:CustomCommands.LoadPost"/>
                 <Separator />
                 <MenuItem Header="Format reponse?" IsCheckable="True" IsChecked="{Binding FormatResponse}"/>
                 <MenuItem Header="Execute" Command="posterTester:CustomCommands.Execute" InputGestureText="Ctrl-Return" />
-				<MenuItem Header="Attack..." Command="posterTester:CustomCommands.Attack" InputGestureText="Ctrl-Shift-Return" />
+                <MenuItem Header="Attack..." Command="posterTester:CustomCommands.Attack" InputGestureText="Ctrl-Shift-Return" />
             </MenuItem>
             <MenuItem Header="Focus">
                 <MenuItem Header="Focus requests" Command="posterTester:CustomCommands.FocusRequests" InputGestureText="Ctrl-R" />
@@ -143,7 +144,7 @@
                 <MenuItem Header="Select request 9" Command="posterTester:CustomCommands.SelectRequest9" InputGestureText="Ctrl-9" />
             </MenuItem>
         </Menu>
-        
+
         <!-- main application here below menu -->
         <Grid Grid.Row="1">
             <Grid>
@@ -168,7 +169,7 @@
                     <ComboBox Margin="3" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}"
                               DisplayMemberPath="Name"
                               />
-                    
+
                     <ListView x:Name="uiRequests" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding SelectedGroup.Requests}" SelectedItem="{Binding SelectedGroup.SelectedRequest}">
                         <ListView.InputBindings>
                             <KeyBinding Key="Delete" Command="posterTester:CustomCommands.DeleteSelectedRequest" />
@@ -184,7 +185,7 @@
                 </Grid>
 
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                
+
                 <!-- Right pane -->
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>
@@ -198,140 +199,163 @@
 
                     <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedGroup.SelectedRequest.Method}"/>
 
-					<Grid Grid.Row="0" Grid.Column="1">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="Auto" />
-						</Grid.ColumnDefinitions>
-						<TextBox Grid.Column="0" Padding="3" Margin="3" x:Name="uiUrl" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
-						<Button Grid.Column="1" Margin="3" Padding="3" Command="posterTester:CustomCommands.BrowseUrl">
-							...
-						</Button>
-						<Button Grid.Column="2" Margin="3" Padding="3" Command="posterTester:CustomCommands.ChangeTimeout">
-							<TextBlock Text="{Binding SelectedGroup.SelectedRequest.Timeout}"/>
-						</Button>
-					</Grid>
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Padding="3" Margin="3" x:Name="uiUrl" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Grid.Column="1" Margin="3" Padding="3" Command="posterTester:CustomCommands.BrowseUrl">
+                            ...
+                        </Button>
+                        <Button Grid.Column="2" Margin="3" Padding="3" Command="posterTester:CustomCommands.ChangeTimeout">
+                            <TextBlock Text="{Binding SelectedGroup.SelectedRequest.Timeout}"/>
+                        </Button>
+                    </Grid>
 
-					<TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom" x:Name="dlgMainTab">
-						<TabItem Header="Response" x:Name="dlgTabResponse">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="*" />
-									<RowDefinition Height="auto" />
-								</Grid.RowDefinitions>
+                    <TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom" x:Name="dlgMainTab">
+                        <TabItem Header="Response" x:Name="dlgTabResponse">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
 
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*" />
-									<ColumnDefinition Width="*" />
-									<ColumnDefinition Width="auto" />
-								</Grid.ColumnDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
 
-								<!-- begin main body -->
-								<Grid Grid.Row="0" Grid.ColumnSpan="3">
+                                <!-- begin main body -->
+                                <Grid Grid.Row="0" Grid.ColumnSpan="3">
 
-									<!-- No request body -->
-									<Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
-										<Grid.RowDefinitions>
-											<RowDefinition Height="auto" />
-											<RowDefinition Height="*" />
-										</Grid.RowDefinitions>
-										<DockPanel>
-											<TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
-											<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
-										</DockPanel>
-										<controls:ResponseControl Grid.Row="2" DataContext="{Binding}" />
-									</Grid>
-
-
-									<!-- Has request body -->
-									<Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
+                                    <!-- No request body -->
+                                    <Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
 										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="*" />
-											<ColumnDefinition Width="5" />
-											<ColumnDefinition Width="*" />
+											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="*"/>
 										</Grid.ColumnDefinitions>
+										
+	                                    <TextBlock
+											Grid.Row="0"
+											Grid.Column="0"
+											FontWeight="Bold" FontStyle="Italic" Text="Response" />
+										<controls:RequestProgress
+											Grid.Row="0"
+											Grid.Column="1"
+											DataContext="{Binding SelectedGroup.SelectedRequest}"/>
+										<controls:ResponseControl
+											Grid.Row="1"
+											Grid.Column="0" Grid.ColumnSpan="2"
+											DataContext="{Binding}" />
+                                    </Grid>
 
-										<Grid Grid.Column="0">
-											<Grid.RowDefinitions>
-												<RowDefinition Height="auto" />
-												<RowDefinition Height="*" />
-											</Grid.RowDefinitions>
-											<TextBlock FontWeight="Bold" Text="Body" />
 
-											<Grid Grid.Row="1">
-												<Grid.RowDefinitions>
-													<RowDefinition Height="auto"/>
-													<RowDefinition Height="*" />
-												</Grid.RowDefinitions>
-												<ComboBox Grid.Row="0" Margin="3" ItemsSource="{Binding AllContentTypes}" SelectedItem="{Binding SelectedGroup.SelectedRequest.ContentType}" DisplayMemberPath="Name"/>
-												<TextBox Padding="3" Grid.Row="1" Margin="3" x:Name="uiPost" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                    <!-- Has request body -->
+                                    <Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfTrueConverter}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="5" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock FontWeight="Bold" Text="Body" />
+
+                                            <Grid Grid.Row="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <ComboBox Grid.Row="0" Margin="3" ItemsSource="{Binding AllContentTypes}" SelectedItem="{Binding SelectedGroup.SelectedRequest.ContentType}" DisplayMemberPath="Name"/>
+                                                <TextBox Padding="3" Grid.Row="1" Margin="3" x:Name="uiPost" Text="{Binding SelectedGroup.SelectedRequest.TextContent, UpdateSourceTrigger=PropertyChanged}"
                                              FontFamily="Consolas" FontSize="11"
                                              AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
-											</Grid>
-										</Grid>
+                                            </Grid>
+                                        </Grid>
 
-										<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                                        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
-										<Grid Grid.Column="2">
-											<Grid.RowDefinitions>
-												<RowDefinition Height="auto" />
-												<RowDefinition Height="*" />
-											</Grid.RowDefinitions>
-											<DockPanel>
-												<TextBlock FontWeight="Bold" FontStyle="Italic" Text="Response" />
-												<ProgressBar Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" HorizontalAlignment="Right" Width="200" Margin="3" IsIndeterminate="True" />
-											</DockPanel>
+                                        <Grid Grid.Column="2">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="auto" />
+												<ColumnDefinition Width="*" />
+											</Grid.ColumnDefinitions>
+											<TextBlock
+												Grid.Row="0"
+												Grid.Column="0"
+												FontWeight="Bold" FontStyle="Italic" Text="Response"
+												VerticalAlignment="Center"
+												/>
+											<controls:RequestProgress Grid.Row="0" Grid.Column="1" DataContext="{Binding SelectedGroup.SelectedRequest}"/>
+											<controls:ResponseControl
+												Grid.Row="1"
+	                                            Grid.Column="0" Grid.ColumnSpan="2"
+                                                DataContext="{Binding}" />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <!-- end main body-->
+                            </Grid>
+                        </TabItem>
 
-											<controls:ResponseControl Grid.Row="2" DataContext="{Binding}" />
-										</Grid>
-									</Grid>
-								</Grid>
-								<!-- end main body-->
-							</Grid>
-						</TabItem>
-
-						<TabItem Header="Attack" x:Name="dlgTabAttack">
-							<Grid>
+                        <TabItem Header="Attack" x:Name="dlgTabAttack">
+                            <Grid>
 								<Grid.RowDefinitions>
 									<RowDefinition Height="auto" />
 									<RowDefinition Height="auto" />
 									<RowDefinition Height="*" />
 								</Grid.RowDefinitions>
-								<ProgressBar Grid.Row="0" Visibility="{Binding SelectedGroup.SelectedRequest.IsWorking, Converter={StaticResource VisibleIfTrueConverter}}" Margin="3" Height="5" IsIndeterminate="True" />
+								<controls:RequestProgress
+									Grid.Row="0"
+									DataContext="{Binding SelectedGroup.SelectedRequest}"/>
 
 								<StackPanel Grid.Row="1" Margin="3" Orientation="Horizontal">
-									<TextBlock Text="Points:" Margin="3,0"/>
-									<TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackOptions.Count}" />
-									
-									<TextBlock Text="Successful:" Margin="12,0,3,0"/>
-									<TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Result, Converter={StaticResource NumberOfItemsConverter}}" />
-									
-									<TextBlock Text="Failed:" Margin="12,0,3,0"/>
-									<TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource NumberOfItemsConverter}}" />
+                                    <TextBlock Text="Points:" Margin="3,0"/>
+                                    <TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackOptions.Count}" />
 
-									<TextBlock FontWeight="Bold" Margin="12,0,3,0" Text="{Binding SelectedGroup.SelectedRequest.PlotStatus}" />
-								</StackPanel>
+                                    <TextBlock Text="Successful:" Margin="12,0,3,0"/>
+                                    <TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Result, Converter={StaticResource NumberOfItemsConverter}}" />
 
-								<TabControl Grid.Row="2" x:Name="dlgAttackTab">
-									<TabItem Header="Histogram">
-										<WpfPlot x:Name="dlgPlot" />
-									</TabItem>
-									<TabItem Header="Errors">
-										<TextBox Padding="3" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource ConcatStringsConverter}}"
+                                    <TextBlock Text="Failed:" Margin="12,0,3,0"/>
+                                    <TextBlock FontWeight="Bold" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource NumberOfItemsConverter}}" />
+
+                                    <TextBlock FontWeight="Bold" Margin="12,0,3,0" Text="{Binding SelectedGroup.SelectedRequest.PlotStatus}" />
+                                </StackPanel>
+
+                                <TabControl Grid.Row="2" x:Name="dlgAttackTab">
+                                    <TabItem Header="Histogram">
+                                        <WpfPlot x:Name="dlgPlot" />
+                                    </TabItem>
+                                    <TabItem Header="Errors">
+                                        <TextBox Padding="3" Text="{Binding SelectedGroup.SelectedRequest.AttackResult.Errors, Converter={StaticResource ConcatStringsConverter}}"
 											FontFamily="Consolas" FontSize="11" IsReadOnly="True" Background="LightGray"
 											HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"/>
-									</TabItem>
-								</TabControl>
-							</Grid>
-							
-						</TabItem>
-					</TabControl>
+                                    </TabItem>
+                                </TabControl>
+                            </Grid>
 
-				</Grid>
+                        </TabItem>
+                    </TabControl>
+
+                </Grid>
             </Grid>
         </Grid>
-        
-        
+
+
     </Grid>
 </Window>

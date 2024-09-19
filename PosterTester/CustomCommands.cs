@@ -43,5 +43,7 @@ namespace PosterTester
 		public static RoutedCommand BrowseUrl = new RoutedCommand();
 		public static RoutedCommand ChangeTimeout = new RoutedCommand();
 
+
+		public static RoutedCommand Abort = new RoutedCommand();
 	}
 }
