@@ -1,21 +1,17 @@
-using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using PosterLib.Data;
 using PosterLib.Domain;
-using ScottPlot;
 
 namespace PosterTester;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+public partial class MainWindow
 {
     private const string PostGroupExt = "PosterTesterGroup";
     private const string PostGroupFilesFilter = $"Post group files (*.{PostGroupExt})|*.{PostGroupExt}|All files (*.*)|*.*";
@@ -31,7 +27,7 @@ public partial class MainWindow : Window
 		this.Closed += (closedSender, closedArgs) => Save();
 
 		// https://scottplot.net/faq/mvvm/
-		this.Root.OnSelectionChanged += () => UpdatePlotForSelectedRequest();
+		this.Root.OnSelectionChanged += UpdatePlotForSelectedRequest;
 
 		UpdatePlotForSelectedRequest();
 	}
@@ -44,8 +40,7 @@ public partial class MainWindow : Window
     private Request? GetSelectedRequest()
     {
         var g = this.Root.SelectedGroup;
-        if (g == null) { return null; }
-        return g.SelectedRequest;
+        return g?.SelectedRequest;
     }
 
 	public void BrowseDataExecuted(object sender, ExecutedRoutedEventArgs e)

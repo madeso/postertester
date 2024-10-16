@@ -26,23 +26,23 @@ public partial class BrowseUrl : Window
 
 public class UrlData : INotifyPropertyChanged
 {
-	private string _absoluteUri;
-	private string _authority;
-	private string _dnsSafeHost;
-	private string _fragment;
-	private string _host;
-	private string _idnHost;
-	private string _scheme;
-	private string _userInfo;
-	private int _port;
-	private bool _isDefaultPort;
-	private bool _isAbsoluteUri;
-	private bool _isFile;
-	private bool _isLoopback;
-	private bool _isUnc;
-	private bool _userEscaped;
-	private string[] _segments;
-	public event PropertyChangedEventHandler? PropertyChanged;
+	private string _absoluteUri = string.Empty;
+	private string _authority = string.Empty;
+	private string _dnsSafeHost = string.Empty;
+	private string _fragment = string.Empty;
+	private string _host = string.Empty;
+	private string _idnHost = string.Empty;
+	private string _scheme = string.Empty;
+	private string _userInfo = string.Empty;
+	private int _port = 0;
+	private bool _isDefaultPort = false;
+	private bool _isAbsoluteUri = false;
+	private bool _isFile = false;
+	private bool _isLoopback = false;
+	private bool _isUnc = false;
+	private bool _userEscaped = false;
+	private string[] _segments = {};
+	public event PropertyChangedEventHandler? PropertyChanged = null;
 
 	public UrlData(string url)
 	{

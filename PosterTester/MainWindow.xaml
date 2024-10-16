@@ -8,6 +8,7 @@
         xmlns:data="clr-namespace:PosterLib.Data;assembly=PosterLib"
 		xmlns:controls="clr-namespace:PosterTester.Controls"
         xmlns:converters="clr-namespace:PosterTester.Converters"
+        xmlns:wpf="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
         mc:Ignorable="d"
         Icon="icon.ico"
         Width="800" Height="600"
