@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -77,18 +78,19 @@ public static class Logic
 	private static readonly HttpClient client = new(handler) { Timeout = new TimeSpan(24, 20, 31, 23) };
 
 
-	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent? content, CancellationToken ct)
+	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent? content, CancellationToken ct, Auth auth)
 	{
+		auth.Setup(client);
 		return action switch
-		{
-			HttpMethod.Get => await client.GetAsync(url, ct),
-			HttpMethod.Post => await client.PostAsync(url, content!, ct),
-			HttpMethod.Put => await client.PutAsync(url, content!, ct),
-			HttpMethod.Delete => await client.DeleteAsync(url, ct),
-			HttpMethod.Patch => await client.PatchAsync(url, content!, ct),
+			{
+				HttpMethod.Get => await client.GetAsync(url, ct),
+				HttpMethod.Post => await client.PostAsync(url, content!, ct),
+				HttpMethod.Put => await client.PutAsync(url, content!, ct),
+				HttpMethod.Delete => await client.DeleteAsync(url, ct),
+				HttpMethod.Patch => await client.PatchAsync(url, content!, ct),
 
-			_ => throw new Exception($"Invalid action: {action}"),
-		};
+				_ => throw new Exception($"Invalid action: {action}"),
+			};
 	}
 
 	internal static bool HasContent(HttpMethod action)
@@ -118,7 +120,7 @@ public static class Logic
 		return new StringContent(t, Encoding.UTF8, "application/json");
 	}
 
-	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content, long timeoutMs, CancellationToken ct)
+	public static async Task<Response> GetUrl(HttpMethod action, Uri url, HttpContent? content, long timeoutMs, CancellationToken ct, Auth auth)
 	{
 		// todo(Gustav): expose and enrich headers
 
@@ -126,7 +128,7 @@ public static class Logic
 
 		var headers = client.DefaultRequestHeaders.ToArray();
 		var cookies = cookieContainer.GetAllCookies().ToList();
-		var responseTask = GetResponse(action, url, content, ct);
+		var responseTask = GetResponse(action, url, content, ct, auth);
 		var resultTask = await Task.WhenAny(responseTask, Task.Delay(timeout, ct));
 		if (responseTask.IsCompletedSuccessfully == false) throw new Exception($"Timeout after {timeout}");
 		using var response = responseTask.Result;
@@ -189,8 +191,8 @@ public static class Logic
 	{
 		var url = new Uri(r.Url);
 		var data = HasContent(r.Method)
-			? await GetUrl(HttpMethod.Post, url, r.GetContent(), r.Timeout.TotalMilliSeconds, ct)
-			: await GetUrl(HttpMethod.Get, url, null, r.Timeout.TotalMilliSeconds, ct);
+			? await GetUrl(HttpMethod.Post, url, r.GetContent(), r.Timeout.TotalMilliSeconds, ct, r.GetAuth())
+			: await GetUrl(HttpMethod.Get, url, null, r.Timeout.TotalMilliSeconds, ct, r.GetAuth());
 		return data;
 	}
 

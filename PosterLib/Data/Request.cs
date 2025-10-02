@@ -31,6 +31,9 @@ public class Request : INotifyPropertyChanged
 
 	public CancellationTokenSource? CancellationToken { get; set; } = null;
 
+	private bool _useBearer = false;
+	private string _bearerToken = "";
+
 	public string TitleOrUrl
 	{
 		get => this._titleOrUrl; private set
@@ -55,6 +58,23 @@ public class Request : INotifyPropertyChanged
 		get => guid; set
 		{
 			guid = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public bool UseBearerToken
+	{
+		get => this._useBearer; set
+		{
+			this._useBearer = value;
+			OnPropertyChanged();
+		}
+	}
+	public string BearerToken
+	{
+		get => this._bearerToken; set
+		{
+			this._bearerToken = value;
 			OnPropertyChanged();
 		}
 	}
@@ -202,6 +222,18 @@ public class Request : INotifyPropertyChanged
 	internal System.Net.Http.HttpContent GetContent()
 	{
 		return this.ContentType.CreateContent(this);
+	}
+
+	public Auth GetAuth()
+	{
+		if (UseBearerToken)
+		{
+			return new BearerAuth(BearerToken);
+		}
+		else
+		{
+			return new NoAuth();
+		}
 	}
 }
 

@@ -219,18 +219,30 @@
                         <TabItem Header="Response" x:Name="dlgTabResponse">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
                                     <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
 
-                                <!-- begin main body -->
-                                <Grid Grid.Row="0" Grid.ColumnSpan="3">
+								<!-- Generic Request Data -->
+	                            <Grid Grid.Row="0">
+									<Grid.RowDefinitions>
+										<RowDefinition Height="auto"/>
+									</Grid.RowDefinitions>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<CheckBox Grid.Row="0" Grid.Column="0" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.SelectedRequest.UseBearerToken}">Bearer</CheckBox>
+									<TextBox Grid.Row="0" Grid.Column="1" Margin="3" Padding="3" Text="{Binding SelectedGroup.SelectedRequest.BearerToken, UpdateSourceTrigger=PropertyChanged}"/>
+	                            </Grid>
+
+								<!-- begin main body -->
+                                <Grid Grid.Row="1" Grid.Column="0">
 
                                     <!-- No request body -->
                                     <Grid Visibility="{Binding SelectedGroup.SelectedRequest.HasPost, Converter={StaticResource VisibleIfFalseConverter}}">
