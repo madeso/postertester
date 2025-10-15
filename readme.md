@@ -1,6 +1,6 @@
 # PosterTester
 
-Basic "postman" clone in .NET 6 in WPF (i.e windows only at the moment).
+Basic "postman" clone in .NET 8 in WPF (i.e windows only at the moment).
 
 Warning: Still in development, stored data might be destroyed after a update
 
@@ -41,15 +41,21 @@ Compare the response time for 2 requests. Does two different endpoints roughly t
 
 
 ## Possible some time in the future (not necessarily in a specifc order)
+* Remove existing uri editor
+* Add options to groups
+* Add icons to request list. Request type(post/get/etc...) and it uses the shared login (lock icon)
+* Move groups to a tree view?
+* Group settings (url variables, shared login settings)
+* Make the ui more pretty (port to avalonia)
+* AOT port
+* Make it cross platform
 * Option to send compact json
-* Uri editor
 * Ctrl-p to fuzzy match requests and groups
 * Better progress indicator when doing attacks
 * Ctrl-tab functionality to switch between recently used requests
 * Use output from one request as input to another
 * Script tests and input "wizards" with .net
 * Solarized light + dark theme
-* Make it cross platform
 * More features to the requests input (like timeout settings)
 * Login options (auth0 etc...)
 * Launch a diff between requests
