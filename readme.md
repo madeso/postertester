@@ -44,7 +44,8 @@ Compare the response time for 2 requests. Does two different endpoints roughly t
 * Add options to groups, new bottom tab
 * Group settings (url variables, shared login settings)
 * Add icons to request list. Request type(post/get/etc...) and it uses the shared login (lock icon)
-* Move groups to a tree view?
+* Add function to move requests between groups
+* Change groups list/dropdown to a tree view?
 * Make the ui more pretty (port to avalonia)
 * AOT port
 * Make it cross platform
