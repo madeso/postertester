@@ -78,7 +78,7 @@ public static class Disk
 		return folder;
 	}
 
-	private static T ReadFile<T>(string path)
+	public static T ReadFile<T>(string path)
 	{
 		string data = File.ReadAllText(path);
 		var parsed = JsonConvert.DeserializeObject<T>(data);

@@ -1,7 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using PosterLib.Domain;
+using PosterLib.Saved;
 
 namespace PosterLib.Data;
 
@@ -111,4 +117,48 @@ public class RequestGroup : INotifyPropertyChanged
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 	}
+
+	Request? RequestFromName(string name)
+		=> this.Requests.FirstOrDefault(r => r.Title == name);
+
+	public void ImportPostman(string path)
+	{
+		var postman = Disk.ReadFile<PostmanFile>(path);
+
+		var vars = postman.Variables.ToImmutableDictionary(x => x.Key, x => x.Value);
+
+		foreach (var src in postman.Items)
+		{
+			var request = RequestFromName(src.Name);
+			if(request == null)
+			{
+				request = new Request() { Guid = Guid.NewGuid(), Title = src.Name };
+				this.Requests.Add(request);
+			}
+
+			request.Method = Enum.TryParse<HttpMethod>(src.Request.Method, true, out var method)
+				? method
+				: HttpMethod.Get;
+			request.Url = src.Request.Url.Raw;
+			if (vars.Count > 0)
+			{
+				foreach (var v in vars)
+				{
+					request.Url = request.Url.Replace("{{" + v.Key + "}}", v.Value);
+				}
+			}
+			if (src.Request.Body.Mode == "raw")
+			{
+				request.TextContent = src.Request.Body.Raw;
+				request.ContentType = ContentTypeJson.Instance;
+			}
+			else
+			{
+				request.TextContent = "";
+				request.ContentType = ContentTypeText.Instance;
+			}
+		}
+	}
 }
+
+

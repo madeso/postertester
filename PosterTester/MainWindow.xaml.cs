@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -462,5 +463,25 @@ public partial class MainWindow
     private void SelectRequest9Executed(object sender, ExecutedRoutedEventArgs e)
     {
         SelectRequest(9);
+    }
+
+    private void ImportRequestsToGroup(object sender, ExecutedRoutedEventArgs e)
+    {
+	    var group = Root.SelectedGroup;
+	    if (group == null) { ShowMissingGroup(); return; }
+	    if (group.Builtin) { ShowError("You probably don't want to import to builtin..."); return; }
+
+		var fdlg = new OpenFileDialog
+		{
+			Title = "Browse postman file",
+			Filter = "Postman collection files|*.postman_collection.json|Json files (json)|*.json|All files (*.*)|*.*",
+			RestoreDirectory = true
+		};
+
+		using var blur = new DialogBackground(this);
+		bool? dr = fdlg.ShowDialog();
+		if (dr == false) { return; }
+
+		group.ImportPostman(fdlg.FileName);
     }
 }

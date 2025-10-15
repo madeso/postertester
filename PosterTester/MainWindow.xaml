@@ -35,6 +35,7 @@
         <CommandBinding Command="posterTester:CustomCommands.AddExistingGroup" Executed="AddExistingGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.ForgetGroup" Executed="ForgetGroupExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.GroupSettings" Executed="GroupSettingsExecuted"/>
+		<CommandBinding Command="posterTester:CustomCommands.ImportRequestsToGroup" Executed="ImportRequestsToGroup" />
 
         <CommandBinding Command="posterTester:CustomCommands.Attack" Executed="AttackExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.Execute" Executed="ExecuteExecuted"/>
@@ -112,6 +113,7 @@
                 <MenuItem Header="Add _existing group..." Command="posterTester:CustomCommands.AddExistingGroup"/>
                 <MenuItem Header="Rename current group..." Command="posterTester:CustomCommands.GroupSettings"/>
                 <MenuItem Header="_Forget current group (won't delete file)" Command="posterTester:CustomCommands.ForgetGroup"/>
+                <MenuItem Header="_Import from Postman" Command="posterTester:CustomCommands.ImportRequestsToGroup"/>
                 <Separator />
                 <MenuItem Header="Compare responses from 2 requests..." Command="posterTester:CustomCommands.Compare"/>
                 <MenuItem Header="Compare attacks from 2 requests..." Command="posterTester:CustomCommands.CompareAttack"/>

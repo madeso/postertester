@@ -45,5 +45,7 @@ namespace PosterTester
 
 
 		public static RoutedCommand Abort = new RoutedCommand();
-	}
+
+		public static RoutedCommand ImportRequestsToGroup = new RoutedCommand();
+    }
 }
