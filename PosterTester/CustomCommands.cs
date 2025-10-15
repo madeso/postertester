@@ -40,7 +40,6 @@ namespace PosterTester
         public static RoutedCommand FocusUrl = new RoutedCommand();
         public static RoutedCommand FocusPost = new RoutedCommand();
 
-		public static RoutedCommand BrowseUrl = new RoutedCommand();
 		public static RoutedCommand ChangeTimeout = new RoutedCommand();
 
 

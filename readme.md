@@ -41,7 +41,6 @@ Compare the response time for 2 requests. Does two different endpoints roughly t
 
 
 ## Possible some time in the future (not necessarily in a specifc order)
-* Remove existing uri editor
 * Add options to groups, new bottom tab
 * Group settings (url variables, shared login settings)
 * Add icons to request list. Request type(post/get/etc...) and it uses the shared login (lock icon)

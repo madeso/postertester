@@ -114,29 +114,6 @@ public partial class MainWindow
 		ShowError("No group is selected!");
 	}
 
-	private void BrowseUrlExecuted(object sender, ExecutedRoutedEventArgs e)
-	{
-		string? RunBrowseDialog()
-		{
-			var url = this.Root.SelectedGroup?.SelectedRequest?.Url;
-			if (url == null) return null;
-
-			var dlg = new Dialogs.BrowseUrl(url);
-			using var blur = new DialogBackgroundWithDialog(this, dlg);
-			if (dlg.ShowDialog() ?? false)
-			{
-				return url;
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		RunBrowseDialog();
-	}
-
-
 	private void AbortExecuted(object sender, ExecutedRoutedEventArgs e)
 	{
 		var req = GetSelectedRequest();
