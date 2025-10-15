@@ -42,10 +42,10 @@ Compare the response time for 2 requests. Does two different endpoints roughly t
 
 ## Possible some time in the future (not necessarily in a specifc order)
 * Remove existing uri editor
-* Add options to groups
+* Add options to groups, new bottom tab
+* Group settings (url variables, shared login settings)
 * Add icons to request list. Request type(post/get/etc...) and it uses the shared login (lock icon)
 * Move groups to a tree view?
-* Group settings (url variables, shared login settings)
 * Make the ui more pretty (port to avalonia)
 * AOT port
 * Make it cross platform
