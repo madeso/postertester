@@ -179,6 +179,18 @@ public class RequestGroup : INotifyPropertyChanged
 		this.Requests.Insert(Math.Min(this.Requests.Count, index + 1), r);
 		this.SelectedRequest = r;
 	}
+
+	public void SortRequests()
+	{
+		var r = this.SelectedRequest;
+		if (r == null) return;
+		// todo(Gustav): provide a comparer so the order is defined
+		var sorted = this.Requests.All(x => string.IsNullOrWhiteSpace(x.Title))
+			? this.Requests.OrderBy(x => x.Url)
+			: this.Requests.OrderBy(x => x.TitleOrUrl);
+		this.Requests = new ObservableCollection<Request>(sorted);
+		this.SelectedRequest = r;
+	}
 }
 
 

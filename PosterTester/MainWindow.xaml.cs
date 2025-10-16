@@ -478,4 +478,13 @@ public partial class MainWindow
 
 	    group.MoveRequestDown();
 	}
+
+    private void SortRequests(object sender, ExecutedRoutedEventArgs e)
+    {
+		var group = Root.SelectedGroup;
+		if (group == null) { ShowMissingGroup(); return; }
+
+		group.SortRequests();
+
+    }
 }

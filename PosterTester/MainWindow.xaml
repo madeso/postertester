@@ -55,6 +55,7 @@
 
         <CommandBinding Command="posterTester:CustomCommands.MoveRequestUp" Executed="MoveRequestUp"/>
         <CommandBinding Command="posterTester:CustomCommands.MoveRequestDown" Executed="MoveRequestDown"/>
+        <CommandBinding Command="posterTester:CustomCommands.SortRequests" Executed="SortRequests"/>
 
         <CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
@@ -123,6 +124,7 @@
                 <Separator />
                 <MenuItem Header="_Move request up" Command="posterTester:CustomCommands.MoveRequestUp" InputGestureText="Ctrl-Up"/>
                 <MenuItem Header="_Move request down" Command="posterTester:CustomCommands.MoveRequestDown" InputGestureText="Ctrl-Down"/>
+                <MenuItem Header="Sort requests alphabetically" Command="posterTester:CustomCommands.SortRequests"/>
                 <Separator />
                 <MenuItem Header="Compare responses from 2 requests..." Command="posterTester:CustomCommands.Compare"/>
                 <MenuItem Header="Compare attacks from 2 requests..." Command="posterTester:CustomCommands.CompareAttack"/>

@@ -49,5 +49,6 @@ namespace PosterTester
 		public static RoutedCommand MoveRequestDown = new RoutedCommand();
 
 		public static RoutedCommand ImportRequestsToGroup = new RoutedCommand();
-    }
+		public static RoutedCommand SortRequests = new RoutedCommand();
+	}
 }
