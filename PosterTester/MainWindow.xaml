@@ -53,6 +53,9 @@
 		<CommandBinding Command="posterTester:CustomCommands.ChangeTimeout" Executed="ChangeTimeoutExecuted" />
         <CommandBinding Command="posterTester:CustomCommands.Abort" Executed="AbortExecuted" />
 
+        <CommandBinding Command="posterTester:CustomCommands.MoveRequestUp" Executed="MoveRequestUp"/>
+        <CommandBinding Command="posterTester:CustomCommands.MoveRequestDown" Executed="MoveRequestDown"/>
+
         <CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.SelectRequest1" Executed="SelectRequest1Executed"/>
@@ -76,6 +79,9 @@
         <KeyBinding Modifiers="Control" Key="P" Command="posterTester:CustomCommands.LoadPost" />
 
         <KeyBinding Key="F2" Command="posterTester:CustomCommands.Rename" />
+
+        <KeyBinding Modifiers="Control" Key="Up" Command="posterTester:CustomCommands.MoveRequestUp" />
+        <KeyBinding Modifiers="Control" Key="Down" Command="posterTester:CustomCommands.MoveRequestDown" />
 
         <KeyBinding Modifiers="Control" Key="R" Command="posterTester:CustomCommands.FocusRequests" />
         <KeyBinding Modifiers="Control" Key="U" Command="posterTester:CustomCommands.FocusUrl" />
@@ -112,7 +118,11 @@
                 <MenuItem Header="Add _existing group..." Command="posterTester:CustomCommands.AddExistingGroup"/>
                 <MenuItem Header="Rename current group..." Command="posterTester:CustomCommands.GroupSettings"/>
                 <MenuItem Header="_Forget current group (won't delete file)" Command="posterTester:CustomCommands.ForgetGroup"/>
+                <Separator />
                 <MenuItem Header="_Import from Postman" Command="posterTester:CustomCommands.ImportRequestsToGroup"/>
+                <Separator />
+                <MenuItem Header="_Move request up" Command="posterTester:CustomCommands.MoveRequestUp" InputGestureText="Ctrl-Up"/>
+                <MenuItem Header="_Move request down" Command="posterTester:CustomCommands.MoveRequestDown" InputGestureText="Ctrl-Down"/>
                 <Separator />
                 <MenuItem Header="Compare responses from 2 requests..." Command="posterTester:CustomCommands.Compare"/>
                 <MenuItem Header="Compare attacks from 2 requests..." Command="posterTester:CustomCommands.CompareAttack"/>
@@ -175,7 +185,9 @@
                     <ListView x:Name="uiRequests" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding SelectedGroup.Requests}" SelectedItem="{Binding SelectedGroup.SelectedRequest}">
                         <ListView.InputBindings>
                             <KeyBinding Key="Delete" Command="posterTester:CustomCommands.DeleteSelectedRequest" />
-                        </ListView.InputBindings>
+                            <KeyBinding Modifiers="Control" Key="Up" Command="posterTester:CustomCommands.MoveRequestUp" />
+                            <KeyBinding Modifiers="Control" Key="Down" Command="posterTester:CustomCommands.MoveRequestDown" />
+						</ListView.InputBindings>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>

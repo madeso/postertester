@@ -461,4 +461,21 @@ public partial class MainWindow
 
 		group.ImportPostman(fdlg.FileName);
     }
+
+    private void MoveRequestUp(object sender, ExecutedRoutedEventArgs e)
+    {
+	    var group = Root.SelectedGroup;
+	    if (group == null) { ShowMissingGroup(); return; }
+
+		group.MoveRequestUp();
+
+	}
+
+    private void MoveRequestDown(object sender, ExecutedRoutedEventArgs e)
+    {
+	    var group = Root.SelectedGroup;
+	    if (group == null) { ShowMissingGroup(); return; }
+
+	    group.MoveRequestDown();
+	}
 }

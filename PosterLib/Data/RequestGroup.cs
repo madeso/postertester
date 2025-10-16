@@ -159,6 +159,26 @@ public class RequestGroup : INotifyPropertyChanged
 			}
 		}
 	}
+
+	public void MoveRequestUp()
+	{
+		var r = this.SelectedRequest;
+		if (r == null) return;
+		int index = this.Requests.IndexOf(r);
+		this.Requests.RemoveAt(index);
+		this.Requests.Insert(Math.Max(0, index - 1), r);
+		this.SelectedRequest = r;
+	}
+
+	public void MoveRequestDown()
+	{
+		var r = this.SelectedRequest;
+		if (r == null) return;
+		int index = this.Requests.IndexOf(r);
+		this.Requests.RemoveAt(index);
+		this.Requests.Insert(Math.Min(this.Requests.Count, index + 1), r);
+		this.SelectedRequest = r;
+	}
 }
 
 
