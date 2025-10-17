@@ -59,11 +59,14 @@ public partial class MainWindow
 
 	public async void ExecuteExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        var r = GetSelectedRequest();
+	    var group = Root.SelectedGroup;
+	    if (group == null) { ShowMissingGroup(); return; }
+
+		var r = GetSelectedRequest();
         if (r == null) { ShowMissingRequest(); return; }
 
 		dlgMainTab.SelectedItem = dlgTabResponse;
-		await Logic.Request(this.Root, r);
+		await Logic.Request(this.Root, r, group.ToAuthData());
         Save();
     }
 
@@ -169,6 +172,9 @@ public partial class MainWindow
 			}
 		}
 
+		var group = Root.SelectedGroup;
+		if (group == null) { ShowMissingGroup(); return; }
+
 		var r = GetSelectedRequest();
 		if (r == null) { ShowMissingRequest(); return; }
 
@@ -178,7 +184,7 @@ public partial class MainWindow
 			this.Root.Attack.GetFrom(options);
 			Save();
 			dlgMainTab.SelectedItem = dlgTabAttack;
-			var result = await Logic.Attack(this.Root, r);
+			var result = await Logic.Attack(this.Root, r, group.ToAuthData());
 
 			// todo(Gustav): display error!
 			r.AttackResult = result;

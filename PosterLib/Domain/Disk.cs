@@ -6,7 +6,13 @@ using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using PosterLib.Data;
+using PosterLib.Saved;
 using PosterTester.Extensions;
+using ContentType = PosterLib.Data.ContentType;
+using Headers = PosterLib.Data.Headers;
+using Request = PosterLib.Data.Request;
+using Response = PosterLib.Data.Response;
+using Root = PosterLib.Data.Root;
 
 namespace PosterLib.Domain;
 
@@ -122,6 +128,7 @@ public static class Disk
 				Url = r.Url ?? Request.DefaultUrl,
 				Title = r.Title ?? Request.DefaultTitle,
 				Method = r.Method ?? Request.DefaultMethod,
+				UseAuth = r.UseAuth ?? false,
 				ContentType = MakeType(r.ContentType),
 				TextContent = r.TextContent ?? "",
 				Timeout = new Time{TotalMilliSeconds = r.TimeoutInMs ?? Request.DefaultTimeoutMs},
@@ -206,6 +213,7 @@ public static class Disk
 					Requests = requests,
 					File = file,
 					Name = sourceGroup.Name ?? "missing name",
+					BearerToken = sourceGroup.BearerToken ?? "",
 					Builtin = isBuiltIn,
 					Guid = FromSavedGuid(sourceGroup.Guid),
 					SelectedRequest = sourceGroup.SelectedRequest == -1 ? null : requests[sourceGroup.SelectedRequest]
@@ -271,6 +279,7 @@ public static class Disk
 				Url = r.Url,
 				Title = r.Title,
 				Method = r.Method,
+				UseAuth = r.UseAuth,
 				ContentType = r.ContentType.SavedType,
 				TextContent = r.TextContent,
 				TimeoutInMs = r.Timeout.TotalMilliSeconds,
@@ -306,6 +315,7 @@ public static class Disk
 			{
 				Guid = ToSaved(g.Guid),
 				File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
+				BearerToken = g.BearerToken,
 				Results = g.Requests.Select(x =>
 				new Saved.Result
 				{
@@ -405,5 +415,12 @@ public static class Disk
 		Writer writer = new();
 		Save(writer, data, PathToSettings);
 		writer.WriteAll();
+	}
+
+	public static AuthFile? LoadAuth(string authFile)
+	{
+		if (string.IsNullOrEmpty(authFile)) return null;
+		
+		return ReadFile<AuthFile>(authFile);
 	}
 }

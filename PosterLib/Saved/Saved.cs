@@ -37,6 +37,9 @@ public class Request
 
 	[JsonProperty("timeout_ms")]
 	public long? TimeoutInMs { get; set; }
+
+	[JsonProperty("use_auth")]
+	public bool? UseAuth { get; set; }
 }
 
 public class RequestsFile
@@ -122,6 +125,9 @@ public class Group
 	[JsonProperty("guid")]
 	public string? Guid { get; internal set; }
 
+	[JsonProperty("bearer_token")]
+	public string? BearerToken { get; internal set; }
+
 	public const string BuiltinFile = "<my requests>";
 }
 
@@ -163,3 +169,10 @@ public class Root
 	[JsonProperty("bin_size")]
 	public double BinSize { get; set; } = 50.0;
 }
+
+public class AuthFile
+{
+	[JsonProperty("bearer_token")]
+	public string? BearerToken { get; set; }
+}
+

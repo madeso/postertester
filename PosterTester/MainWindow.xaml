@@ -255,7 +255,7 @@
 								           Margin="3"
 								           Text="Bearer token" />
 								<TextBox Grid.Row="2" Grid.Column="1" Margin="3" Padding="3"
-								         Text="{Binding SelectedGroup.SelectedRequest.BearerToken, UpdateSourceTrigger=PropertyChanged}"/>
+								         Text="{Binding SelectedGroup.BearerToken, UpdateSourceTrigger=PropertyChanged}"/>
 
 								<TextBlock Grid.Row="3" Grid.Column="0"
 										   VerticalAlignment="Center"
@@ -278,7 +278,7 @@
 								         Text="{Binding SelectedGroup.File, Mode=OneWay}" />
 
 
-								<CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.SelectedRequest.UseBearerToken}">Bearer</CheckBox>
+								<CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.SelectedRequest.UseAuth}">Request uses auth</CheckBox>
 							</Grid>
 						</TabItem>
 	                    <TabItem Header="Response" x:Name="dlgTabResponse">

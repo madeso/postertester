@@ -11,12 +11,17 @@ using PosterLib.Saved;
 
 namespace PosterLib.Data;
 
+public class AuthData
+{
+	public string BearerToken { get; set; } = string.Empty;
+}
 
 public class RequestGroup : INotifyPropertyChanged
 {
 	private bool _builtin = false;
 	private string _name = "";
 	private string _file = "";
+	private string _bearerToken = "";
 
 	private Request? selectedRequest = null;
 	private ObservableCollection<Request> requests = new();
@@ -73,6 +78,15 @@ public class RequestGroup : INotifyPropertyChanged
 		get => this._file; set
 		{
 			this._file = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public string BearerToken
+	{
+		get => this._bearerToken; set
+		{
+			this._bearerToken = value;
 			OnPropertyChanged();
 		}
 	}
@@ -190,6 +204,11 @@ public class RequestGroup : INotifyPropertyChanged
 			: this.Requests.OrderBy(x => x.TitleOrUrl);
 		this.Requests = new ObservableCollection<Request>(sorted);
 		this.SelectedRequest = r;
+	}
+
+	public AuthData ToAuthData()
+	{
+		return new AuthData { BearerToken = this.BearerToken };
 	}
 }
 

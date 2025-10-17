@@ -12,6 +12,9 @@ public class RunTestsSettings : CommandSettings
 {
 	[CommandArgument(0, "[GROUP]")]
 	public string GroupFile { get; set; } = string.Empty;
+
+	[CommandOption("-a|--authfile <AUTHFILE>")]
+	public string AuthFile { get; set; } = string.Empty;
 }
 
 
@@ -30,6 +33,18 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 			var loaded = Disk.LoadRequests(settings.GroupFile);
 			AnsiConsole.MarkupLineInterpolated($"Loaded file with gui [red]{loaded.Guid}[/]");
 
+			var authFile = Disk.LoadAuth(settings.AuthFile);
+			if (authFile != null)
+			{
+				AnsiConsole.MarkupLineInterpolated($"Applied auth from file [red]{settings.AuthFile}[/]");
+			}
+			else
+			{
+				authFile=new AuthFile();
+			}
+
+			var auth = new AuthData { BearerToken = authFile.BearerToken ?? string.Empty };
+
 			// Synchronous
 			await AnsiConsole.Status()
 				.StartAsync(CreateStatus(errorCount), async ctx =>
@@ -38,7 +53,7 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 					foreach (var req in loaded.Requests)
 					{
 						AnsiConsole.MarkupLineInterpolated($"Running [blue]{req.TitleOrUrl}[/]");
-						var response = await Logic.SingleAttack(req, cancel.Token);
+						var response = await Logic.SingleAttack(req, auth, cancel.Token);
 						SetSpinnerStatus(response, ctx, ref errorCount);
 
 						if (response.Error != null)
