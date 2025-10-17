@@ -227,7 +227,29 @@
                     </Grid>
 
                     <TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom" x:Name="dlgMainTab">
-                        <TabItem Header="Response" x:Name="dlgTabResponse">
+						<TabItem Header="Group" x:Name="dlgTabGroupSettings">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="auto"/>
+									<RowDefinition Height="auto"/>
+								</Grid.RowDefinitions>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+
+
+								<TextBlock Text="{Binding Path=SelectedGroup.Name, StringFormat='Group settings - \{0\}'}"
+										   Margin="6,3"
+										   FontSize="20" FontWeight="Bold"
+										   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+								           />
+
+								<CheckBox Grid.Row="1" Grid.Column="0" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.SelectedRequest.UseBearerToken}">Bearer</CheckBox>
+								<TextBox Grid.Row="1" Grid.Column="1" Margin="3" Padding="3" Text="{Binding SelectedGroup.SelectedRequest.BearerToken, UpdateSourceTrigger=PropertyChanged}"/>
+							</Grid>
+						</TabItem>
+	                    <TabItem Header="Response" x:Name="dlgTabResponse">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto" />
@@ -239,18 +261,10 @@
 								</Grid.ColumnDefinitions>
 
 								<!-- Generic Request Data -->
-	                            <Grid Grid.Row="0">
-									<Grid.RowDefinitions>
-										<RowDefinition Height="auto"/>
-									</Grid.RowDefinitions>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto"/>
-										<ColumnDefinition Width="*"/>
-									</Grid.ColumnDefinitions>
-
-									<CheckBox Grid.Row="0" Grid.Column="0" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.SelectedRequest.UseBearerToken}">Bearer</CheckBox>
-									<TextBox Grid.Row="0" Grid.Column="1" Margin="3" Padding="3" Text="{Binding SelectedGroup.SelectedRequest.BearerToken, UpdateSourceTrigger=PropertyChanged}"/>
-	                            </Grid>
+								<!--
+								<Grid Grid.Row="0">
+								</Grid>
+								-->
 
 								<!-- begin main body -->
                                 <Grid Grid.Row="1" Grid.Column="0">

@@ -31,7 +31,8 @@ public partial class MainWindow
 		this.Root.OnSelectionChanged += UpdatePlotForSelectedRequest;
 
 		UpdatePlotForSelectedRequest();
-	}
+		this.dlgMainTab.SelectedItem = this.dlgTabResponse;
+    }
 
     private void Save()
     {
