@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 
 public class BooleanConverter<T> : IValueConverter
@@ -31,10 +32,6 @@ public class BooleanConverter<T> : IValueConverter
 }
 
 
-public sealed class BooleanToVisibilityConverter : BooleanConverter<Visibility>
-{
-    public BooleanToVisibilityConverter() :
-        base(Visibility.Visible, Visibility.Collapsed)
-    {
-	}
-}
+public sealed class BooleanToVisibilityConverter() : BooleanConverter<Visibility>(Visibility.Visible, Visibility.Collapsed);
+
+public sealed class BooleanToBitmapImageConverter() : BooleanConverter<BitmapImage>(null, null);

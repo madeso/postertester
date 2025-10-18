@@ -21,10 +21,11 @@
         </MultiBinding>
     </Window.Title>
     <Window.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"  True="Visible"   False="Collapsed" />
+		<converters:BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter"  True="Visible"   False="Collapsed" />
         <converters:BooleanToVisibilityConverter x:Key="VisibleIfFalseConverter" True="Collapsed" False="Visible" />
         <converters:NumberOfItemsConverter x:Key="NumberOfItemsConverter" />
         <converters:ConcatStringsConverter x:Key="ConcatStringsConverter" />
+		<converters:BooleanToBitmapImageConverter x:Key="AuthIconConverter" True="{StaticResource IconLocked}" False="{StaticResource IconUnlocked}" />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Exit" Executed="ExitExecuted" />
@@ -192,8 +193,12 @@
 						</ListView.InputBindings>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <WrapPanel>
-                                    <TextBlock Text="{Binding TitleOrUrl}" Foreground="Blue"/>
+								<WrapPanel>
+									<Image Source="{Binding Path=UseAuth, Converter={StaticResource AuthIconConverter}, Mode=OneWay}"
+									       Width="16" Height="16"
+										   Margin="0,0,3,0"
+									       />
+									<TextBlock Text="{Binding TitleOrUrl}" Foreground="Blue"/>
                                 </WrapPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
