@@ -81,6 +81,7 @@ public static class Logic
 	private static async Task<HttpResponseMessage> GetResponse(HttpMethod action, Uri url, HttpContent? content, CancellationToken ct, Auth auth)
 	{
 		auth.Setup(client);
+
 		return action switch
 			{
 				HttpMethod.Get => await client.GetAsync(url, ct),

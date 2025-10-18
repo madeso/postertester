@@ -4,4 +4,10 @@
 	<BitmapImage x:Key="IconLocked" UriSource="Icons/lock.png" />
 	<BitmapImage x:Key="IconUnlocked" UriSource="Icons/lock-open-variant-outline.png" />
 
+	<BitmapImage x:Key="IconGet" UriSource="Icons/http-get.png" />
+	<BitmapImage x:Key="IconPost" UriSource="Icons/http-post.png" />
+	<BitmapImage x:Key="IconPut" UriSource="Icons/http-put.png" />
+	<BitmapImage x:Key="IconDelete" UriSource="Icons/http-delete.png" />
+	<BitmapImage x:Key="IconPatch" UriSource="Icons/http-patch.png" />
+
 </ResourceDictionary>

@@ -26,6 +26,13 @@
         <converters:NumberOfItemsConverter x:Key="NumberOfItemsConverter" />
         <converters:ConcatStringsConverter x:Key="ConcatStringsConverter" />
 		<converters:BooleanToBitmapImageConverter x:Key="AuthIconConverter" True="{StaticResource IconLocked}" False="{StaticResource IconUnlocked}" />
+		<converters:HttpMethodImageConverter x:Key="HttpMethodImageConverter"
+		                                     Get="{StaticResource IconGet}"
+		                                     Post="{StaticResource IconPost}"
+		                                     Put="{StaticResource IconPut}"
+		                                     Delete="{StaticResource IconDelete}"
+		                                     Patch="{StaticResource IconPatch}"
+		                                     />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="posterTester:CustomCommands.Exit" Executed="ExitExecuted" />
@@ -194,10 +201,14 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
 								<WrapPanel>
+									<Image Source="{Binding Path=Method, Converter={StaticResource HttpMethodImageConverter}, Mode=OneWay}"
+									       Width="16" Height="16"
+									       Margin="0,0,3,0"
+									/>
 									<Image Source="{Binding Path=UseAuth, Converter={StaticResource AuthIconConverter}, Mode=OneWay}"
 									       Width="16" Height="16"
-										   Margin="0,0,3,0"
-									       />
+									       Margin="0,0,3,0"
+									/>
 									<TextBlock Text="{Binding TitleOrUrl}" Foreground="Blue"/>
                                 </WrapPanel>
                             </DataTemplate>
