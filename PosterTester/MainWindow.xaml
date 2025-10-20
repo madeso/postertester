@@ -220,29 +220,30 @@
 
                 <!-- Right pane -->
                 <Grid Grid.Column="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedGroup.SelectedRequest.Method}"/>
-
-                    <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
+	                        <ColumnDefinition Width="Auto" />
+	                        <ColumnDefinition Width="Auto" />
+	                        <ColumnDefinition Width="*" />
 							<ColumnDefinition Width="Auto" />
 						</Grid.ColumnDefinitions>
-						<TextBox Grid.Column="0" Padding="3" Margin="3" x:Name="uiUrl" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
-						<Button Grid.Column="1" Margin="3" Padding="3" Command="posterTester:CustomCommands.ChangeTimeout">
+	                    <ComboBox Grid.Column="0" Margin="3" ItemsSource="{Binding AllRequestMethods}" SelectedItem="{Binding SelectedGroup.SelectedRequest.Method}"/>
+	                    <TextBox Grid.Column="1" Padding="3" Margin="3" Text="{Binding SelectedGroup.BaseUrl, UpdateSourceTrigger=PropertyChanged}" MinWidth="14" Visibility="{Binding SelectedGroup.UseBaseUrl, Converter={StaticResource VisibleIfTrueConverter}}" />
+						<TextBox Grid.Column="2" Padding="3" Margin="3" x:Name="uiUrl" Text="{Binding SelectedGroup.SelectedRequest.Url, UpdateSourceTrigger=PropertyChanged}" />
+						<Button Grid.Column="3" Margin="3" Padding="3" Command="posterTester:CustomCommands.ChangeTimeout">
                             <TextBlock Text="{Binding SelectedGroup.SelectedRequest.Timeout}"/>
                         </Button>
                     </Grid>
 
-                    <TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Bottom" x:Name="dlgMainTab">
+                    <TabControl Grid.Row="1" TabStripPlacement="Bottom" x:Name="dlgMainTab">
 						<TabItem Header="Group" x:Name="dlgTabGroupSettings">
 							<Grid>
 								<Grid.RowDefinitions>
@@ -292,6 +293,7 @@
 								         IsReadOnly="True"
 								         Background="LightGray"
 								         Text="{Binding SelectedGroup.File, Mode=OneWay}" />
+								<CheckBox Grid.Row="5" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.UseBaseUrl}">Use same base URL for all requests</CheckBox>
 
 
 								<CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.SelectedRequest.UseAuth}">Request uses auth</CheckBox>

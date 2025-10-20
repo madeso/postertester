@@ -41,7 +41,8 @@ Compare the response time for 2 requests. Does two different endpoints roughly t
 
 
 ## Possible some time in the future (not necessarily in a specifc order)
-* Group settings (url variables, shared login settings)
+* Add transition buttons to base url
+* Make base url a multiple choice (dev, test, localhost, custom etc...)
 * Add function to move requests between groups
 * Change groups list/dropdown to a tree view?
 * Make the ui more pretty (port to avalonia)

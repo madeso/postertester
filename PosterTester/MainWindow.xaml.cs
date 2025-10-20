@@ -62,11 +62,11 @@ public partial class MainWindow
 	    var group = Root.SelectedGroup;
 	    if (group == null) { ShowMissingGroup(); return; }
 
-		var r = GetSelectedRequest();
-        if (r == null) { ShowMissingRequest(); return; }
+		var request = GetSelectedRequest();
+        if (request == null) { ShowMissingRequest(); return; }
 
 		dlgMainTab.SelectedItem = dlgTabResponse;
-		await Logic.Request(this.Root, r, group.ToAuthData());
+		await Logic.Request(this.Root, group.ToGroupSettings(), request, group.ToAuthData());
         Save();
     }
 
@@ -175,8 +175,8 @@ public partial class MainWindow
 		var group = Root.SelectedGroup;
 		if (group == null) { ShowMissingGroup(); return; }
 
-		var r = GetSelectedRequest();
-		if (r == null) { ShowMissingRequest(); return; }
+		var request = GetSelectedRequest();
+		if (request == null) { ShowMissingRequest(); return; }
 
 		var options = RunAttackDialog();
 		if (options != null)
@@ -184,12 +184,12 @@ public partial class MainWindow
 			this.Root.Attack.GetFrom(options);
 			Save();
 			dlgMainTab.SelectedItem = dlgTabAttack;
-			var result = await Logic.Attack(this.Root, r, group.ToAuthData());
+			var result = await Logic.Attack(this.Root, group.ToGroupSettings(), request, group.ToAuthData());
 
 			// todo(Gustav): display error!
-			r.AttackResult = result;
-			r.AttackOptions = options;
-			UpdatePlotForRequest(r);
+			request.AttackResult = result;
+			request.AttackOptions = options;
+			UpdatePlotForRequest(request);
 			// Save();
 		}
 	}

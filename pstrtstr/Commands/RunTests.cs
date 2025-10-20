@@ -15,6 +15,9 @@ public class RunTestsSettings : CommandSettings
 
 	[CommandOption("-a|--authfile <AUTHFILE>")]
 	public string AuthFile { get; set; } = string.Empty;
+
+	[CommandOption("-b|--base-url <URL>")]
+	public string? BaseUrl { get; set; } = null;
 }
 
 
@@ -30,8 +33,14 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 		int errorCount = 0;
 		try
 		{
-			var loaded = Disk.LoadRequests(settings.GroupFile);
+			var loaded = Disk.LoadSharedGroupFile(settings.GroupFile);
 			AnsiConsole.MarkupLineInterpolated($"Loaded file with gui [red]{loaded.Guid}[/]");
+
+			if (settings.BaseUrl == null && loaded.UseBaseUrl)
+			{
+				AnsiConsole.MarkupLineInterpolated($"ERROR: Missing required base url!");
+				return -1;
+			}
 
 			var authFile = Disk.LoadAuth(settings.AuthFile);
 			if (authFile != null)
@@ -45,6 +54,8 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 
 			var auth = new AuthData { BearerToken = authFile.BearerToken ?? string.Empty };
 
+			var group = new GroupSettings(loaded.UseBaseUrl, settings.BaseUrl ?? "");
+
 			// Synchronous
 			await AnsiConsole.Status()
 				.StartAsync(CreateStatus(errorCount), async ctx =>
@@ -53,7 +64,7 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 					foreach (var req in loaded.Requests)
 					{
 						AnsiConsole.MarkupLineInterpolated($"Running [blue]{req.TitleOrUrl}[/]");
-						var response = await Logic.SingleAttack(req, auth, cancel.Token);
+						var response = await Logic.SingleAttack(group, req, auth, cancel.Token);
 						SetSpinnerStatus(response, ctx, ref errorCount);
 
 						if (response.Error != null)

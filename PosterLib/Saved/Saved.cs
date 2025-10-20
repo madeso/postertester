@@ -42,13 +42,16 @@ public class Request
 	public bool? UseAuth { get; set; }
 }
 
-public class RequestsFile
+public class SharedGroupFile
 {
 	[JsonProperty("requests")]
 	public Request[]? Requests { get; set; }
 
 	[JsonProperty("guid")]
 	public string? Guid { get; internal set; }
+
+	[JsonProperty("use_base_url")]
+	public bool? UseBaseUrl { get; internal set; }
 }
 
 public class HeaderRow
@@ -127,6 +130,9 @@ public class Group
 
 	[JsonProperty("bearer_token")]
 	public string? BearerToken { get; internal set; }
+
+	[JsonProperty("base_url")]
+	public string? BaseUrl { get; internal set; }
 
 	public const string BuiltinFile = "<my requests>";
 }

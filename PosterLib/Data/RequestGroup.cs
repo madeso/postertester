@@ -22,6 +22,8 @@ public class RequestGroup : INotifyPropertyChanged
 	private string _name = "";
 	private string _file = "";
 	private string _bearerToken = "";
+	private string _baseUrl = "";
+	private bool _useBaseUrl = false;
 
 	private Request? selectedRequest = null;
 	private ObservableCollection<Request> requests = new();
@@ -87,6 +89,24 @@ public class RequestGroup : INotifyPropertyChanged
 		get => this._bearerToken; set
 		{
 			this._bearerToken = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public string BaseUrl
+	{
+		get => this._baseUrl; set
+		{
+			this._baseUrl = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public bool UseBaseUrl
+	{
+		get => this._useBaseUrl; set
+		{
+			this._useBaseUrl = value;
 			OnPropertyChanged();
 		}
 	}
@@ -209,6 +229,11 @@ public class RequestGroup : INotifyPropertyChanged
 	public AuthData ToAuthData()
 	{
 		return new AuthData { BearerToken = this.BearerToken };
+	}
+
+	public GroupSettings ToGroupSettings()
+	{
+		return new GroupSettings(this.UseBaseUrl, this.BaseUrl);
 	}
 }
 

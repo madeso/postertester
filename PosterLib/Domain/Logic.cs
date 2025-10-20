@@ -50,6 +50,12 @@ public enum HttpMethod
 	// Unlock
 }
 
+public class GroupSettings(bool useBaseUrl, string baseUrl)
+{
+	public bool UseBaseUrl { get; set; } = useBaseUrl;
+	public string BaseUrl { get; set; } = baseUrl;
+}
+
 
 public static class Logic
 {
@@ -141,25 +147,25 @@ public static class Logic
 		return new Response(status: response.StatusCode, body: responseBody, responseHeaders: resh);
 	}
 
-	public static async Task Request(Root root, Request r, AuthData g)
+	public static async Task Request(Root root, GroupSettings group, Request request, AuthData auth)
 	{
 		// silently ignore double commands
-		if (r.IsWorking == true) { return; }
+		if (request.IsWorking == true) { return; }
 
-		r.Response = null;
-		using var locked = new WorkingLock(r);
+		request.Response = null;
+		using var locked = new WorkingLock(request);
 
-		var res = await RunRequest(root.FormatResponse, r, g, locked.CancellationToken.Token);
-		r.Response = res;
+		var res = await RunRequest(root.FormatResponse, group, request, auth, locked.CancellationToken.Token);
+		request.Response = res;
 	}
 
-	private static async Task<Response> RunRequest(bool formatResponse, Request r, AuthData auth, CancellationToken ct)
+	private static async Task<Response> RunRequest(bool formatResponse, GroupSettings group, Request request, AuthData auth, CancellationToken ct)
 	{
 		var start = DateTime.Now;
 
 		try
 		{
-			var response = await MakeRequest(auth, r, ct);
+			var response = await MakeRequest(auth, group, request, ct);
 			var end = DateTime.Now;
 			response.Time = end.Subtract(start);
 
@@ -188,13 +194,35 @@ public static class Logic
 		}
 	}
 
-	private static async Task<Response> MakeRequest(AuthData auth, Request r, CancellationToken ct)
+	private static async Task<Response> MakeRequest(AuthData auth, GroupSettings group, Request request, CancellationToken ct)
 	{
-		var url = new Uri(r.Url);
-		var data = HasContent(r.Method)
-			? await GetUrl(HttpMethod.Post, url, r.GetContent(), r.Timeout.TotalMilliSeconds, ct, r.GetAuth(auth))
-			: await GetUrl(HttpMethod.Get, url, null, r.Timeout.TotalMilliSeconds, ct, r.GetAuth(auth));
+		var url = JoinUrl(group, request);
+		var data = HasContent(request.Method)
+			? await GetUrl(HttpMethod.Post, url, request.GetContent(), request.Timeout.TotalMilliSeconds, ct, request.GetAuth(auth))
+			: await GetUrl(HttpMethod.Get, url, null, request.Timeout.TotalMilliSeconds, ct, request.GetAuth(auth));
 		return data;
+	}
+
+	public static Uri JoinUrl(GroupSettings group, Request request)
+	{
+		if (group.UseBaseUrl == false)
+		{
+			return new Uri(request.Url);
+		}
+
+		const string slash = "/";
+		var baseUrl = group.BaseUrl;
+		if (baseUrl.EndsWith(slash))
+		{
+			baseUrl = baseUrl[..^slash.Length];
+		}
+		var requestUrl = request.Url;
+		if (requestUrl.StartsWith(slash))
+		{
+			requestUrl = requestUrl[slash.Length..];
+		}
+
+		return new Uri(baseUrl + slash + requestUrl);
 	}
 
 	public class SingleAttackResult
@@ -224,12 +252,12 @@ public static class Logic
 	}
 
 
-	public static async Task<SingleAttackResult> SingleAttack(Request r, AuthData auth, CancellationToken ct)
+	public static async Task<SingleAttackResult> SingleAttack(GroupSettings group, Request request, AuthData auth, CancellationToken ct)
 	{
 		try
 		{
 			var start = DateTime.Now;
-			var data = await MakeRequest(auth, r, ct);
+			var data = await MakeRequest(auth, group, request, ct);
 			// todo(Gustav): verify data...
 			if (data.Status != HttpStatusCode.OK)
 			{
@@ -257,12 +285,12 @@ public static class Logic
 		}
 	}
 
-	public static async Task<AttackResult?> Attack(Root root, Request r, AuthData auth)
+	public static async Task<AttackResult?> Attack(Root root, GroupSettings group, Request request, AuthData auth)
 	{
 		// silently ignore double commands
-		if (r.IsWorking == true) { return null; }
+		if (request.IsWorking == true) { return null; }
 
-		using var locked = new WorkingLock(r);
+		using var locked = new WorkingLock(request);
 
 		var attack = root.Attack.Clone();
 		var ret = new AttackResult();
@@ -270,7 +298,7 @@ public static class Logic
 		if (attack.AtTheSameTime)
 		{
 			var tasks = Enumerable.Range(0, attack.Count)
-				.Select(i => SingleAttack(r, auth, locked.CancellationToken.Token));
+				.Select(i => SingleAttack(group, request, auth, locked.CancellationToken.Token));
 			var results = await Task.WhenAll(tasks);
 			foreach (var callResult in results)
 			{
@@ -281,7 +309,7 @@ public static class Logic
 		{
 			for (int i = 0; i < attack.Count; i += 1)
 			{
-				var callResult = await SingleAttack(r, auth, locked.CancellationToken.Token);
+				var callResult = await SingleAttack(group, request, auth, locked.CancellationToken.Token);
 				AddAttackResult(ret, callResult);
 			}
 		}

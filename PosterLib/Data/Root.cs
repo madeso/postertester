@@ -244,7 +244,7 @@ public class Root : INotifyPropertyChanged
 
 	public void AddExistingGroup(string fileName)
 	{
-		var loaded = Disk.LoadRequests(fileName);
+		var loaded = Disk.LoadSharedGroupFile(fileName);
 		var g = new RequestGroup
 		{
 			Requests = loaded.Requests,

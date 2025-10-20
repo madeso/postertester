@@ -96,20 +96,15 @@ public static class Disk
 	}
 
 
-	public class RequestsWithGuid
+	public class SharedGroupFile(ObservableCollection<Request> requests, Guid guid, bool useBaseUrl)
 	{
-		public RequestsWithGuid(ObservableCollection<Request> requests, Guid guid)
-		{
-			this.Requests = requests;
-			this.Guid = guid;
-		}
-
-		public ObservableCollection<Request> Requests { get; private set; }
-		public Guid Guid { get; private set; }
+		public ObservableCollection<Request> Requests { get; private set; } = requests;
+		public Guid Guid { get; private set; } = guid;
+		public bool UseBaseUrl { get; private set; } = useBaseUrl;
 	}
 
 
-	public static RequestsWithGuid LoadRequests(string file)
+	public static SharedGroupFile LoadSharedGroupFile(string file)
 	{
 		static ContentType MakeType(Saved.ContentType? t)
 		{
@@ -135,9 +130,9 @@ public static class Disk
 			};
 		}
 
-		var json = ReadFile<Saved.RequestsFile>(file);
+		var json = ReadFile<Saved.SharedGroupFile>(file);
 		var req = json.Requests?.Select(ToReq);
-		return new RequestsWithGuid(req.ToObservableCollectionOrEmpty(), FromSavedGuid(json?.Guid));
+		return new SharedGroupFile(req.ToObservableCollectionOrEmpty(), FromSavedGuid(json?.Guid), json?.UseBaseUrl ?? false);
 	}
 
 	private static Root Load(string file)
@@ -172,53 +167,54 @@ public static class Disk
 					return Data.Root.CreateDefaultGroup();
 				}
 			}
-			else
+
+			var groupFile = LoadSharedGroupFile(file);
+			var requests = groupFile.Requests; // todo(Gustav): inline variable?
+			if (sourceGroup.Results != null)
 			{
-				var loadedRequests = LoadRequests(file);
-				var requests = loadedRequests.Requests;
-				if (sourceGroup.Results != null)
+				var reqDict = requests.ToDictionary(x => ToSaved(x.Guid));
+				foreach (var saved in sourceGroup.Results)
 				{
-					var reqDict = requests.ToDictionary(x => ToSaved(x.Guid));
-					foreach (var saved in sourceGroup.Results)
+					if (saved == null) { continue; }
+					if(saved.Guid == null) { continue; }
+
+					var req = reqDict[saved.Guid];
+					if (req == null) { continue; }
+
+					var savedResponse = saved.Response;
+					if (savedResponse != null)
 					{
-						if (saved == null) { continue; }
-						if(saved.Guid == null) { continue; }
-
-						var req = reqDict[saved.Guid];
-						if (req == null) { continue; }
-
-						var savedResponse = saved.Response;
-						if (savedResponse != null)
+						var status = IntToStatus(savedResponse.Status);
+						string body = savedResponse.Body ?? string.Empty;
+						var headers = TransformHeaders(savedResponse.ResponseHeaders);
+						req.Response = new Response(status, body, headers)
 						{
-							var status = IntToStatus(savedResponse.Status);
-							string body = savedResponse.Body ?? string.Empty;
-							var headers = TransformHeaders(savedResponse.ResponseHeaders);
-							req.Response = new Response(status, body, headers)
-							{
-								Time = TimeSpan.FromSeconds(savedResponse.Seconds)
-							};
-						}
+							Time = TimeSpan.FromSeconds(savedResponse.Seconds)
+						};
+					}
 
-						var attack = saved.Attack;
-						if (attack != null && attack.AttackResult != null)
-						{
-							req.AttackOptions = new AttackOptions { AtTheSameTime = attack.AttackAtTheSameTime, Count = attack.AttackCount };
-							var spans = attack.AttackResult.Select(x => TimeSpan.FromMilliseconds(x));
-							req.AttackResult = new AttackResult { Errors = attack.AttackErrors.ToObservableCollectionOrEmpty(), Result = spans.ToObservableCollectionOrEmpty() };
-						}
+					var attack = saved.Attack;
+					if (attack != null && attack.AttackResult != null)
+					{
+						req.AttackOptions = new AttackOptions { AtTheSameTime = attack.AttackAtTheSameTime, Count = attack.AttackCount };
+						var spans = attack.AttackResult.Select(x => TimeSpan.FromMilliseconds(x));
+						req.AttackResult = new AttackResult { Errors = attack.AttackErrors.ToObservableCollectionOrEmpty(), Result = spans.ToObservableCollectionOrEmpty() };
 					}
 				}
-				return new RequestGroup
-				{
-					Requests = requests,
-					File = file,
-					Name = sourceGroup.Name ?? "missing name",
-					BearerToken = sourceGroup.BearerToken ?? "",
-					Builtin = isBuiltIn,
-					Guid = FromSavedGuid(sourceGroup.Guid),
-					SelectedRequest = sourceGroup.SelectedRequest == -1 ? null : requests[sourceGroup.SelectedRequest]
-				};
 			}
+
+			return new RequestGroup
+			{
+				Requests = requests,
+				File = file,
+				Name = sourceGroup.Name ?? "missing name",
+				BearerToken = sourceGroup.BearerToken ?? "",
+				BaseUrl = sourceGroup.BaseUrl ?? "",
+				UseBaseUrl = groupFile.UseBaseUrl,
+				Builtin = isBuiltIn,
+				Guid = FromSavedGuid(sourceGroup.Guid),
+				SelectedRequest = sourceGroup.SelectedRequest == -1 ? null : requests[sourceGroup.SelectedRequest]
+			};
 		}
 
 		static RequestGroup? FindGroup(ObservableCollection<RequestGroup> groups, Saved.RequestInGroup? i)
@@ -285,7 +281,7 @@ public static class Disk
 				TimeoutInMs = r.Timeout.TotalMilliSeconds,
 			};
 		}
-		var rf = new Saved.RequestsFile { Guid = ToSaved(g.Guid), Requests = g.Requests.Select(ToReq).ToArray() };
+		var rf = new Saved.SharedGroupFile { Guid = ToSaved(g.Guid), Requests = g.Requests.Select(ToReq).ToArray() };
 		VerifyGuids(rf.Requests.Select(x => x.Guid));
 		WriteJson(writer, rf, g.File);
 	}
