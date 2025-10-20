@@ -10,38 +10,26 @@ namespace PosterLib.Data;
 
 public class Headers
 {
-	public class Row
+	public class Row(string name, string[] values)
 	{
-		public Row(string name, string[] values)
-		{
-			this.Name = name;
-			this.Values = values;
-		}
-
-		public string Name { get; private set; }
-		public string[] Values { get; private set; }
+		public string Name { get; private set; } = name;
+		public string[] Values { get; private set; } = values;
 	}
 
-	public Row[] Rows { get; set; } = Array.Empty<Row>();
+	public Row[] Rows { get; set; } = [];
+
+	public static Headers Join(params Headers[] headers)
+		=> new() { Rows = headers.SelectMany(x => x.Rows).ToArray() };
 
 	internal static Headers Collect(HttpResponseHeaders src)
-	{
-		return new Headers { Rows = CollectToRows(src).ToArray() };
-	}
+		=> new() { Rows = CollectToRows(src).ToArray() };
 
 	internal static Headers Collect(HttpContentHeaders src)
-	{
-		return new Headers { Rows = CollectToRows(src).ToArray() };
-	}
+		=> new() { Rows = CollectToRows(src).ToArray() };
 
 	private static IEnumerable<Row> CollectToRows<T>(T src)
 		where T : IEnumerable<KeyValuePair<string, IEnumerable<string>>>
-	{
-		foreach (var e in src)
-		{
-			yield return new Row(e.Key, e.Value.ToArray());
-		}
-	}
+		=> src.Select(e => new Row(e.Key, e.Value.ToArray()));
 }
 
 public class Response : INotifyPropertyChanged

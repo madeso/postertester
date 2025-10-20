@@ -144,7 +144,7 @@ public static class Logic
 		var resh = Headers.Collect(response.Headers);
 		var conh = Headers.Collect(response.Content.Headers);
 
-		return new Response(status: response.StatusCode, body: responseBody, responseHeaders: resh);
+		return new Response(status: response.StatusCode, body: responseBody, responseHeaders: Headers.Join(resh, conh));
 	}
 
 	public static async Task Request(Root root, GroupSettings group, Request request, AuthData auth)
