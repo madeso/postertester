@@ -65,7 +65,11 @@
         <CommandBinding Command="posterTester:CustomCommands.MoveRequestDown" Executed="MoveRequestDown"/>
         <CommandBinding Command="posterTester:CustomCommands.SortRequests" Executed="SortRequests"/>
 
+		<CommandBinding Command="posterTester:CustomCommands.EnableBaseUrl" Executed="EnableBaseUrl"/>
+		<CommandBinding Command="posterTester:CustomCommands.DisableBaseUrl" Executed="DisableBaseUrl"/>
+
         <CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
+
         <CommandBinding Command="posterTester:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.SelectRequest1" Executed="SelectRequest1Executed"/>
         <CommandBinding Command="posterTester:CustomCommands.SelectRequest2" Executed="SelectRequest2Executed"/>
@@ -253,6 +257,7 @@
 									<RowDefinition Height="auto"/>
 									<RowDefinition Height="auto"/>
 									<RowDefinition Height="auto"/>
+									<RowDefinition Height="auto"/>
 								</Grid.RowDefinitions>
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>
@@ -294,6 +299,10 @@
 								         Background="LightGray"
 								         Text="{Binding SelectedGroup.File, Mode=OneWay}" />
 								<CheckBox Grid.Row="5" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.UseBaseUrl}">Use same base URL for all requests</CheckBox>
+								<StackPanel Grid.Row="6" Margin="3" Grid.Column="1" Orientation="Horizontal">
+									<Button Padding="3" Margin="0,0,6,0" Content="Enable base URL" Command="posterTester:CustomCommands.EnableBaseUrl" />
+									<Button Padding="3" Margin="0,0,6,0" Content="Disable base URL" Command="posterTester:CustomCommands.DisableBaseUrl" />
+								</StackPanel>
 
 
 								<CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.SelectedRequest.UseAuth}">Request uses auth</CheckBox>

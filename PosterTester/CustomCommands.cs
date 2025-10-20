@@ -50,5 +50,8 @@ namespace PosterTester
 
 		public static RoutedCommand ImportRequestsToGroup = new RoutedCommand();
 		public static RoutedCommand SortRequests = new RoutedCommand();
+
+		public static RoutedCommand EnableBaseUrl = new RoutedCommand();
+		public static RoutedCommand DisableBaseUrl = new RoutedCommand();
 	}
 }

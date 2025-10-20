@@ -235,6 +235,49 @@ public class RequestGroup : INotifyPropertyChanged
 	{
 		return new GroupSettings(this.UseBaseUrl, this.BaseUrl);
 	}
+
+	public void EnableBaseUrl()
+	{
+		if (this.Builtin) return;
+
+		var lefts = Requests.Select(r => new Uri(r.Url)).Where(x=>x.IsAbsoluteUri).Select(GetBaseUrl).ToImmutableSortedSet();
+
+		foreach (var request in Requests)
+		{
+			var originalUrl = new Uri(request.Url);
+			if (originalUrl.IsAbsoluteUri == false) continue;
+			var baseUrl = new Uri(GetBaseUrl(originalUrl));
+			var local = baseUrl.MakeRelativeUri(originalUrl);
+			var newUrl = local.ToString();
+			request.Url = newUrl;
+		}
+
+		this.UseBaseUrl = true;
+		this.BaseUrl = lefts.Count == 1 ? lefts[0] : "";
+	}
+
+	private string GetBaseUrl(Uri x)
+	{
+		return x.GetLeftPart(UriPartial.Authority);
+	}
+
+	public void DisableBaseUrl()
+	{
+		if(this.Builtin) return;
+
+		foreach (var request in this.Requests)
+		{
+			if(Uri.IsWellFormedUriString(request.Url, UriKind.Absolute) && new Uri(request.Url).IsAbsoluteUri)
+			{
+				// do nothing if for some reason the base url is not used for this request
+				continue;
+			}
+
+			request.Url = Logic.JoinUrlString(this.BaseUrl, request);
+		}
+		this.UseBaseUrl = false;
+		this.BaseUrl = "";
+	}
 }
 
 

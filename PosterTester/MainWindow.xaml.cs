@@ -494,4 +494,22 @@ public partial class MainWindow
 		group.SortRequests();
 
     }
+
+    private void EnableBaseUrl(object sender, ExecutedRoutedEventArgs e)
+    {
+		var group = Root.SelectedGroup;
+		if (group == null) { ShowMissingGroup(); return; }
+		if (group.Builtin) { ShowError("You can't enable base url for the builtin group!"); return; }
+
+		group.EnableBaseUrl();
+    }
+
+    private void DisableBaseUrl(object sender, ExecutedRoutedEventArgs e)
+    {
+		var group = Root.SelectedGroup;
+		if (group == null) { ShowMissingGroup(); return; }
+		if (group.Builtin) { ShowError("You can't disable the base url for the builtin group!"); return; }
+
+		group.DisableBaseUrl();
+	}
 }

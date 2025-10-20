@@ -41,7 +41,6 @@ Compare the response time for 2 requests. Does two different endpoints roughly t
 
 
 ## Possible some time in the future (not necessarily in a specifc order)
-* Add transition buttons to base url
 * Make base url a multiple choice (dev, test, localhost, custom etc...)
 * Add function to move requests between groups
 * Change groups list/dropdown to a tree view?

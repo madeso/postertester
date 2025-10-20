@@ -204,14 +204,13 @@ public static class Logic
 	}
 
 	public static Uri JoinUrl(GroupSettings group, Request request)
-	{
-		if (group.UseBaseUrl == false)
-		{
-			return new Uri(request.Url);
-		}
+		=> group.UseBaseUrl
+			? new Uri(JoinUrlString(group.BaseUrl, request))
+			: new Uri(request.Url);
 
+	public static string JoinUrlString(string baseUrl, Request request)
+	{
 		const string slash = "/";
-		var baseUrl = group.BaseUrl;
 		if (baseUrl.EndsWith(slash))
 		{
 			baseUrl = baseUrl[..^slash.Length];
@@ -222,7 +221,7 @@ public static class Logic
 			requestUrl = requestUrl[slash.Length..];
 		}
 
-		return new Uri(baseUrl + slash + requestUrl);
+		return baseUrl + slash + requestUrl;
 	}
 
 	public class SingleAttackResult
