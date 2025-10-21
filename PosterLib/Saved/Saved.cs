@@ -176,9 +176,3 @@ public class Root
 	public double BinSize { get; set; } = 50.0;
 }
 
-public class AuthFile
-{
-	[JsonProperty("bearer_token")]
-	public string? BearerToken { get; set; }
-}
-

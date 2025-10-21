@@ -412,11 +412,4 @@ public static class Disk
 		Save(writer, data, PathToSettings);
 		writer.WriteAll();
 	}
-
-	public static AuthFile? LoadAuth(string authFile)
-	{
-		if (string.IsNullOrEmpty(authFile)) return null;
-		
-		return ReadFile<AuthFile>(authFile);
-	}
 }

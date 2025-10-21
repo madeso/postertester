@@ -15,10 +15,9 @@ public class RunTestsSettings : CommandSettings
 	[Description("The group/service file (*.PosterTesterGroup)")]
 	public string GroupFile { get; set; } = string.Empty;
 
-	// todo(Gustav): remove this in favor of passing the bearer token directly
-	[CommandOption("-a|--authfile <AUTHFILE>")]
-	[Description("The auth file to use for requests that require authentication")]
-	public string AuthFile { get; set; } = string.Empty;
+	[CommandOption("-t|--bearer-token <TOKEN>")]
+	[Description("The bearer token to use for requests that require authentication")]
+	public string? BearerToken { get; set; } = null;
 
 	[CommandOption("-b|--base-url <URL>")]
 	[Description("The base url to use for requests that use the base url")]
@@ -55,17 +54,7 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 				return -1;
 			}
 
-			var authFile = Disk.LoadAuth(settings.AuthFile);
-			if (authFile != null)
-			{
-				AnsiConsole.MarkupLineInterpolated($"Applied auth from file [red]{settings.AuthFile}[/]");
-			}
-			else
-			{
-				authFile=new AuthFile();
-			}
-
-			var auth = new AuthData { BearerToken = authFile.BearerToken ?? string.Empty };
+			var auth = new AuthData { BearerToken = settings.BearerToken ?? string.Empty };
 
 			var group = new GroupSettings(loaded.UseBaseUrl, settings.BaseUrl ?? "");
 
