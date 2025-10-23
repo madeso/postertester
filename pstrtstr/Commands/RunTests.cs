@@ -90,13 +90,14 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 				});
 
 			// Print report
+			int totalTests = loaded.Requests.Count;
 			AnsiConsole.WriteLine();
 			AnsiConsole.MarkupLine("[underline]Test Report[/]");
 			foreach (string test in failedTests)
 			{
 				AnsiConsole.MarkupLineInterpolated($"* [red]{test}[/]");
 			}
-			AnsiConsole.MarkupLineInterpolated($"[red]{failedTests.Count}[/] tests failed.");
+			AnsiConsole.MarkupLineInterpolated($"[red]{failedTests.Count}[/]/{totalTests} tests [red]FAILED[/] ({PercentageString(failedTests.Count / (float)totalTests)}).");
 			if(settings.WritePassedTests)
 			{
 				foreach (string test in okTests)
@@ -104,13 +105,10 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 					AnsiConsole.MarkupLineInterpolated($"* [green]{test}[/]");
 				}
 			}
-			AnsiConsole.MarkupLineInterpolated($"[green]{okTests.Count}[/] tests passed.");
+			AnsiConsole.MarkupLineInterpolated($"[green]{okTests.Count}[/]/{totalTests} tests passed ({PercentageString(okTests.Count / (float)totalTests)}).");
 
 			if (errorCount > 0)
 			{
-				int totalTests = loaded.Requests.Count;
-
-				AnsiConsole.MarkupLineInterpolated($"Error: [red]{errorCount}[/]/{totalTests} tests [red]FAILED[/]");
 				return -errorCount;
 			}
 			else
@@ -123,6 +121,11 @@ public class RunTestsCommand : AsyncCommand<RunTestsSettings>
 			AnsiConsole.MarkupLineInterpolated($"Could not open [red]{x.FileName}[/]");
 			return 1;
 		}
+	}
+
+	private static string PercentageString(float percentage)
+	{
+		return (percentage * 100).ToString("0.00") + "%";
 	}
 
 	private static void SetSpinnerStatus(Logic.SingleAttackResult res, StatusContext ctx, ref int errorCount)
