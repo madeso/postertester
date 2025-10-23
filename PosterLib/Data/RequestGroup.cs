@@ -118,12 +118,19 @@ public class RequestGroup : INotifyPropertyChanged
 		var r = new Request() { Guid = Guid.NewGuid() };
 		if (this.SelectedRequest != null)
 		{
-			var newUrl = new UriBuilder(new Uri(this.SelectedRequest.Url))
+			try
 			{
-				Path = "",
-				Query = ""
-			};
-			r.Url = newUrl.Uri.AbsoluteUri;
+				var newUrl = new UriBuilder(new Uri(this.SelectedRequest.Url))
+				{
+					Path = "",
+					Query = ""
+				};
+				r.Url = newUrl.Uri.AbsoluteUri;
+			}
+			catch(Exception)
+			{
+				r.Url = "/";
+			}
 		}
 		this.Requests.Add(r);
 		this.SelectedRequest = r;
@@ -240,11 +247,12 @@ public class RequestGroup : INotifyPropertyChanged
 	{
 		if (this.Builtin) return;
 
-		var lefts = Requests.Select(r => new Uri(r.Url)).Where(x=>x.IsAbsoluteUri).Select(GetBaseUrl).ToImmutableSortedSet();
+		var lefts = Requests.Select(MakeUrl).Where(x=>x?.IsAbsoluteUri ?? false).Select(x => GetBaseUrl(x!)).ToImmutableSortedSet();
 
 		foreach (var request in Requests)
 		{
-			var originalUrl = new Uri(request.Url);
+			var originalUrl = MakeUrl(request);
+			if (originalUrl == null) continue;
 			if (originalUrl.IsAbsoluteUri == false) continue;
 			var baseUrl = new Uri(GetBaseUrl(originalUrl));
 			var local = baseUrl.MakeRelativeUri(originalUrl);
@@ -254,6 +262,18 @@ public class RequestGroup : INotifyPropertyChanged
 
 		this.UseBaseUrl = true;
 		this.BaseUrl = lefts.Count == 1 ? lefts[0] : "";
+
+		static Uri? MakeUrl(Request r)
+		{
+			try
+			{
+				return new Uri(r.Url);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
 	}
 
 	private string GetBaseUrl(Uri x)
