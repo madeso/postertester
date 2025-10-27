@@ -281,7 +281,7 @@ public static class Disk
 				TimeoutInMs = r.Timeout.TotalMilliSeconds,
 			};
 		}
-		var rf = new Saved.SharedGroupFile { Guid = ToSaved(g.Guid), Requests = g.Requests.Select(ToReq).ToArray() };
+		var rf = new Saved.SharedGroupFile { Guid = ToSaved(g.Guid), Requests = g.Requests.Select(ToReq).ToArray(), UseBaseUrl = g.UseBaseUrl};
 		VerifyGuids(rf.Requests.Select(x => x.Guid));
 		WriteJson(writer, rf, g.File);
 	}
@@ -312,6 +312,7 @@ public static class Disk
 				Guid = ToSaved(g.Guid),
 				File = g.Builtin ? Saved.Group.BuiltinFile : g.File,
 				BearerToken = g.BearerToken,
+				BaseUrl = g.BaseUrl,
 				Results = g.Requests.Select(x =>
 				new Saved.Result
 				{
