@@ -1,48 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <OutputType>WinExe</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWPF>true</UseWPF>
-    <Nullable>enable</Nullable>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;CA1416</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;CA1416</NoWarn>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Icons\http-delete.png" />
-    <None Remove="Icons\http-get.png" />
-    <None Remove="Icons\http-patch.png" />
-    <None Remove="Icons\http-post.png" />
-    <None Remove="Icons\http-put.png" />
-    <None Remove="Icons\lock-open-variant-outline.png" />
-    <None Remove="Icons\lock-outline.png" />
-    <None Remove="Icons\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icon.ico" />
-    <Resource Include="Icons\http-delete.png" />
-    <Resource Include="Icons\http-get.png" />
-    <Resource Include="Icons\http-patch.png" />
-    <Resource Include="Icons\http-post.png" />
-    <Resource Include="Icons\http-put.png" />
-    <Resource Include="Icons\lock-open-variant-outline.png" />
-    <Resource Include="Icons\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.74" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PosterLib\PosterLib.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<OutputType>WinExe</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<NoWarn>1701;1702;CA1416</NoWarn>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<None Remove="Icons\http-delete.png" />
+		<None Remove="Icons\http-get.png" />
+		<None Remove="Icons\http-patch.png" />
+		<None Remove="Icons\http-post.png" />
+		<None Remove="Icons\http-put.png" />
+		<None Remove="Icons\lock-open-variant-outline.png" />
+		<None Remove="Icons\lock-outline.png" />
+		<None Remove="Icons\lock.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<AppDesigner Include="Properties\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Resource Include="icon.ico" />
+		<Resource Include="Icons\http-delete.png" />
+		<Resource Include="Icons\http-get.png" />
+		<Resource Include="Icons\http-patch.png" />
+		<Resource Include="Icons\http-post.png" />
+		<Resource Include="Icons\http-put.png" />
+		<Resource Include="Icons\lock-open-variant-outline.png" />
+		<Resource Include="Icons\lock.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="ScottPlot.WPF" Version="4.1.74" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\PosterLib\PosterLib.csproj" />
+	</ItemGroup>
 </Project>
