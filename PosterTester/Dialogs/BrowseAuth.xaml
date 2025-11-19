@@ -9,7 +9,7 @@
 		Icon="../icon.ico"
 		WindowStartupLocation="CenterOwner"
 		d:DataContext="{d:DesignInstance dialogs:AuthData}"
-		mc:Ignorable="d" Height="331" Width="323"  Activated="Window_Activated"
+		mc:Ignorable="d" Height="355" Width="323"  Activated="Window_Activated"
         >
 	<Window.CommandBindings>
 		<CommandBinding Command="posterTester:CustomCommands.Ok" Executed="OkExecuted" />
@@ -37,6 +37,7 @@
 			<RowDefinition Height="auto"/>
 			
 			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
 
 		<TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Domain:" />
@@ -61,19 +62,22 @@
 			</Button>
 		</StackPanel>
 
-		<TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Identity token:" />
-		<TextBox   Grid.Row="5" Grid.Column="1" Padding="3" Margin="3" Text="{Binding IdentityToken}" IsReadOnly="true" Background="LightGray" />
+		<TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Name:" />
+		<TextBox   Grid.Row="5" Grid.Column="1" Padding="3" Margin="3" Text="{Binding User}" IsReadOnly="true" Background="LightGray" />
 
-		<TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Access token:" />
-		<TextBox   Grid.Row="6" Grid.Column="1" Padding="3" Margin="3" Text="{Binding AccessToken}" IsReadOnly="true" Background="LightGray" />
+		<TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Identity token:" />
+		<TextBox   Grid.Row="6" Grid.Column="1" Padding="3" Margin="3" Text="{Binding IdentityToken}" IsReadOnly="true" Background="LightGray" />
 
-		<TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="Refresh token:" />
-		<TextBox   Grid.Row="7" Grid.Column="1" Padding="3" Margin="3" Text="{Binding RefreshToken}" IsReadOnly="true" Background="LightGray" />
+		<TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="Access token:" />
+		<TextBox   Grid.Row="7" Grid.Column="1" Padding="3" Margin="3" Text="{Binding AccessToken}" IsReadOnly="true" Background="LightGray" />
 
-		<TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Claims:" />
-		<TextBox   Grid.Row="8" Grid.Column="1" Padding="3" Margin="3" Text="{Binding Claims}" IsReadOnly="true" Background="LightGray" />
+		<TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Refresh token:" />
+		<TextBox   Grid.Row="8" Grid.Column="1" Padding="3" Margin="3" Text="{Binding RefreshToken}" IsReadOnly="true" Background="LightGray" />
 
-		<StackPanel Grid.Row="9" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+		<TextBlock Grid.Row="9" Grid.Column="0" Margin="3" Text="Claims:" />
+		<TextBox   Grid.Row="9" Grid.Column="1" Padding="3" Margin="3" Text="{Binding Claims}" IsReadOnly="true" Background="LightGray" />
+
+		<StackPanel Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
 			<Button Margin="3" IsDefault="True" Command="posterTester:CustomCommands.Ok">
 				<Border Padding="6,3">
 					<TextBlock Text="OK" />

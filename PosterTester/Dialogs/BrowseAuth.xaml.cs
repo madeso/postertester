@@ -23,6 +23,8 @@ namespace PosterTester.Dialogs
 		private string _RefreshToken = string.Empty;
 		public string Claims { get => _Claims; set { _Claims = value; OnPropertyChanged(); } }
 		private string _Claims = string.Empty;
+		public string User { get => _User; set { _User = value; OnPropertyChanged(); } }
+		private string _User = string.Empty;
 
 		private bool IsLoggedIn = false;
 		public bool LoggedIn
@@ -81,6 +83,7 @@ namespace PosterTester.Dialogs
 				this.AuthOptions.IdentityToken = authentication.loginResult?.IdentityToken ?? string.Empty;
 				this.AuthOptions.AccessToken = authentication.loginResult?.AccessToken ?? string.Empty;
 				this.AuthOptions.RefreshToken = authentication.loginResult?.RefreshToken ?? string.Empty;
+				this.AuthOptions.User = authentication.loginResult?.User.Identity?.Name ?? string.Empty;
 				// todo(Gustav): diplay this better
 				this.AuthOptions.Claims = string.Join(" | ", authentication.loginResult?.User.Claims.Select(c => $"{c.Type}: {c.Value}") ?? Array.Empty<string>());
 				this.AuthOptions.LoggedIn = true;
@@ -90,6 +93,7 @@ namespace PosterTester.Dialogs
 				this.AuthOptions.IdentityToken = string.Empty;
 				this.AuthOptions.AccessToken = string.Empty;
 				this.AuthOptions.RefreshToken = string.Empty;
+				this.AuthOptions.User = string.Empty;
 				this.AuthOptions.Claims = string.Empty;
 				this.AuthOptions.LoggedIn = false;
 				this.authentication = null;

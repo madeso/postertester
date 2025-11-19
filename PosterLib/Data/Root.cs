@@ -147,9 +147,10 @@ public class Root : INotifyPropertyChanged
 		}
 	}
 
-	public string AuthDomain { get; set; }
-	public string AuthClient { get; set; }
-	public string AuthAudience { get; set; }
+	// todo(Gustav): add OnPropertyChanged for theese, or not? they are never shown in main UI so it should be "fine"
+	public string AuthDomain { get; set; } = string.Empty;
+	public string AuthClient { get; set; } = string.Empty;
+	public string AuthAudience { get; set; } = string.Empty;
 
 	public double BinSize
 	{
