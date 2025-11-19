@@ -45,6 +45,12 @@
 	<ItemGroup>
 		<PackageReference Include="ScottPlot.WPF" Version="4.1.74" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Authentication tool -->
+		<PackageReference Include="Auth0.OidcClient.WPF" Version="4.0.0" />
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2849.39" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<ProjectReference Include="..\PosterLib\PosterLib.csproj" />

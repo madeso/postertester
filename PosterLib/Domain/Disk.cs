@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using PosterLib.Data;
-using PosterLib.Saved;
 using PosterTester.Extensions;
 using ContentType = PosterLib.Data.ContentType;
 using Headers = PosterLib.Data.Headers;

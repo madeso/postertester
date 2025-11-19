@@ -68,7 +68,9 @@
 		<CommandBinding Command="posterTester:CustomCommands.EnableBaseUrl" Executed="EnableBaseUrl"/>
 		<CommandBinding Command="posterTester:CustomCommands.DisableBaseUrl" Executed="DisableBaseUrl"/>
 
-        <CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
+		<CommandBinding Command="posterTester:CustomCommands.BrowseAuth" Executed="BrowseAuth"/>
+
+		<CommandBinding Command="posterTester:CustomCommands.Save" Executed="SaveExecuted"/>
 
         <CommandBinding Command="posterTester:CustomCommands.LoadPost" Executed="LoadPostExecuted"/>
         <CommandBinding Command="posterTester:CustomCommands.SelectRequest1" Executed="SelectRequest1Executed"/>
@@ -258,6 +260,7 @@
 									<RowDefinition Height="auto"/>
 									<RowDefinition Height="auto"/>
 									<RowDefinition Height="auto"/>
+									<RowDefinition Height="auto"/>
 								</Grid.RowDefinitions>
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto"/>
@@ -278,28 +281,33 @@
 								           Text="Bearer token" />
 								<TextBox Grid.Row="2" Grid.Column="1" Margin="3" Padding="3"
 								         Text="{Binding SelectedGroup.BearerToken, UpdateSourceTrigger=PropertyChanged}"/>
+								<StackPanel Grid.Row="3" Margin="3" Grid.Column="1" Orientation="Horizontal">
+									<Button Padding="3" Margin="0,0,6,0" Content="Select token" Command="posterTester:CustomCommands.BrowseAuth" />
+								</StackPanel>
 
-								<TextBlock Grid.Row="3" Grid.Column="0"
+								<TextBlock Grid.Row="4" Grid.Column="0"
 										   VerticalAlignment="Center"
 										   FontWeight="Bold"
 										   Margin="3"
 										   Text="Guid" />
-								<TextBox Grid.Row="3" Grid.Column="1" Margin="3" Padding="3"
+								<TextBox Grid.Row="4" Grid.Column="1" Margin="3" Padding="3"
 										 IsReadOnly="True"
 										 Background="LightGray"
 								         Text="{Binding SelectedGroup.Guid, Mode=OneWay}" />
 
-								<TextBlock Grid.Row="4" Grid.Column="0"
+								<TextBlock Grid.Row="5" Grid.Column="0"
 								           VerticalAlignment="Center"
 								           FontWeight="Bold"
 								           Margin="3"
 								           Text="File" />
-								<TextBox Grid.Row="4" Grid.Column="1" Margin="3" Padding="3"
+								<TextBox Grid.Row="5" Grid.Column="1" Margin="3" Padding="3"
 								         IsReadOnly="True"
 								         Background="LightGray"
 								         Text="{Binding SelectedGroup.File, Mode=OneWay}" />
-								<CheckBox Grid.Row="5" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.UseBaseUrl}">Use same base URL for all requests</CheckBox>
-								<StackPanel Grid.Row="6" Margin="3" Grid.Column="1" Orientation="Horizontal">
+								
+								<CheckBox Grid.Row="6" Grid.Column="1" Margin="3" Padding="3" VerticalContentAlignment="Center" IsChecked="{Binding SelectedGroup.UseBaseUrl}">Use same base URL for all requests</CheckBox>
+								
+								<StackPanel Grid.Row="7" Margin="3" Grid.Column="1" Orientation="Horizontal">
 									<Button Padding="3" Margin="0,0,6,0" Content="Enable base URL" Command="posterTester:CustomCommands.EnableBaseUrl" />
 									<Button Padding="3" Margin="0,0,6,0" Content="Disable base URL" Command="posterTester:CustomCommands.DisableBaseUrl" />
 								</StackPanel>

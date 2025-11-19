@@ -53,5 +53,9 @@ namespace PosterTester
 
 		public static RoutedCommand EnableBaseUrl = new RoutedCommand();
 		public static RoutedCommand DisableBaseUrl = new RoutedCommand();
+
+		public static RoutedCommand BrowseAuth = new RoutedCommand();
+		public static RoutedCommand Login = new RoutedCommand();
+		public static RoutedCommand Logout = new RoutedCommand();
 	}
 }

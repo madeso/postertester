@@ -1,0 +1,89 @@
+﻿<Window x:Class="PosterTester.Dialogs.BrowseAuth"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:posterTester="clr-namespace:PosterTester"
+		xmlns:dialogs="clr-namespace:PosterTester.Dialogs"
+		xmlns:data="clr-namespace:PosterLib.Data;assembly=PosterLib"
+		Icon="../icon.ico"
+		WindowStartupLocation="CenterOwner"
+		d:DataContext="{d:DesignInstance dialogs:AuthData}"
+		mc:Ignorable="d" Height="331" Width="323"  Activated="Window_Activated"
+        >
+	<Window.CommandBindings>
+		<CommandBinding Command="posterTester:CustomCommands.Ok" Executed="OkExecuted" />
+		<CommandBinding Command="posterTester:CustomCommands.Login" Executed="LoginExecuted" />
+		<CommandBinding Command="posterTester:CustomCommands.Logout" Executed="LogoutExecuted" />
+	</Window.CommandBindings>
+	<Grid Margin="6">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+
+			<RowDefinition Height="auto"/>
+
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Domain:" />
+		<TextBox   Grid.Row="1" Grid.Column="1" Padding="3" x:Name="dlgCount" Margin="3" Text="{Binding Domain, UpdateSourceTrigger=PropertyChanged}"/>
+
+		<TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Client:" />
+		<TextBox   Grid.Row="2" Grid.Column="1" Padding="3" Margin="3" Text="{Binding ClientId, UpdateSourceTrigger=PropertyChanged}"/>
+
+		<TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Audience:" />
+		<TextBox   Grid.Row="3" Grid.Column="1" Padding="3" Margin="3" Text="{Binding Audience, UpdateSourceTrigger=PropertyChanged}"/>
+
+		<StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
+			<Button Margin="3" Command="posterTester:CustomCommands.Login">
+				<Border Padding="6,3">
+					<TextBlock Text="Login" />
+				</Border>
+			</Button>
+			<Button Margin="3" Command="posterTester:CustomCommands.Logout">
+				<Border Padding="6,3">
+					<TextBlock Text="Logout" />
+				</Border>
+			</Button>
+		</StackPanel>
+
+		<TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Identity token:" />
+		<TextBox   Grid.Row="5" Grid.Column="1" Padding="3" Margin="3" Text="{Binding IdentityToken}" IsReadOnly="true" Background="LightGray" />
+
+		<TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Access token:" />
+		<TextBox   Grid.Row="6" Grid.Column="1" Padding="3" Margin="3" Text="{Binding AccessToken}" IsReadOnly="true" Background="LightGray" />
+
+		<TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="Refresh token:" />
+		<TextBox   Grid.Row="7" Grid.Column="1" Padding="3" Margin="3" Text="{Binding RefreshToken}" IsReadOnly="true" Background="LightGray" />
+
+		<TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Claims:" />
+		<TextBox   Grid.Row="8" Grid.Column="1" Padding="3" Margin="3" Text="{Binding Claims}" IsReadOnly="true" Background="LightGray" />
+
+		<StackPanel Grid.Row="9" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+			<Button Margin="3" IsDefault="True" Command="posterTester:CustomCommands.Ok">
+				<Border Padding="6,3">
+					<TextBlock Text="OK" />
+				</Border>
+			</Button>
+			<Button Margin="3" IsCancel="True">
+				<Border Padding="6,3">
+					<TextBlock Text="cancel" />
+				</Border>
+			</Button>
+		</StackPanel>
+	</Grid>
+</Window>
