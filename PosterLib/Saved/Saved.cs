@@ -163,6 +163,15 @@ public class Root
 	[JsonProperty("format_response")]
 	public bool FormatResponse { get; set; } = false;
 
+	[JsonProperty("auth_domain")]
+	public string AuthDomain { get; set; } = string.Empty;
+
+	[JsonProperty("auth_client")]
+	public string AuthClient { get; set; } = string.Empty;
+
+	[JsonProperty("auth_audience")]
+	public string AuthAudience { get; set; } = string.Empty;
+
 	[JsonProperty("attack_count")]
 	public int AttackCount { get; set; }
 

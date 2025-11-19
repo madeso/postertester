@@ -244,6 +244,9 @@ public static class Disk
 			LeftCompare = FindRequest(groups, container.LeftCompare),
 			RightCompare = FindRequest(groups, container.RightCompare),
 			FormatResponse = container.FormatResponse,
+			AuthDomain = container.AuthDomain,
+			AuthClient = container.AuthClient,
+			AuthAudience = container.AuthAudience,
 			Attack = new AttackOptions { AtTheSameTime = container.AttackAtTheSameTime, Count = container.AttackCount },
 			SelectedResponseTab = container.SelectedResponseTab
 		};
@@ -357,6 +360,9 @@ public static class Disk
 			LeftCompare = FindRequest(data.LeftGroup, data.LeftCompare),
 			RightCompare = FindRequest(data.RightGroup, data.RightCompare),
 			FormatResponse = data.FormatResponse,
+			AuthDomain = data.AuthDomain,
+			AuthClient = data.AuthClient,
+			AuthAudience = data.AuthAudience,
 			AttackAtTheSameTime = data.Attack.AtTheSameTime,
 			AttackCount = data.Attack.Count,
 			SelectedResponseTab = data.SelectedResponseTab

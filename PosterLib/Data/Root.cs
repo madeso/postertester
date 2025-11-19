@@ -147,6 +147,10 @@ public class Root : INotifyPropertyChanged
 		}
 	}
 
+	public string AuthDomain { get; set; }
+	public string AuthClient { get; set; }
+	public string AuthAudience { get; set; }
+
 	public double BinSize
 	{
 		get => binSize; set

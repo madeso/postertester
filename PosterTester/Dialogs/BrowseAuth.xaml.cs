@@ -44,16 +44,23 @@ namespace PosterTester.Dialogs
 
 	public partial class BrowseAuth : Window
 	{
-		public BrowseAuth()
+		public BrowseAuth(PosterLib.Data.Root root)
 		{
 			InitializeComponent();
-			var data = new AuthData();
+			var data = new AuthData
+			{
+				Domain = root.AuthDomain,
+				ClientId = root.AuthClient,
+				Audience = root.AuthAudience
+			};
 			this.AuthOptions = data;
 			this.DataContext = data;
+			this.root = root;
 		}
 
 		public AuthData AuthOptions { get; }
 		private Authentication? authentication = null;
+		private PosterLib.Data.Root root;
 
 		private void Window_Activated(object sender, EventArgs e)
 		{
@@ -102,6 +109,9 @@ namespace PosterTester.Dialogs
 		private void OkExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
 			this.DialogResult = true;
+			this.root.AuthDomain = this.AuthOptions.Domain;
+			this.root.AuthClient = this.AuthOptions.ClientId;
+			this.root.AuthAudience = this.AuthOptions.Audience;
 			Close();
 		}
 	}

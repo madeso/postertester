@@ -519,11 +519,11 @@ public partial class MainWindow
 		if (group == null) { ShowMissingGroup(); return; }
 		if (group.Builtin) { ShowError("You can't enable base url for the builtin group!"); return; }
 
-		var compareRequestsDialog = new Dialogs.BrowseAuth();
+		var compareRequestsDialog = new Dialogs.BrowseAuth(Root);
 		using var blur = new DialogBackgroundWithDialog(this, compareRequestsDialog);
 		if (compareRequestsDialog.ShowDialog() ?? false)
 		{
-			group.BearerToken = compareRequestsDialog.AuthOptions.IdentityToken;
+			group.BearerToken = compareRequestsDialog.AuthOptions.AccessToken;
 		}
 	}
 }
