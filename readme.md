@@ -5,6 +5,13 @@ Basic "postman" clone in .NET 8 in WPF (i.e windows only at the moment).
 Warning: Still in development, stored data might be destroyed after a update
 
 
+## Alternatives
+
+* [Yaak](https://yaak.app/)
+* [bruno](https://www.usebruno.com/)
+* The following blog posts might also be interesting discussing alternatives to postman:
+    - [API Clients: Bruno betrays, Yaak yaks](https://royathan.com/blog/the-api-client-hunt/)
+    - [The API Tooling Crisis](https://efp.asia/blog/2025/12/24/api-tooling-crisis/) and its corresponding [lobsters discussion](https://lobste.rs/s/lgnaoi/api_tooling_crisis_why_developers_are)
 
 ## Current features
 * No external services or call-to-home. 
