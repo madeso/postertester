@@ -517,7 +517,7 @@ public partial class MainWindow
 	{
 		var group = Root.SelectedGroup;
 		if (group == null) { ShowMissingGroup(); return; }
-		if (group.Builtin) { ShowError("You can't enable base url for the builtin group!"); return; }
+		// if (group.Builtin) { ShowError("Auth can't be used for the builtin group!"); return; }
 
 		var compareRequestsDialog = new Dialogs.BrowseAuth(Root);
 		using var blur = new DialogBackgroundWithDialog(this, compareRequestsDialog);
