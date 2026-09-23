@@ -250,13 +250,18 @@ public class Root : INotifyPropertyChanged
 	public void AddExistingGroup(string fileName)
 	{
 		var loaded = Disk.LoadSharedGroupFile(fileName);
+		var suggestedGuid = loaded.Guid;
+		if (this.Groups.Select(x => x.Guid).Contains(suggestedGuid))
+		{
+			suggestedGuid = Guid.NewGuid();
+		}
 		var g = new RequestGroup
 		{
 			Requests = loaded.Requests,
 			Name = GuessGroupName(fileName),
 			File = fileName,
 			Builtin = false,
-			Guid = loaded.Guid
+			Guid = suggestedGuid
 		};
 		g.SelectedRequest = g.Requests[0];
 		AddGroup(g);
