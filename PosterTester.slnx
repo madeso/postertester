@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PosterLib/PosterLib.csproj" />
+  <Project Path="PosterTester/PosterTester.csproj" />
+  <Project Path="pstrtstr/pstrtstr.csproj" />
+</Solution>
