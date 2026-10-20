@@ -234,6 +234,13 @@ public static class Disk
 		var container = ReadFile<Saved.Root>(file);
 		var rc = container.Groups?.Select(TransformGroupOrNull).NotNull();
 		var groups = rc.ToObservableCollectionOrEmpty();
+
+		if (container.SelectedGroup >= groups.Count)
+		{
+			// if invalid selection, select a valid selection
+			container.SelectedGroup = groups.Count == 0 ? -1 : 0;
+		}
+
 		return new Root
 		{
 			BinSize = container.BinSize,
