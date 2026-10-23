@@ -18,7 +18,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Solution_Name: PosterTester.sln
+      Solution_Name: PosterTester.slnx
 
     steps:
     - name: Checkout
